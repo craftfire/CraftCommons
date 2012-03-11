@@ -1,11 +1,11 @@
 [![CraftCommons][Project Logo]][Website]
 CraftCommons
 ============
-
+Commons library by CraftFire which features a data source manager, encryption methods, and more.
 
 Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com>
 
-AuthAPI is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
+CraftCommons is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
 
 Who is CraftFire?
 -----------------
@@ -33,9 +33,9 @@ CraftCommons uses Maven to handle its dependencies.
 Coding and Pull Request Conventions
 -----------------------------------
 * Generally follow the Oracle coding standards.
-* Use tabs, no spaces.
+* 80 column limit.
+* Use spaces, no tabs.
 * No trailing whitespaces.
-* No 80 column limit or midstatement newlines.
 * Pull requests must compile and work.
 * Pull requests must be formatted properly.
 * Number of commits in a pull request should be kept to a minimum.
