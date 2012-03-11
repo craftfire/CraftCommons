@@ -37,36 +37,40 @@ public class CraftCommons {
      * @return true, if the string is an email.
      */
     public static boolean isEmail(String string) {
-        Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-        Matcher m = p.matcher(string);
-        if (m.matches()) {
-          return true;
+        if (string != null && ! string.isEmpty()) {
+            Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+            Matcher m = p.matcher(string);
+            if (m.matches()) {
+                return true;
+            }
         }
         return false;
     }
 
-     /**
+    /**
      * Checks if string is a valid IP. Wildcards (*) are allowed.
      *
      * @param string The IP as a string.
      * @return true, if string is an IP.
      */
     public static boolean isIP(String string) {
-        String[] parts = string.split ("\\.");
-        if(parts.length == 4) {
-            for (String s : parts) {
-                if(s == "*") {
-                    continue;
+        if (string != null && ! string.isEmpty()) {
+            String[] parts = string.split("\\.");
+            if (parts.length == 4) {
+                for (String s : parts) {
+                    if (s == "*") {
+                        continue;
+                    }
+                    if (! isInteger(s)) {
+                        return false;
+                    }
+                    int i = Integer.parseInt(s);
+                    if (i < 0 || i > 255) {
+                        return false;
+                    }
                 }
-                if(!isInteger(s)) {
-                    return false;
-                }
-                int i = Integer.parseInt(s);
-                if (i < 0 || i > 255) {
-                    return false;
-                }
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -79,21 +83,38 @@ public class CraftCommons {
      */
     public static boolean isInteger(String input) {
         try {
-           Integer.parseInt(input);
-           return true;
-        } catch(Exception e) {
-           return false;
+            Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-     }
+    }
+
+    public static String long2ip(Long i) {
+        return ((i >> 24) & 0xFF) + "." +
+               ((i >> 16) & 0xFF) + "." +
+               ((i >> 8) & 0xFF) + "." +
+               (i & 0xFF);
+    }
+
+    public static Long ip2long(String ip) {
+        String[] ipArray = ip.split("\\.");
+        long num = 0;
+        for (int i = 0; i < ipArray.length; i++) {
+            int power = 3 - i;
+            num += ((Integer.parseInt(ipArray[i]) % 256 * Math.pow(256, power)));
+        }
+        return num;
+    }
 
     public static boolean inVersionRange(String lastversion, String compare) {
-        if(lastversion.equalsIgnoreCase(compare)) {
+        if (lastversion.equalsIgnoreCase(compare)) {
             return true;
         }
         String s1 = normalisedVersion(compare);
         String s2 = normalisedVersion(lastversion);
         int cmp = s1.compareTo(s2);
-        if(cmp < 0) {
+        if (cmp < 0) {
             return true;
         }
         return false;
@@ -187,7 +208,7 @@ public class CraftCommons {
         w.NESSIEinit();
         w.NESSIEadd(string);
         w.NESSIEfinalize(digest);
-        return  Whirlpool.display(digest);
+        return Whirlpool.display(digest);
     }
 
     public static String normalisedVersion(String version) {
@@ -217,9 +238,11 @@ public class CraftCommons {
         return null;
     }
 
-    public static String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
+    public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
+                                    String newusername, String newuserid, String extrausername, String lastvalue) {
         Util util = new Util();
-        return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid, extrausername, lastvalue);
+        return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
+                               extrausername, lastvalue);
     }
 
     public static String forumCacheValue(String cache, String value) {

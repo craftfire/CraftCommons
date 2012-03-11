@@ -46,7 +46,8 @@ public class DataManager {
     private Statement stmt = null;
     private ResultSet rs = null;
 
-    public DataManager(boolean keepalive, int timeout, String host, int port, String database, String username, String password, String prefix) {
+    public DataManager(boolean keepalive, int timeout, String host, int port, String database, String username,
+                       String password, String prefix) {
         this.keepalive = keepalive;
         this.timeout = timeout;
         this.startup = System.currentTimeMillis() / 1000;
@@ -58,7 +59,7 @@ public class DataManager {
         this.prefix = prefix;
         this.datatype = DataTypes.MYSQL;
         this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
-        if(keepalive) {
+        if (keepalive) {
             connect();
         }
     }
@@ -77,8 +78,18 @@ public class DataManager {
         this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
     }
 
+    public boolean exist(String table, String field, Object value) {
+        if (getStringField(
+                "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE `" + field + "` = '" + value +
+                "' LIMIT 1") != null) {
+            return true;
+        }
+        return false;
+    }
+
     public int getLastID(String field, String table) {
-        return getIntegerField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` ORDER BY `" + field + "` DESC LIMIT 1");
+        return getIntegerField(
+                "SELECT `" + field + "` FROM `" + getPrefix() + table + "` ORDER BY `" + field + "` DESC LIMIT 1");
     }
 
     public int getCount(String table, String where) {
@@ -90,7 +101,7 @@ public class DataManager {
     }
 
     public String getStringField(String table, String field, String where) {
-          return getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
     }
 
     public int getIntegerField(String table, String field, String where) {
@@ -110,12 +121,12 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            if(this.rs.next()) {
+            if (this.rs.next()) {
                 String value = this.rs.getString(1);
                 close();
                 return value;
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             close();
         }
@@ -127,12 +138,12 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            if(this.rs.next()) {
+            if (this.rs.next()) {
                 int value = this.rs.getInt(1);
                 close();
                 return value;
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             close();
         }
@@ -144,12 +155,12 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            if(this.rs.next()) {
+            if (this.rs.next()) {
                 Date value = this.rs.getDate(1);
                 close();
                 return value;
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             close();
         }
@@ -161,12 +172,12 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            if(this.rs.next()) {
+            if (this.rs.next()) {
                 Blob value = this.rs.getBlob(1);
                 close();
                 return value;
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             close();
         }
@@ -179,7 +190,7 @@ public class DataManager {
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
             close();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -192,7 +203,7 @@ public class DataManager {
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
             close();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -205,7 +216,7 @@ public class DataManager {
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
             close();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -259,7 +270,7 @@ public class DataManager {
             }
             close();
             return data;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             close();
             e.printStackTrace();
         }
@@ -283,7 +294,7 @@ public class DataManager {
             }
             close();
             return list;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             close();
             e.printStackTrace();
         }
@@ -296,7 +307,7 @@ public class DataManager {
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
             return this.rs;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             close();
             e.printStackTrace();
         }
@@ -313,7 +324,7 @@ public class DataManager {
 
     public boolean isConnected() {
         try {
-            return !this.con.isClosed();
+            return ! this.con.isClosed();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -321,7 +332,7 @@ public class DataManager {
     }
 
     public void connect() {
-        if(this.con != null && isConnected()) {
+        if (this.con != null && isConnected()) {
             return;
         }
         try {
@@ -329,14 +340,14 @@ public class DataManager {
             this.con = DriverManager.getConnection(this.url, this.username, this.password);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void close() {
-        if(this.keepalive && !this.reconnect) {
-            if(this.timeout == 0) {
+        if (this.keepalive && ! this.reconnect) {
+            if (this.timeout == 0) {
                 return;
             } else if ((System.currentTimeMillis() / 1000) < (this.startup + this.timeout)) {
                 return;
@@ -344,22 +355,22 @@ public class DataManager {
         }
         try {
             this.con.close();
-            if(this.rs != null) {
+            if (this.rs != null) {
                 this.rs.close();
                 this.rs = null;
             }
-            if(this.pStmt != null) {
+            if (this.pStmt != null) {
                 this.pStmt.close();
                 this.pStmt = null;
             }
-            if(this.stmt != null) {
+            if (this.stmt != null) {
                 this.stmt.close();
                 this.stmt = null;
             }
-            if(this.keepalive) {
+            if (this.keepalive) {
                 connect();
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -459,7 +470,7 @@ public class DataManager {
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
+            Map.Entry<String, Object> pairs = (Map.Entry<String, Object>) it.next();
             if (i == data.size()) {
                 suffix = "";
             }
@@ -474,7 +485,7 @@ public class DataManager {
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
+            Map.Entry<String, Object> pairs = (Map.Entry<String, Object>) it.next();
             if (i == data.size()) {
                 suffix = "";
             }
@@ -482,7 +493,7 @@ public class DataManager {
             values += " '" + pairs.getValue() + "'" + suffix;
             i++;
         }
-        query =  "(" + fields + ") VALUES (" + values + ")";
+        query = "(" + fields + ") VALUES (" + values + ")";
         return query;
     }
 }
