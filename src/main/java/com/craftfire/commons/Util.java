@@ -104,7 +104,7 @@ public class Util {
             }
             i++;
         }
-        return "no";
+        return null;
     }
 
     public String removeChar(String s, char c) {
