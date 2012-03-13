@@ -237,7 +237,7 @@ public class CraftCommons {
         return null;
     }
 
-    public String convertHexToString(String hex) {
+    public static String convertHexToString(String hex) {
         StringBuilder sb = new StringBuilder();
         StringBuilder temp = new StringBuilder();
         for ( int i=0; i<hex.length()-1; i+=2 ) {
