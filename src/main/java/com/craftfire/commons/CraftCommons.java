@@ -20,6 +20,7 @@ import com.craftfire.commons.encryption.EncryptionUtil;
 import com.craftfire.commons.encryption.Whirlpool;
 
 import java.awt.*;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -235,6 +236,14 @@ public class CraftCommons {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String convertStreamToString(InputStream is) {
+        try {
+            return new java.util.Scanner(is).useDelimiter("\\A").next();
+        } catch (java.util.NoSuchElementException e) {
+            return "";
+        }
     }
 
     public static String convertHexToString(String hex) {

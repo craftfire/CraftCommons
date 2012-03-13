@@ -114,7 +114,7 @@ public class DataManager {
         return getBlobField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
-    public InputStream getBinaryField(String table, String field, String where) {
+    public String getBinaryField(String table, String field, String where) {
         return getBinaryField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
@@ -186,7 +186,7 @@ public class DataManager {
         return null;
     }
 
-    public InputStream getBinaryField(String query) {
+    public String getBinaryField(String query) {
         try {
             connect();
             this.stmt = this.con.createStatement();
@@ -194,7 +194,7 @@ public class DataManager {
             if (this.rs.next()) {
                 InputStream value = this.rs.getBinaryStream(1);
                 close();
-                return value;
+                return CraftCommons.convertStreamToString(value);
             }
         } catch (SQLException e) {
             e.printStackTrace();
