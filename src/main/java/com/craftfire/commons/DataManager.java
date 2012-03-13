@@ -16,24 +16,13 @@
  */
 package com.craftfire.commons;
 
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.io.ByteArrayInputStream;
+import java.sql.*;
+import java.sql.Date;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepalive, reconnect;
@@ -188,6 +177,22 @@ public class DataManager {
         try {
             connect();
             this.pStmt = this.con.prepareStatement(query);
+            this.pStmt.executeUpdate();
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBlob(String table, String field, String where, String data) {
+        try {
+            String query = "UPDATE `" + getPrefix() + table + "` SET `" + field + "` = ? WHERE " + where;
+            byte[] array = data.getBytes();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
+            connect();
+            this.stmt = this.con.createStatement();
+            this.pStmt = this.con.prepareStatement(query);
+            this.pStmt.setBlob(1, inputStream, array.length);
             this.pStmt.executeUpdate();
             close();
         } catch (SQLException e) {
