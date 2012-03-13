@@ -19,6 +19,7 @@ package com.craftfire.commons;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -90,27 +91,31 @@ public class DataManager {
     }
 
     public int getCount(String table, String where) {
-        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public int getCount(String table) {
-        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "`");
+        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1");
     }
 
     public String getStringField(String table, String field, String where) {
-        return getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public int getIntegerField(String table, String field, String where) {
-        return getIntegerField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getIntegerField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public Date getDateField(String table, String field, String where) {
-        return getDateField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getDateField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public Blob getBlobField(String table, String field, String where) {
-        return getBlobField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where);
+        return getBlobField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+    }
+
+    public InputStream getBinaryField(String table, String field, String where) {
+        return getBinaryField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public String getStringField(String query) {
@@ -171,6 +176,23 @@ public class DataManager {
             this.rs = this.stmt.executeQuery(query);
             if (this.rs.next()) {
                 Blob value = this.rs.getBlob(1);
+                close();
+                return value;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            close();
+        }
+        return null;
+    }
+
+    public InputStream getBinaryField(String query) {
+        try {
+            connect();
+            this.stmt = this.con.createStatement();
+            this.rs = this.stmt.executeQuery(query);
+            if (this.rs.next()) {
+                InputStream value = this.rs.getBinaryStream(1);
                 close();
                 return value;
             }
