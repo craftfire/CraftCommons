@@ -81,6 +81,14 @@ public class DataManager {
                 "SELECT `" + field + "` FROM `" + getPrefix() + table + "` ORDER BY `" + field + "` DESC LIMIT 1");
     }
 
+    public int getLastID(String field, String table, String where) {
+        return getIntegerField(
+                "SELECT `" + field + "` " +
+                "FROM `" + getPrefix() + table + "` " +
+                "WHERE " + where + " " +
+                "ORDER BY `" + field + "` DESC LIMIT 1");
+    }
+
     public int getCount(String table, String where) {
         return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " + where);
     }
