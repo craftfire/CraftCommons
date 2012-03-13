@@ -16,8 +16,10 @@
  */
 package com.craftfire.commons;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import com.craftfire.commons.encryption.EncryptionUtil;
+import com.craftfire.commons.encryption.Whirlpool;
+
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,9 +27,6 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.craftfire.commons.encryption.EncryptionUtil;
-import com.craftfire.commons.encryption.Whirlpool;
 
 public class CraftCommons {
     /**
@@ -236,6 +235,18 @@ public class CraftCommons {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String convertHexToString(String hex) {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder temp = new StringBuilder();
+        for ( int i=0; i<hex.length()-1; i+=2 ) {
+            String output = hex.substring(i, (i + 2));
+            int decimal = Integer.parseInt(output, 16);
+            sb.append((char)decimal);
+            temp.append(decimal);
+        }
+        return sb.toString();
     }
 
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
