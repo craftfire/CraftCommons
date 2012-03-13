@@ -249,6 +249,15 @@ public class CraftCommons {
         return sb.toString();
     }
 
+    public static String convertStringToHex(String str) {
+        char[] chars = str.toCharArray();
+        StringBuffer hex = new StringBuffer();
+        for (int i = 0; i < chars.length; i++){
+            hex.append(Integer.toHexString((int)chars[i]));
+        }
+        return hex.toString();
+    }
+
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
                                     String newusername, String newuserid, String extrausername, String lastvalue) {
         Util util = new Util();
