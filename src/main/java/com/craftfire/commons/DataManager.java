@@ -117,6 +117,11 @@ public class DataManager {
     public String getBinaryField(String table, String field, String where) {
         return getBinaryField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
+    
+    public void increaseField(String table, String field, String where) {
+        executeSQLquery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` =" + " " + field +
+                        " + 1 WHERE " + where);
+    }
 
     public String getStringField(String query) {
         try {
