@@ -349,7 +349,7 @@ public class CraftCommons {
         return yaml;
     }
 
-    public HashMap<String, Object> loadYaml(File file) throws IOException {
+    public static HashMap<String, Object> loadYaml(File file) throws IOException {
         HashMap<String, Object> yaml = new HashMap<String, Object>();
         InputStream yamlStream = new FileInputStream(file);
         if (yamlStream != null) {
