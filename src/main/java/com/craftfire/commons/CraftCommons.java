@@ -285,7 +285,7 @@ public class CraftCommons {
     }
     
     public HashMap<String, Object> loadLocalYaml(String path) throws IOException {
-        return loadYaml(getClass().getResourceAsStream(path));
+        return loadYaml(getClass().getClassLoader().getResourceAsStream(path));
     }
 
     public static HashMap<String, Object> loadYaml(File file) throws IOException {
@@ -295,7 +295,7 @@ public class CraftCommons {
     public static HashMap<String, Object> loadYaml(InputStream yamlStream) throws IOException {
         HashMap<String, Object> yaml = new HashMap<String, Object>();
         if (yamlStream != null) {
-            try  {
+            try {
                 InputStreamReader yamlStreamReader = new InputStreamReader (yamlStream);
                 BufferedReader buffer = new BufferedReader (yamlStreamReader);
                 String line, node = "";
