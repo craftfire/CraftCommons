@@ -16,7 +16,12 @@
  */
 package com.craftfire.commons;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -116,5 +121,69 @@ public class Util {
             if (cur != c) r.setCharAt(current++, cur);
         }
         return r.toString();
+    }
+
+    public HashMap<String, Object> loadYaml(InputStream yamlStream) throws IOException {
+        HashMap<String, Object> yaml = new HashMap<String, Object>();
+        if (yamlStream != null) {
+            try {
+                InputStreamReader yamlStreamReader = new InputStreamReader (yamlStream);
+                BufferedReader buffer = new BufferedReader (yamlStreamReader);
+                String line, node = "";
+                int lastBlank = 0;
+                while  ((line = buffer.readLine()) != null) {
+                    int blank = 0;
+                    if (line.charAt(line.length() - 1) == ':') {
+                        for (int i=0; i < line.length(); i++) {
+                            if (Character.isWhitespace(line.charAt(i))) {
+                                blank++;
+                            }
+                        }
+                        line = line.replaceAll("\\s+", "");
+                        line = line.replaceAll(":", "");
+                        if (blank == 0) {
+                            node = line + ".";
+                        } else if (blank > lastBlank) {
+                            node += line + ".";
+                        } else if (blank <= lastBlank) {
+                            String[] split = node.split("\\.");
+                            node = node.replace("." + split[split.length - 1], "");
+                            node += line + ".";
+                        }
+                        lastBlank = blank;
+                    } else {
+                        String[] split = line.split("\\:");
+                        String finalNode = split[0].replaceAll("\\s+", "");
+                        if (finalNode.startsWith("#")) {
+                            continue;
+                        }
+                        String temp = split[1].substring(1);
+                        if (split.length > 1) {
+                            for(int i=2; split.length > i; i++){
+                                temp += ":" + split[i];
+                            }
+                        }
+                        int index = temp.lastIndexOf("#");
+                        if (index != -1 && Character.isWhitespace(temp.charAt(index - 1))) {
+                            temp = temp.substring(0, index - 1);
+                        }
+                        String value = "";
+                        char last = 0;
+                        for (int i=0; i < temp.length(); i++) {
+                            if (Character.isWhitespace(temp.charAt(i)) && Character.isWhitespace(last)) {
+                                continue;
+                            }
+                            value += temp.charAt(i);
+                            last = temp.charAt(i);
+                        }
+                        value = value.substring(0, value.length() - 1);
+                        yaml.put(node + finalNode, value);
+                    }
+                }
+            } finally  {
+                yamlStream.close();
+            }
+        }
+        return yaml;
     }
 }

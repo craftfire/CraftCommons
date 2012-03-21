@@ -130,6 +130,8 @@ public class LoggingManager {
     public void stackTrace(Exception e, Thread t, HashSet<String> extra) {
         advancedWarning("Stacktrace Error");
         warning("Class name: " + t.getStackTrace()[1].getClassName());
+        warning("Error message: " + e.getMessage());
+        warning("Error cause: " + e.getCause());
         warning("File name: " + t.getStackTrace()[1].getFileName());
         warning("Function name: " + t.getStackTrace()[1].getMethodName());
         warning("Error line: " + t.getStackTrace()[1].getLineNumber());
@@ -143,6 +145,8 @@ public class LoggingManager {
 
         logError("--------------------------- STACKTRACE ERROR ---------------------------");
         logError("Class name: " + t.getStackTrace()[1].getClassName());
+        logError("Error message: " + e.getMessage());
+        logError("Error cause: " + e.getCause());
         logError("File name: " + t.getStackTrace()[1].getFileName());
         logError("Function name: " + t.getStackTrace()[1].getMethodName());
         logError("Error line: " + t.getStackTrace()[1].getLineNumber());
