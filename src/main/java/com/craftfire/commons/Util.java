@@ -133,7 +133,7 @@ public class Util {
                 int lastBlank = 0;
                 while  ((line = buffer.readLine()) != null) {
                     int blank = 0;
-                    if (line.charAt(line.length() - 1) == ':') {
+                    if (line.length() > 0 && line.charAt(line.length() - 1) == ':') {
                         for (int i=0; i < line.length(); i++) {
                             if (Character.isWhitespace(line.charAt(i))) {
                                 blank++;
@@ -151,7 +151,7 @@ public class Util {
                             node += line + ".";
                         }
                         lastBlank = blank;
-                    } else {
+                    } else if (line.length() > 0) {
                         String[] split = line.split("\\:");
                         String finalNode = split[0].replaceAll("\\s+", "");
                         if (finalNode.startsWith("#")) {
