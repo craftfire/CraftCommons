@@ -16,17 +16,31 @@
  */
 package com.craftfire.commons;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 public class LoggingManager {
     private final Logger logger;
-    private String prefix, directory;
-    private boolean debug = false;
+    private String prefix, directory, format;
+    private boolean debug = false, logging = false;
     
-    public LoggingManager(String logger, String directory, String prefix) {
+    public LoggingManager(String logger, String directory, String prefix, String format) {
         this.logger = Logger.getLogger(logger);
         this.directory = directory;
         this.prefix = prefix;
+        this.format = format;
+    }
+
+    public static enum Type {
+        error, debug
     }
     
     public Logger getLogger() {
@@ -56,11 +70,21 @@ public class LoggingManager {
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
+
+    public boolean isLogging() {
+        return this.logging;
+    }
+
+    public void setLogging(boolean logging) {
+        this.logging = logging;
+    }
     
-    public void debug(String line) {
-        if (this.debug) {
-            this.logger.info(this.prefix + " " + line);
-        }
+    public String getFormat() {
+        return this.format;
+    }
+    
+    public void setFormat(String format) {
+        this.format = format;
     }
     
     public void info(String line) {
@@ -74,6 +98,18 @@ public class LoggingManager {
     public void warning(String line) {
         this.logger.warning(this.prefix + " " + line);
     }
+
+    public void debug(String line) {
+        if (this.debug) {
+            this.logger.info(this.prefix + " " + line);
+            toFile(Type.debug, line);
+        }
+    }
+
+    public void error(String error) {
+        warning(error);
+        toFile(Type.error, error);
+    }
     
     public void advancedWarning(String line) {
         warning(System.getProperty("line.separator") + 
@@ -85,6 +121,85 @@ public class LoggingManager {
                 System.getProperty("line.separator") + 
                 "| " + line.toUpperCase() + System.getProperty("line.separator") + 
                 "|-----------------------------------------------------------------------------|");   
+    }
+
+    public void stackTrace(Exception e, Thread t) {
+        stackTrace(e, t, null);
+    }
+    
+    public void stackTrace(Exception e, Thread t, HashSet<String> extra) {
+        advancedWarning("Stacktrace Error");
+        warning("Class name: " + t.getStackTrace()[1].getClassName());
+        warning("File name: " + t.getStackTrace()[1].getFileName());
+        warning("Function name: " + t.getStackTrace()[1].getMethodName());
+        warning("Error line: " + t.getStackTrace()[1].getLineNumber());
+        if (this.logging) {
+            DateFormat LogFormat = new SimpleDateFormat(this.format);
+            Date date = new Date();
+            warning("Check log file: " + this.directory  + "error\\" + LogFormat.format(date) + "-error.log");
+        } else {
+            warning("Enable logging in the config to get more information about the error.");
+        }
+
+        logError("--------------------------- STACKTRACE ERROR ---------------------------");
+        logError("Class name: " + t.getStackTrace()[1].getClassName());
+        logError("File name: " + t.getStackTrace()[1].getFileName());
+        logError("Function name: " + t.getStackTrace()[1].getMethodName());
+        logError("Error line: " + t.getStackTrace()[1].getLineNumber());
+        if (extra != null) {
+        Iterator<String> it = extra.iterator();
+            while (it.hasNext()) {
+                logError(it.next());
+            }
+        }
+        logError("--------------------------- STACKTRACE START ---------------------------");
+        for (int i = 0; i < e.getStackTrace().length; i++) {
+            logError(e.getStackTrace()[i].toString());
+        }
+        logError("---------------------------- STACKTRACE END ----------------------------");
+    }
+
+    public void logError(String error) {
+        toFile(Type.error, error);
+    }
+
+    private void toFile(Type type, String line) {
+        if (this.logging) {
+            File data = new File(this.directory, "");
+            if (! data.exists()) {
+                if (data.mkdir()) {
+                   debug("Created missing directory: " + this.directory);
+                }
+            }
+            data = new File(this.directory + type.toString() + "/", "");
+            if (! data.exists()) {
+                if (data.mkdir()) {
+                    debug("Created missing directory: " + this.directory + type.toString());
+                }
+            }
+            DateFormat logFormat = new SimpleDateFormat(this.format);
+            Date date = new Date();
+            data = new File(this.directory + type.toString() + "/" + logFormat.format(date) + "-" +
+                            type.toString() + ".log");
+            if (! data.exists()) {
+                try {
+                    data.createNewFile();
+                } catch (IOException e) {
+                    stackTrace(e, Thread.currentThread());
+                }
+            }
+            try {
+                DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                FileWriter writer = new FileWriter(this.directory + type.toString() + "/" + logFormat.format(date) + "-" +
+                                        type.toString() + ".log", true);
+                BufferedWriter buffer = new BufferedWriter(writer);
+                buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
+                buffer.close();
+                writer.close();
+            } catch (IOException e) {
+                stackTrace(e, Thread.currentThread());
+            }
+        }
     }
 
 }
