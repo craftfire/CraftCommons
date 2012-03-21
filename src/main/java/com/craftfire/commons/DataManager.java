@@ -27,7 +27,7 @@ import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepalive, reconnect;
-    private String host, username, password, database, prefix, url;
+    private String host, username, password, database, prefix, url, query;
     private long startup;
     private int timeout, port, queries = 0;
     private Connection con = null;
@@ -128,7 +128,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             if (this.rs.next()) {
                 String value = this.rs.getString(1);
                 close();
@@ -146,7 +146,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             if (this.rs.next()) {
                 int value = this.rs.getInt(1);
                 close();
@@ -164,7 +164,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             if (this.rs.next()) {
                 Date value = this.rs.getDate(1);
                 close();
@@ -182,7 +182,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             if (this.rs.next()) {
                 Blob value = this.rs.getBlob(1);
                 close();
@@ -200,7 +200,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             if (this.rs.next()) {
                 InputStream value = this.rs.getBinaryStream(1);
                 close();
@@ -218,7 +218,7 @@ public class DataManager {
             connect();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
-            this.queries++;
+            log(query);
             close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class DataManager {
             byte[] array = data.getBytes();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
             connect();
-            this.queries++;
+            log(query);
             this.stmt = this.con.createStatement();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.setBlob(1, inputStream, array.length);
@@ -248,7 +248,7 @@ public class DataManager {
             String query = "UPDATE `" + getPrefix() + table + "`" + update + " WHERE " + where;
             connect();
             this.pStmt = this.con.prepareStatement(query);
-            this.queries++;
+            log(query);
             this.pStmt.executeUpdate();
             close();
         } catch (SQLException e) {
@@ -262,7 +262,7 @@ public class DataManager {
             String query = "INSERT INTO `" + getPrefix() + table + "` " + insert;
             connect();
             this.pStmt = this.con.prepareStatement(query);
-            this.queries++;
+            log(query);
             this.pStmt.executeUpdate();
             close();
         } catch (SQLException e) {
@@ -275,7 +275,7 @@ public class DataManager {
             connect();
             Statement stmt = this.con.createStatement();
             this.rs = stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
@@ -310,7 +310,7 @@ public class DataManager {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             HashMap<String, Object> data = new HashMap<String, Object>();
@@ -334,7 +334,7 @@ public class DataManager {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while (this.rs.next()) {
@@ -358,7 +358,7 @@ public class DataManager {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.queries++;
+            log(query);
             return this.rs;
         } catch (SQLException e) {
             close();
@@ -367,6 +367,11 @@ public class DataManager {
         return null;
     }
 
+    protected void log(String query) {
+        this.query = query;
+        this.queries++;
+    }
+    
     public DataTypes getDataType() {
         return this.datatype;
     }
@@ -520,6 +525,10 @@ public class DataManager {
     
     public int getQueries() {
         return this.queries;
+    }
+    
+    public String getLastQuery() {
+        return this.query;
     }
 
     private String updateFieldsString(HashMap<String, Object> data) {
