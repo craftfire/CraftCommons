@@ -91,17 +91,17 @@ public class LoggingManager {
         this.logger.info(this.prefix + " " + line);    
     }
 
-    public void severe(String line) {
-        this.logger.severe(this.prefix + " " + line);
-    }
-
     public void warning(String line) {
         this.logger.warning(this.prefix + " " + line);
     }
 
+    public void severe(String line) {
+        this.logger.severe(this.prefix + " " + line);
+    }
+
     public void debug(String line) {
         if (this.debug) {
-            this.logger.info(this.prefix + " " + line);
+            this.logger.info(this.prefix + " [Debug] " + line);
             toFile(Type.debug, line);
         }
     }
