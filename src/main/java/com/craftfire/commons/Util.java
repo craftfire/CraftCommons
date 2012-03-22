@@ -131,6 +131,7 @@ public class Util {
                 BufferedReader buffer = new BufferedReader (yamlStreamReader);
                 String line, node = "";
                 int lastBlank = 0;
+                boolean isNode = false;
                 while  ((line = buffer.readLine()) != null) {
                     int blank = 0;
                     if (line.length() > 0 && line.charAt(line.length() - 1) == ':') {
@@ -147,16 +148,39 @@ public class Util {
                             node += line + ".";
                         } else if (blank <= lastBlank) {
                             String[] split = node.split("\\.");
-                            node = node.replace("." + split[split.length - 1], "");
+                            if ((lastBlank - blank) > 0) {
+                                for (int i = 1; ((lastBlank - blank) / 4) >= i; i++) {
+                                    node = node.replace("." + split[split.length - i], "");
+                                }
+                            } else {
+                                node = node.replace("." + split[split.length - 1], "");
+                            }
                             node += line + ".";
                         }
                         lastBlank = blank;
+                        isNode = true;
                     } else if (line.length() > 0) {
+                        boolean set = false;
+                        for (int i=0; i < line.length() && ! set; i++) {
+                            if (Character.isWhitespace(line.charAt(i))) {
+                                blank++;
+                            } else {
+                                set = true;
+                            }
+                        }
+
                         String[] split = line.split("\\:");
                         String finalNode = split[0].replaceAll("\\s+", "");
                         if (finalNode.startsWith("#")) {
                             continue;
                         }
+                        if (! isNode && blank > lastBlank) {
+                            node += finalNode + ".";
+                        } else if (! isNode && blank < lastBlank) {
+                            String[] spl = node.split("\\.");
+                            node = node.replace("." + spl[spl.length - 1], "");
+                        }
+                        lastBlank = blank;
                         String temp = split[1].substring(1);
                         if (split.length > 1) {
                             for(int i=2; split.length > i; i++){
@@ -176,8 +200,12 @@ public class Util {
                             value += temp.charAt(i);
                             last = temp.charAt(i);
                         }
-                        value = value.substring(0, value.length() - 1);
+                        if (Character.isWhitespace(value.charAt(value.length() - 1))) {
+                            value = value.substring(0, value.length() - 1);
+                        }
+                            System.out.println(node + finalNode + " = " + value);
                         yaml.put(node + finalNode, value);
+                        isNode = false;
                     }
                 }
             } finally  {
