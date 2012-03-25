@@ -204,7 +204,17 @@ public class Util {
                             value = value.substring(0, value.length() - 1);
                         }
                         //System.out.println(node + finalNode + " = " + value);
-                        yaml.put(node + finalNode, value);
+                        if (value.equalsIgnoreCase("true")) {
+                            yaml.put(node + finalNode, true);
+                        } else if (value.equalsIgnoreCase("false")) {
+                            yaml.put(node + finalNode, false);
+                        } else if (CraftCommons.isInteger(value)) {
+                            yaml.put(node + finalNode, Integer.parseInt(value));
+                        } else if (CraftCommons.isLong(value)) {
+                            yaml.put(node + finalNode, Long.parseLong(value));
+                        } else {
+                            yaml.put(node + finalNode, value);
+                        }
                         isNode = false;
                     }
                 }
