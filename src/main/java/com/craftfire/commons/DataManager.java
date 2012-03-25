@@ -31,13 +31,13 @@ public class DataManager {
     private long startup;
     private int timeout, port, queries = 0;
     private Connection con = null;
-    private final DataTypes datatype;
+    private final DataType datatype;
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
 
-    public DataManager(boolean keepalive, int timeout, String host, int port, String database, String username,
-                       String password, String prefix) {
+    public DataManager(boolean keepalive, int timeout, String host, int port, String database,
+                       String username, String password, String prefix) {
         this.keepalive = keepalive;
         this.timeout = timeout;
         this.startup = System.currentTimeMillis() / 1000;
@@ -47,11 +47,46 @@ public class DataManager {
         this.username = username;
         this.password = password;
         this.prefix = prefix;
-        this.datatype = DataTypes.MYSQL;
+        this.datatype = DataType.MYSQL;
         this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
         if (keepalive) {
             connect();
         }
+    }
+
+    public DataManager(DataType datatype, boolean keepalive, int timeout, String host, int port, String database,
+                       String username, String password, String prefix) {
+        this.keepalive = keepalive;
+        this.timeout = timeout;
+        this.startup = System.currentTimeMillis() / 1000;
+        this.host = host;
+        this.port = port;
+        this.database = database;
+        this.username = username;
+        this.password = password;
+        this.prefix = prefix;
+        this.datatype = datatype;
+        this.url = "jdbc:" + datatype.toString().toLowerCase() + "://" + this.host + "/" + this.database +
+                   "?jdbcCompliantTruncation=false";
+        if (keepalive) {
+            connect();
+        }
+    }
+
+    public DataManager(DataType datatype, String host, int port, String database, String username, String password,
+                       String prefix) {
+        this.keepalive = false;
+        this.timeout = 0;
+        this.startup = System.currentTimeMillis() / 1000;
+        this.host = host;
+        this.port = port;
+        this.database = database;
+        this.username = username;
+        this.password = password;
+        this.prefix = prefix;
+        this.datatype = datatype;
+        this.url = "jdbc:" + datatype.toString().toLowerCase() + "://" + this.host + "/" + this.database +
+                   "?jdbcCompliantTruncation=false";
     }
 
     public DataManager(String host, int port, String database, String username, String password, String prefix) {
@@ -64,7 +99,7 @@ public class DataManager {
         this.username = username;
         this.password = password;
         this.prefix = prefix;
-        this.datatype = DataTypes.MYSQL;
+        this.datatype = DataType.MYSQL;
         this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
     }
 
@@ -372,7 +407,7 @@ public class DataManager {
         this.queries++;
     }
     
-    public DataTypes getDataType() {
+    public DataType getDataType() {
         return this.datatype;
     }
 
@@ -382,7 +417,9 @@ public class DataManager {
 
     public boolean isConnected() {
         try {
-            return ! this.con.isClosed();
+            if (this.con != null) {
+                return !this.con.isClosed();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
