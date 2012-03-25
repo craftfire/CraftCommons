@@ -23,8 +23,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class LoggingManager {
@@ -123,11 +122,11 @@ public class LoggingManager {
                 "|-----------------------------------------------------------------------------|");   
     }
 
-    public void stackTrace(Exception e, Thread t) {
+    public void stackTrace(final Exception e, final Thread t) {
         stackTrace(e, t, null);
     }
     
-    public void stackTrace(Exception e, Thread t, HashSet<String> extra) {
+    public void stackTrace(final Exception e, final Thread t, HashMap<Integer, String> extra) {
         advancedWarning("Stacktrace Error");
         warning("Class name: " + t.getStackTrace()[1].getClassName());
         warning("Error message: " + e.getMessage());
@@ -151,9 +150,8 @@ public class LoggingManager {
         logError("Function name: " + t.getStackTrace()[1].getMethodName());
         logError("Error line: " + t.getStackTrace()[1].getLineNumber());
         if (extra != null) {
-        Iterator<String> it = extra.iterator();
-            while (it.hasNext()) {
-                logError(it.next());
+            for (int id : extra.keySet()) {
+                logError(extra.get(id));
             }
         }
         logError("--------------------------- STACKTRACE START ---------------------------");
