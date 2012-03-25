@@ -16,6 +16,6 @@
  */
 package com.craftfire.commons;
 
-public enum DataTypes {
-    MYSQL, SQLITE
+public enum DataType {
+    MYSQL, H2
 }
