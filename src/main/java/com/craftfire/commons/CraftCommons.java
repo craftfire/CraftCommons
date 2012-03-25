@@ -90,6 +90,21 @@ public class CraftCommons {
         }
     }
 
+    /**
+     * Checks if input is a Long object.
+     *
+     * @param input The string to parse/check.
+     * @return true, if the input is a Long object.
+     */
+    public static boolean isLong(String input) {
+        try {
+            Long.parseLong(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static String long2ip(Long i) {
         return ((i >> 24) & 0xFF) + "." +
                ((i >> 16) & 0xFF) + "." +
