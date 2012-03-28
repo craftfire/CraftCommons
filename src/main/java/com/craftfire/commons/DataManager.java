@@ -162,10 +162,10 @@ public class DataManager {
     protected void setURL() {
         switch(datatype) {
             case MYSQL:     this.url = "jdbc:h2://" + this.host + "/"
-                    + this.database + "?jdbcCompliantTruncation=false";
-                break;
+                                     + this.database + "?jdbcCompliantTruncation=false";
+                            break;
             case H2:        this.url = "jdbc:h2:" + this.directory;
-                break;
+                            break;
         }
     }
 
@@ -450,18 +450,12 @@ public class DataManager {
         return null;
     }
 
-    public ResultSet getResultSet(String query) {
-        try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
-            return this.rs;
-        } catch (SQLException e) {
-            close();
-            e.printStackTrace();
-        }
-        return null;
+    public ResultSet getResultSet(String query) throws SQLException {
+        connect();
+        this.stmt = this.con.createStatement();
+        log(query);
+        this.rs = this.stmt.executeQuery(query);
+        return this.rs;
     }
 
     private void log(String query) {
