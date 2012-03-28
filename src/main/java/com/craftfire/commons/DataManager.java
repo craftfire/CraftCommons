@@ -216,7 +216,7 @@ public class DataManager {
     }
     
     public void increaseField(String table, String field, String where) {
-        executeSQLQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` =" + " " + field +
+        executeQueryVoid("UPDATE `" + getPrefix() + table + "` SET `" + field + "` =" + " " + field +
                         " + 1 WHERE " + where);
     }
 
@@ -310,7 +310,15 @@ public class DataManager {
         return null;
     }
 
-    public void executeSQLQuery(String query) {
+    public void executeQuery(String query) throws SQLException {
+        connect();
+        this.pStmt = this.con.prepareStatement(query);
+        this.pStmt.executeUpdate();
+        log(query);
+        close();
+    }
+
+    public void executeQueryVoid(String query) {
         try {
             connect();
             this.pStmt = this.con.prepareStatement(query);
