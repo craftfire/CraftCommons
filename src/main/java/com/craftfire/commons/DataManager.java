@@ -30,7 +30,7 @@ public class DataManager {
     private String host, username, password, database, prefix, url = null, query, directory;
     private Map<Long, String> queries = new HashMap<Long, String>();
     private long startup;
-    private int timeout, port, queriesCount = 0;
+    private int timeout = 0, port = 3306, queriesCount = 0;
     private Connection con = null;
     private final DataType datatype;
     private PreparedStatement pStmt = null;
