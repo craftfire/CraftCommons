@@ -27,89 +27,149 @@ import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepalive, reconnect;
-    private String host, username, password, database, prefix, url, query;
+    private String host, username, password, database, prefix, url = null, query, directory;
+    private Map<Long, String> queries = new HashMap<Long, String>();
     private long startup;
-    private int timeout, port, queries = 0;
+    private int timeout, port, queriesCount = 0;
     private Connection con = null;
     private final DataType datatype;
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
+    
+    public DataManager(DataType type, String username, String password) {
+        this.datatype = type;
+        this.username = username;
+        this.password = password;
+        this.startup = System.currentTimeMillis() / 1000;
+    }
 
-    public DataManager(boolean keepalive, int timeout, String host, int port, String database,
-                       String username, String password, String prefix) {
+    public String getURL() {
+        return this.url;
+    }
+
+    public boolean isKeepAlive() {
+        return this.keepalive;
+    }
+
+    public void setKeepAlive(boolean keepalive) {
         this.keepalive = keepalive;
+        connect();
+    }
+
+    public int getTimeout() {
+        return this.timeout;
+    }
+
+    public void setTimeout(int timeout) {
         this.timeout = timeout;
-        this.startup = System.currentTimeMillis() / 1000;
+    }
+
+    public Long getStartup() {
+        return this.startup;
+    }
+
+    public String getHost() {
+        return this.host;
+    }
+
+    public void setHost(String host) {
         this.host = host;
+    }
+
+    public int getPort() {
+        return this.port;
+    }
+
+    public void setPort(int port) {
         this.port = port;
+    }
+
+    public String getDatabase() {
+        return this.database;
+    }
+
+    public void setDatabase(String database) {
         this.database = database;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDirectory() {
+        return this.directory;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
-        this.datatype = DataType.MYSQL;
-        this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
-        if (keepalive) {
-            connect();
+    }
+
+    public ResultSet getCurrentResultSet() {
+        return this.rs;
+    }
+
+    public PreparedStatement getCurrentPreparedStatement() {
+        return this.pStmt;
+    }
+
+    public Statement getCurrentStatement() {
+        return this.stmt;
+    }
+
+    public int getQueriesCount() {
+        return this.queriesCount;
+    }
+
+    public Map<Long, String> getQueries() {
+        return this.queries;
+    }
+
+    public String getLastQuery() {
+        return this.query;
+    }
+
+    public DataType getDataType() {
+        return this.datatype;
+    }
+
+    public Connection getConnection() {
+        return this.con;
+    }
+
+    protected void setURL() {
+        switch(datatype) {
+            case MYSQL:     this.url = "jdbc:h2://" + this.host + "/"
+                    + this.database + "?jdbcCompliantTruncation=false";
+                break;
+            case H2:        this.url = "jdbc:h2:" + this.directory;
+                break;
         }
-    }
-
-    public DataManager(DataType datatype, boolean keepalive, int timeout, String host, int port, String database,
-                       String username, String password, String prefix) {
-        this.keepalive = keepalive;
-        this.timeout = timeout;
-        this.startup = System.currentTimeMillis() / 1000;
-        this.host = host;
-        this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
-        this.prefix = prefix;
-        this.datatype = datatype;
-        this.url = "jdbc:" + datatype.toString().toLowerCase() + "://" + this.host + "/" + this.database +
-                   "?jdbcCompliantTruncation=false";
-        if (keepalive) {
-            connect();
-        }
-    }
-
-    public DataManager(DataType datatype, String host, int port, String database, String username, String password,
-                       String prefix) {
-        this.keepalive = false;
-        this.timeout = 0;
-        this.startup = System.currentTimeMillis() / 1000;
-        this.host = host;
-        this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
-        this.prefix = prefix;
-        this.datatype = datatype;
-        this.url = "jdbc:" + datatype.toString().toLowerCase() + "://" + this.host + "/" + this.database +
-                   "?jdbcCompliantTruncation=false";
-    }
-
-    public DataManager(String host, int port, String database, String username, String password, String prefix) {
-        this.keepalive = false;
-        this.timeout = 0;
-        this.startup = System.currentTimeMillis() / 1000;
-        this.host = host;
-        this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
-        this.prefix = prefix;
-        this.datatype = DataType.MYSQL;
-        this.url = "jdbc:mysql://" + this.host + "/" + this.database + "?jdbcCompliantTruncation=false";
     }
 
     public boolean exist(String table, String field, Object value) {
-        if (getStringField(
-                "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE `" + field + "` = '" + value +
-                "' LIMIT 1") != null) {
-            return true;
-        }
-        return false;
+        return (getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE `" + field + "` = '" +
+                              value + "' LIMIT 1") != null);
     }
 
     public int getLastID(String field, String table) {
@@ -402,17 +462,10 @@ public class DataManager {
         return null;
     }
 
-    protected void log(String query) {
+    private void log(String query) {
         this.query = query;
-        this.queries++;
-    }
-    
-    public DataType getDataType() {
-        return this.datatype;
-    }
-
-    public Connection getConnection() {
-        return this.con;
+        this.queries.put(System.currentTimeMillis(), query);
+        this.queriesCount++;
     }
 
     public boolean isConnected() {
@@ -427,12 +480,21 @@ public class DataManager {
     }
 
     public void connect() {
+        if (this.url == null) {
+            setURL();
+        }
         if (this.con != null && isConnected()) {
             return;
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            this.con = DriverManager.getConnection(this.url, this.username, this.password);
+            switch(datatype) {
+                case MYSQL:     Class.forName("com.mysql.jdbc.Driver");
+                                this.con = DriverManager.getConnection(this.url, this.username, this.password);
+                                break;
+                case H2:        Class.forName("org.h2.Driver");
+                                this.con = DriverManager.getConnection(this.url, this.username, this.password);
+                                break;
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -474,98 +536,6 @@ public class DataManager {
         this.reconnect = true;
         close();
         connect();
-    }
-
-    public String getURL() {
-        return this.url;
-    }
-
-    public boolean isKeepAlive() {
-        return this.keepalive;
-    }
-
-    public void setKeepAlive(boolean keepalive) {
-        this.keepalive = keepalive;
-    }
-
-    public int getTimeout() {
-        return this.timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public Long getStartup() {
-        return this.startup;
-    }
-
-    public String getHost() {
-        return this.host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return this.port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getDatabase() {
-        return this.database;
-    }
-
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPrefix() {
-        return this.prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public ResultSet getCurrentResultSet() {
-        return this.rs;
-    }
-
-    public PreparedStatement getCurrentPreparedStatement() {
-        return this.pStmt;
-    }
-
-    public Statement getCurrentStatement() {
-        return this.stmt;
-    }
-    
-    public int getQueries() {
-        return this.queries;
-    }
-    
-    public String getLastQuery() {
-        return this.query;
     }
 
     private String updateFieldsString(HashMap<String, Object> data) {
