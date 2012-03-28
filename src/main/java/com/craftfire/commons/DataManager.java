@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class DataManager {
-    private boolean keepalive, reconnect;
+    private boolean keepAlive, reconnect;
     private String host, username, password, database, prefix, url = null, query, directory;
     private Map<Long, String> queries = new HashMap<Long, String>();
     private long startup;
@@ -49,12 +49,14 @@ public class DataManager {
     }
 
     public boolean isKeepAlive() {
-        return this.keepalive;
+        return this.keepAlive;
     }
 
-    public void setKeepAlive(boolean keepalive) {
-        this.keepalive = keepalive;
-        connect();
+    public void setKeepAlive(boolean keepAlive) {
+        this.keepAlive = keepAlive;
+        if (keepAlive) {
+            connect();
+        }
     }
 
     public int getTimeout() {
@@ -503,7 +505,7 @@ public class DataManager {
     }
 
     public void close() {
-        if (this.keepalive && ! this.reconnect) {
+        if (this.keepAlive && !this.reconnect) {
             if (this.timeout == 0) {
                 return;
             } else if ((System.currentTimeMillis() / 1000) < (this.startup + this.timeout)) {
@@ -524,7 +526,7 @@ public class DataManager {
                 this.stmt.close();
                 this.stmt = null;
             }
-            if (this.keepalive) {
+            if (this.keepAlive) {
                 connect();
             }
         } catch (SQLException e) {
