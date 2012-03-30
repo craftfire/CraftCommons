@@ -347,32 +347,24 @@ public class DataManager {
         }
     }
 
-    public void updateFields(HashMap<String, Object> data, String table, String where) {
-        try {
-            String update = updateFieldsString(data);
-            String query = "UPDATE `" + getPrefix() + table + "`" + update + " WHERE " + where;
-            connect();
-            this.pStmt = this.con.prepareStatement(query);
-            log(query);
-            this.pStmt.executeUpdate();
-            close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void updateFields(HashMap<String, Object> data, String table, String where) throws SQLException {
+        String update = updateFieldsString(data);
+        String query = "UPDATE `" + getPrefix() + table + "`" + update + " WHERE " + where;
+        connect();
+        this.pStmt = this.con.prepareStatement(query);
+        log(query);
+        this.pStmt.executeUpdate();
+        close();
     }
 
-    public void insertFields(HashMap<String, Object> data, String table) {
-        try {
-            String insert = insertFieldString(data);
-            String query = "INSERT INTO `" + getPrefix() + table + "` " + insert;
-            connect();
-            this.pStmt = this.con.prepareStatement(query);
-            log(query);
-            this.pStmt.executeUpdate();
-            close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void insertFields(HashMap<String, Object> data, String table) throws SQLException {
+        String insert = insertFieldString(data);
+        String query = "INSERT INTO `" + getPrefix() + table + "` " + insert;
+        connect();
+        this.pStmt = this.con.prepareStatement(query);
+        log(query);
+        this.pStmt.executeUpdate();
+        close();
     }
 
     public TableModel resultSetToTableModel(String query) {
