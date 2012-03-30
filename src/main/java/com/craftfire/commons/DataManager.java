@@ -475,6 +475,21 @@ public class DataManager {
         return false;
     }
 
+    public boolean hasConnection() {
+        try {
+            boolean result = false;
+            connect();
+            if (this.con != null) {
+                result = !this.con.isClosed();
+            } 
+            close();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void connect() {
         if (this.url == null) {
             setURL();
