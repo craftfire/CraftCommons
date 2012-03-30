@@ -161,7 +161,7 @@ public class DataManager {
 
     protected void setURL() {
         switch(datatype) {
-            case MYSQL:     this.url = "jdbc:h2://" + this.host + "/"
+            case MYSQL:     this.url = "jdbc:mysql://" + this.host + "/"
                                      + this.database + "?jdbcCompliantTruncation=false";
                             break;
             case H2:        this.url = "jdbc:h2:" + this.directory;
@@ -498,7 +498,7 @@ public class DataManager {
             return;
         }
         try {
-            switch(datatype) {
+            switch(this.datatype) {
                 case MYSQL:     Class.forName("com.mysql.jdbc.Driver");
                                 this.con = DriverManager.getConnection(this.url, this.username, this.password);
                                 break;
