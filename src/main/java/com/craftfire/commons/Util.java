@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Util {
+
+    //TODO: Rewrite this function. (PHP deserialize)
     public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
         StringTokenizer st = new StringTokenizer(cache, ":");
         int i = 0;
