@@ -16,6 +16,9 @@
  */
 package com.craftfire.commons;
 
+import com.craftfire.commons.enums.DataType;
+import com.craftfire.commons.enums.FieldType;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.ByteArrayInputStream;
@@ -170,17 +173,20 @@ public class DataManager {
     }
 
     public boolean exist(String table, String field, Object value) {
-        return (getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE `" + field + "` = '" +
-                              value + "' LIMIT 1") != null);
+        return getField(FieldType.STRING,
+                                        ("SELECT `" + field + "` " +
+                                         "FROM `" + getPrefix() + table + "` " +
+                                         "WHERE `" + field + "` = '" + value + "' " +
+                                         "LIMIT 1")) != null;
     }
 
     public int getLastID(String field, String table) {
-        return getIntegerField(
+        return (Integer) getField(FieldType.INTEGER,
                 "SELECT `" + field + "` FROM `" + getPrefix() + table + "` ORDER BY `" + field + "` DESC LIMIT 1");
     }
 
     public int getLastID(String field, String table, String where) {
-        return getIntegerField(
+        return (Integer) getField(FieldType.INTEGER,
                 "SELECT `" + field + "` " +
                 "FROM `" + getPrefix() + table + "` " +
                 "WHERE " + where + " " +
@@ -188,31 +194,17 @@ public class DataManager {
     }
 
     public int getCount(String table, String where) {
-        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-    }
+        return (Integer) getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " +
+                                                                                                    where + " LIMIT 1");
+}
 
     public int getCount(String table) {
-        return getIntegerField("SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1");
+        return (Integer) getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1");
     }
 
-    public String getStringField(String table, String field, String where) {
-        return getStringField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-    }
-
-    public int getIntegerField(String table, String field, String where) {
-        return getIntegerField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-    }
-
-    public Date getDateField(String table, String field, String where) {
-        return getDateField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-    }
-
-    public Blob getBlobField(String table, String field, String where) {
-        return getBlobField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-    }
-
-    public String getBinaryField(String table, String field, String where) {
-        return getBinaryField("SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+    public Object getField(FieldType fieldType, String table, String field, String where) {
+        return getField(fieldType, "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where +
+                                                                                                            " LIMIT 1");
     }
     
     public void increaseField(String table, String field, String where) {
@@ -220,88 +212,27 @@ public class DataManager {
                         " + 1 WHERE " + where);
     }
 
-    public String getStringField(String query) {
+    public Object getField(FieldType field, String query) {
         try {
             connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
             log(query);
             if (this.rs.next()) {
-                String value = this.rs.getString(1);
+                Object value = null;
+                if (field.equals(FieldType.STRING)) {
+                    value = this.rs.getString(1);
+                } else if (field.equals(FieldType.INTEGER)) {
+                    value = this.rs.getInt(1);
+                } else if (field.equals(FieldType.DATE)) {
+                    value = this.rs.getDate(1);
+                } else if (field.equals(FieldType.BLOB)) {
+                    value = this.rs.getBlob(1);
+                } else if (field.equals(FieldType.BINARY)) {
+                    value = CraftCommons.convertStreamToString(this.rs.getBinaryStream(1));
+                }
                 close();
                 return value;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            close();
-        }
-        return null;
-    }
-
-    public int getIntegerField(String query) {
-        try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
-            if (this.rs.next()) {
-                int value = this.rs.getInt(1);
-                close();
-                return value;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            close();
-        }
-        return 0;
-    }
-
-    public Date getDateField(String query) {
-        try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
-            if (this.rs.next()) {
-                Date value = this.rs.getDate(1);
-                close();
-                return value;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            close();
-        }
-        return null;
-    }
-
-    public Blob getBlobField(String query) {
-        try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
-            if (this.rs.next()) {
-                Blob value = this.rs.getBlob(1);
-                close();
-                return value;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            close();
-        }
-        return null;
-    }
-
-    public String getBinaryField(String query) {
-        try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
-            if (this.rs.next()) {
-                InputStream value = this.rs.getBinaryStream(1);
-                close();
-                return CraftCommons.convertStreamToString(value);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -332,7 +263,9 @@ public class DataManager {
 
     public void updateBlob(String table, String field, String where, String data) {
         try {
-            String query = "UPDATE `" + getPrefix() + table + "` SET `" + field + "` = ? WHERE " + where;
+            String query = "UPDATE `" + getPrefix() + table + "` " +
+                           "SET `" + field + "` = ? " +
+                           "WHERE " + where;
             byte[] array = data.getBytes();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
             connect();
