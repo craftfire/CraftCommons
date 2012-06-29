@@ -136,7 +136,7 @@ public class CraftCommons {
         return cmp < 0;
     }
 
-    public String encrypt(Encryption encryption, Object object) {
+    public static String encrypt(Encryption encryption, Object object) {
         try {
             String string = (String) object;
             MessageDigest md = null;
