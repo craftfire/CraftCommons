@@ -18,6 +18,7 @@ package com.craftfire.commons;
 
 import com.craftfire.commons.encryption.EncryptionUtil;
 import com.craftfire.commons.encryption.Whirlpool;
+import com.craftfire.commons.enums.Encryption;
 
 import java.awt.*;
 import java.io.*;
@@ -58,7 +59,7 @@ public class CraftCommons {
             String[] parts = string.split("\\.");
             if (parts.length == 4) {
                 for (String s : parts) {
-                    if (s == "*") {
+                    if (s.equals("*")) {
                         continue;
                     }
                     if (! isInteger(s)) {
@@ -129,101 +130,41 @@ public class CraftCommons {
         String s1 = normalisedVersion(compare);
         String s2 = normalisedVersion(lastversion);
         int cmp = s1.compareTo(s2);
-        if (cmp < 0) {
-            return true;
-        }
-        return false;
+        return cmp < 0;
     }
 
-    /**
-     * Converts a string into a MD5 hash.
-     *
-     * @param string The string that is going to be encrypted.
-     * @return Returns a MD5 hash of the string.
-     */
-    public static String md5(String string) {
+    public String encrypt(Encryption encryption, Object object) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(string.getBytes("ISO-8859-1"), 0, string.length());
-            byte[] hash = md.digest();
-            return EncryptionUtil.bytesTohex(hash);
+            String string = (String) object;
+            MessageDigest md = null;
+            if (encryption.equals(Encryption.MD5)) {
+                md = MessageDigest.getInstance("MD5");
+            } else if (encryption.equals(Encryption.SHA1)) {
+                md = MessageDigest.getInstance("SHA-1");
+            } else if (encryption.equals(Encryption.SHA256)) {
+                md = MessageDigest.getInstance("SHA-256");
+            } else if (encryption.equals(Encryption.SHA512)) {
+                md = MessageDigest.getInstance("SHA-512");
+            } else if (encryption.equals(Encryption.WHIRLPOOL)) {
+                Whirlpool w = new Whirlpool();
+                byte[] digest = new byte[Whirlpool.DIGESTBYTES];
+                w.NESSIEinit();
+                w.NESSIEadd(string);
+                w.NESSIEfinalize(digest);
+                return Whirlpool.display(digest);
+            }
+            if (md != null) {
+                md.update(string.getBytes("ISO-8859-1"), 0, string.length());
+                byte[] hash = md.digest();
+                return EncryptionUtil.bytesTohex(hash);
+            } else {
+                return null;
+            }
         } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
+                throw new RuntimeException(e);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Converts a string into a SHA-1 hash.
-     *
-     * @param string The string that is going to be encrypted.
-     * @return Returns a SHA-1 hash of the string.
-     */
-    public static String sha1(String string) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(string.getBytes("ISO-8859-1"), 0, string.length());
-            byte[] hash = md.digest();
-            return EncryptionUtil.bytesTohex(hash);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Converts a string into a SHA-256 hash.
-     *
-     * @param string The string that is going to be encrypted.
-     * @return Returns a SHA-256 hash of the string.
-     */
-    public static String sha256(String string) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(string.getBytes("ISO-8859-1"), 0, string.length());
-            byte[] hash = md.digest();
-            return EncryptionUtil.bytesTohex(hash);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Converts a string into a SHA-512 hash.
-     *
-     * @param string The string that is going to be encrypted.
-     * @return Returns a SHA-512 hash of the string.
-     */
-    public static String sha512(String string) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(string.getBytes("ISO-8859-1"), 0, string.length());
-            byte[] hash = md.digest();
-            return EncryptionUtil.bytesTohex(hash);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Converts a string into a Whirpool hash.
-     *
-     * @param string The string that is going to be encrypted.
-     * @return Returns a Whirpool hash of the string.
-     */
-    public static String whirlpool(String string) {
-        Whirlpool w = new Whirlpool();
-        byte[] digest = new byte[Whirlpool.DIGESTBYTES];
-        w.NESSIEinit();
-        w.NESSIEadd(string);
-        w.NESSIEfinalize(digest);
-        return Whirlpool.display(digest);
     }
 
     public static String normalisedVersion(String version) {
@@ -263,12 +204,10 @@ public class CraftCommons {
 
     public static String convertHexToString(String hex) {
         StringBuilder sb = new StringBuilder();
-        StringBuilder temp = new StringBuilder();
         for ( int i=0; i<hex.length()-1; i+=2 ) {
             String output = hex.substring(i, (i + 2));
             int decimal = Integer.parseInt(output, 16);
             sb.append((char)decimal);
-            temp.append(decimal);
         }
         return sb.toString();
     }
