@@ -1,5 +1,8 @@
 /*
- * This file is part of CraftCommons <http://www.craftfire.com/>.
+ * This file is part of CraftCommons.
+ *
+ * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * CraftCommons is licensed under the GNU Lesser General Public License.
  *
  * CraftCommons is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +25,9 @@ import com.craftfire.commons.enums.FieldType;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
+import java.util.Date;
 import java.util.Map.Entry;
 
 public class DataManager {
@@ -202,14 +204,54 @@ public class DataManager {
         return (Integer) getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1");
     }
 
-    public Object getField(FieldType fieldType, String table, String field, String where) {
-        return getField(fieldType, "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where +
-                                                                                                            " LIMIT 1");
-    }
-    
     public void increaseField(String table, String field, String where) {
         executeQueryVoid("UPDATE `" + getPrefix() + table + "` SET `" + field + "` =" + " " + field +
-                        " + 1 WHERE " + where);
+                " + 1 WHERE " + where);
+    }
+
+    public String getStringField(String query) {
+        return (String) getField(FieldType.STRING, query);
+    }
+
+    public String getStringField(String table, String field, String where) {
+        return (String) getField(FieldType.STRING, table, field, where);
+    }
+
+    public int getIntegerField(String query) {
+        return (Integer) getField(FieldType.INTEGER, query);
+    }
+
+    public int getIntegerField(String table, String field, String where) {
+        return (Integer) getField(FieldType.INTEGER, table, field, where);
+    }
+
+    public Date getDateField(String query) {
+        return (Date) getField(FieldType.DATE, query);
+    }
+
+    public Date getDateField(String table, String field, String where) {
+        return (Date) getField(FieldType.INTEGER, table, field, where);
+    }
+
+    public Blob getBlobField(String query) {
+        return (Blob) getField(FieldType.BLOB, query);
+    }
+
+    public Blob getBlobField(String table, String field, String where) {
+        return (Blob) getField(FieldType.BLOB, table, field, where);
+    }
+
+    public String String(String query) {
+        return (String) getField(FieldType.BINARY, query);
+    }
+
+    public String getBinaryField(String table, String field, String where) {
+        return (String) getField(FieldType.BINARY, table, field, where);
+    }
+
+    public Object getField(FieldType fieldType, String table, String field, String where) {
+        return getField(fieldType, "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where +
+                " LIMIT 1");
     }
 
     public Object getField(FieldType field, String query) {
