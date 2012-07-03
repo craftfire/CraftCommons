@@ -34,7 +34,6 @@ package com.craftfire.commons.encryption;
 //OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import java.io.UnsupportedEncodingException;
-
 import java.security.SecureRandom;
 
 /**
@@ -408,8 +407,9 @@ public class BCrypt {
         StringBuffer rs = new StringBuffer();
         int c1, c2;
 
-        if (len <= 0 || len > d.length)
+        if (len <= 0 || len > d.length) {
             throw new IllegalArgumentException ("Invalid len");
+        }
 
         while (off < len) {
             c1 = d[off++] & 0xff;
@@ -442,8 +442,9 @@ public class BCrypt {
      * @return    the decoded value of x
      */
     private static byte char64(char x) {
-        if ((int)x < 0 || (int)x > index_64.length)
+        if ((int)x < 0 || (int)x > index_64.length) {
             return -1;
+        }
         return index_64[(int)x];
     }
 
@@ -463,27 +464,32 @@ public class BCrypt {
         byte ret[];
         byte c1, c2, c3, c4, o;
 
-        if (maxolen <= 0)
+        if (maxolen <= 0) {
             throw new IllegalArgumentException ("Invalid maxolen");
+        }
 
         while (off < slen - 1 && olen < maxolen) {
             c1 = char64(s.charAt(off++));
             c2 = char64(s.charAt(off++));
-            if (c1 == -1 || c2 == -1)
+            if (c1 == -1 || c2 == -1) {
                 break;
+            }
             o = (byte)(c1 << 2);
             o |= (c2 & 0x30) >> 4;
             rs.append((char)o);
-            if (++olen >= maxolen || off >= slen)
+            if (++olen >= maxolen || off >= slen) {
                 break;
+            }
             c3 = char64(s.charAt(off++));
-            if (c3 == -1)
+            if (c3 == -1) {
                 break;
+            }
             o = (byte)((c2 & 0x0f) << 4);
             o |= (c3 & 0x3c) >> 2;
             rs.append((char)o);
-            if (++olen >= maxolen || off >= slen)
+            if (++olen >= maxolen || off >= slen) {
                 break;
+            }
             c4 = char64(s.charAt(off++));
             o = (byte)((c3 & 0x03) << 6);
             o |= c4;
@@ -492,8 +498,9 @@ public class BCrypt {
         }
 
         ret = new byte[olen];
-        for (off = 0; off < olen; off++)
+        for (off = 0; off < olen; off++) {
             ret[off] = (byte)rs.charAt(off);
+        }
         return ret;
     }
 
@@ -565,8 +572,9 @@ public class BCrypt {
         int lr[] = { 0, 0 };
         int plen = P.length, slen = S.length;
 
-        for (i = 0; i < plen; i++)
+        for (i = 0; i < plen; i++) {
             P[i] = P[i] ^ streamtoword(key, koffp);
+        }
 
         for (i = 0; i < plen; i += 2) {
             encipher(lr, 0);
@@ -594,8 +602,9 @@ public class BCrypt {
         int lr[] = { 0, 0 };
         int plen = P.length, slen = S.length;
 
-        for (i = 0; i < plen; i++)
+        for (i = 0; i < plen; i++) {
             P[i] = P[i] ^ streamtoword(key, koffp);
+        }
 
         for (i = 0; i < plen; i += 2) {
             lr[0] ^= streamtoword(data, doffp);
@@ -629,11 +638,13 @@ public class BCrypt {
         int clen = cdata.length;
         byte ret[];
 
-        if (log_rounds < 4 || log_rounds > 31)
+        if (log_rounds < 4 || log_rounds > 31) {
             throw new IllegalArgumentException ("Bad number of rounds");
+        }
         rounds = 1 << log_rounds;
-        if (salt.length != BCRYPT_SALT_LEN)
+        if (salt.length != BCRYPT_SALT_LEN) {
             throw new IllegalArgumentException ("Bad salt length");
+        }
 
         init_key();
         ekskey(salt, password);
@@ -643,8 +654,9 @@ public class BCrypt {
         }
 
         for (i = 0; i < 64; i++) {
-            for (j = 0; j < (clen >> 1); j++)
+            for (j = 0; j < (clen >> 1); j++) {
                 encipher(cdata, j << 1);
+            }
         }
 
         ret = new byte[clen * 4];
@@ -672,20 +684,23 @@ public class BCrypt {
         int rounds, off = 0;
         StringBuffer rs = new StringBuffer();
 
-        if (salt.charAt(0) != '$' || salt.charAt(1) != '2')
+        if (salt.charAt(0) != '$' || salt.charAt(1) != '2') {
             throw new IllegalArgumentException ("Invalid salt version");
-        if (salt.charAt(2) == '$')
+        }
+        if (salt.charAt(2) == '$') {
             off = 3;
-        else {
+        } else {
             minor = salt.charAt(2);
-            if (minor != 'a' || salt.charAt(3) != '$')
+            if (minor != 'a' || salt.charAt(3) != '$') {
                 throw new IllegalArgumentException ("Invalid salt revision");
+            }
             off = 4;
         }
 
         // Extract number of rounds
-        if (salt.charAt(off + 2) > '$')
+        if (salt.charAt(off + 2) > '$') {
             throw new IllegalArgumentException ("Missing salt rounds");
+        }
         rounds = Integer.parseInt(salt.substring(off, off + 2));
 
         real_salt = salt.substring(off + 3, off + 25);
@@ -702,11 +717,13 @@ public class BCrypt {
         hashed = B.crypt_raw(passwordb, saltb, rounds);
 
         rs.append("$2");
-        if (minor >= 'a')
+        if (minor >= 'a') {
             rs.append(minor);
+        }
         rs.append("$");
-        if (rounds < 10)
+        if (rounds < 10) {
             rs.append("0");
+        }
         rs.append(Integer.toString(rounds));
         rs.append("$");
         rs.append(encode_base64(saltb, saltb.length));
@@ -730,8 +747,9 @@ public class BCrypt {
         random.nextBytes(rnd);
 
         rs.append("$2a$");
-        if (log_rounds < 10)
+        if (log_rounds < 10) {
             rs.append("0");
+        }
         rs.append(Integer.toString(log_rounds));
         rs.append("$");
         rs.append(encode_base64(rnd, rnd.length));

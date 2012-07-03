@@ -29,9 +29,10 @@ public class PHPass {
     		"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     int iteration_count_log2;
     SecureRandom random_gen;
-    public PHPass(int iteration_count_log2){
-        if (iteration_count_log2 < 4 || iteration_count_log2 > 31)
+    public PHPass(int iteration_count_log2) {
+        if (iteration_count_log2 < 4 || iteration_count_log2 > 31) {
             iteration_count_log2 = 8;
+        }
         this.iteration_count_log2 = iteration_count_log2;
         this.random_gen = new SecureRandom(); 
     }
@@ -47,12 +48,16 @@ public class PHPass {
                 value |= (src[i] + (src[i] < 0 ? 256 : 0)) << 8;
             }
             output += itoa64.charAt((value >> 6) & 63);
-            if (i++ >= count) break;
+            if (i++ >= count) {
+            	break;
+            }
             if (i < count) {
                 value |= (src[i] + (src[i] < 0 ? 256 : 0)) << 16;
             }
             output += itoa64.charAt((value >> 12) & 63);
-            if (i++ >= count) break;
+            if (i++ >= count) {
+            	break;
+            }
             output += itoa64.charAt((value >> 18) & 63);
         } while (i < count);
         return output;
@@ -60,18 +65,22 @@ public class PHPass {
     private String crypt_private(String password, String setting) {
         String output = "*0";
         if (((setting.length() < 2 )? setting : setting.substring(0, 2))
-        		.equalsIgnoreCase(output))
+        		.equalsIgnoreCase(output)) {
             output = "*1";
+        }
         String id = (setting.length() < 3) ? setting : setting.substring(0, 3);
-        if (!(id.equals("$P$") || id.equals("$H$")))
+        if (!(id.equals("$P$") || id.equals("$H$"))) {
             return output;
+        }
         int count_log2 = itoa64.indexOf(setting.charAt(3));
-        if (count_log2 < 7 || count_log2 > 30)
+        if (count_log2 < 7 || count_log2 > 30) {
             return output;
+        }
         int count = 1 << count_log2;
         String salt = setting.substring(4, 4+8);
-        if (salt.length() != 8)
+        if (salt.length() != 8) {
             return output;
+        }
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");

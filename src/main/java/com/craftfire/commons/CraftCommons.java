@@ -139,10 +139,10 @@ public class CraftCommons {
     }
 
     public static String encrypt(Encryption encryption, Object object) {
-    	return encrypt(encryption, object, null);
+        return encrypt(encryption, object, null);
     }
     public static String encrypt(Encryption encryption, Object object, String salt) {
-    	return encrypt(encryption, object, salt, 0);
+        return encrypt(encryption, object, salt, 0);
     }
     public static String encrypt(Encryption encryption, Object object, String salt, int iteration_count) {
         try {
@@ -164,17 +164,26 @@ public class CraftCommons {
                 w.NESSIEfinalize(digest);
                 return Whirlpool.display(digest);
             } else if (encryption.equals(Encryption.PHPASS)) {
-            	if (iteration_count == 0) iteration_count = 8;
-            	PHPass phpass = new PHPass(iteration_count);
-            	if (salt == null || salt.isEmpty()) salt = phpass.gensalt();
-            	String hash = phpass.crypt(string, salt);
-            	if (hash.length() == 34) return hash;
-            	return "*";
+                if (iteration_count == 0) {
+                    iteration_count = 8;
+                }
+                PHPass phpass = new PHPass(iteration_count);
+                if (salt == null || salt.isEmpty()) {
+                    salt = phpass.gensalt();
+                }
+                String hash = phpass.crypt(string, salt);
+                if (hash.length() == 34) {
+                    return hash;
+                }
+                return "*";
             } else if (encryption.equals(Encryption.BLOWFISH)) {
-            	if (iteration_count == 0) iteration_count = 8;
-            	if(salt == null || salt.isEmpty())
-            		salt = BCrypt.gensalt(iteration_count);
-            	return BCrypt.hashpw(string, salt);
+                if (iteration_count == 0) {
+                    iteration_count = 8;
+                }
+                if(salt == null || salt.isEmpty()) {
+                    salt = BCrypt.gensalt(iteration_count);
+                }
+                return BCrypt.hashpw(string, salt);
             }
             if (md != null) {
                 md.update(string.getBytes("ISO-8859-1"), 0, string.length());
@@ -191,14 +200,22 @@ public class CraftCommons {
     }
     
     public static Encryption unixHashIdentify(String hash){
-    	if (hash.startsWith("$1$") ||
-    		hash.startsWith("$md5$")) return Encryption.MD5;
-    	if (hash.startsWith("$2")) return Encryption.BLOWFISH;
-    	if (hash.startsWith("$5$")) return Encryption.SHA256;
-    	if (hash.startsWith("$6$")) return Encryption.SHA512;
-    	if (hash.startsWith("$P$") ||
-    		hash.startsWith("$H$")) return Encryption.PHPASS;
-    	return null;
+        if (hash.startsWith("$1$") || hash.startsWith("$md5$")) {
+            return Encryption.MD5;
+        }
+        if (hash.startsWith("$2")) {
+            return Encryption.BLOWFISH;
+        }
+        if (hash.startsWith("$5$")) {
+            return Encryption.SHA256;
+        }
+        if (hash.startsWith("$6$")) {
+            return Encryption.SHA512;
+        }
+        if (hash.startsWith("$P$") || hash.startsWith("$H$")) {
+            return Encryption.PHPASS;
+        }
+        return null;
     }
 
     public static String normalisedVersion(String version) {
