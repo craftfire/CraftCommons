@@ -22,13 +22,12 @@ package com.craftfire.commons.database;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Results {
     private final String query;
     private final int rows;
-    private List<List<DataField>> array;
+    private List<DataList<DataField>> array;
 
     public Results(String query, ResultSet rs) throws SQLException {
         this.query = query;
@@ -36,7 +35,7 @@ public class Results {
         ResultSetMetaData metaData = rs.getMetaData();
         this.rows = metaData.getColumnCount();
         while (rs.next()) {
-            List<DataField> data = new ArrayList<DataField>();
+            DataList<DataField> data = new DataList<DataField>();
             for (int i = 1; i <= this.rows; i++) {
                 data.add(new DataField(i, metaData, rs.getObject(i)));
             }
@@ -52,13 +51,21 @@ public class Results {
         return this.query;
     }
 
-    public List<List<DataField>> getArray() {
+    public List<DataList<DataField>> getArray() {
         return this.array;
     }
 
-    public List<DataField> getFirstResult() {
+    public DataList<DataField> getFirstResult() {
         if (this.array.size() > 0) {
             return this.array.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public DataList<DataField> getLastResult() {
+        if (this.array.size() > 0) {
+            return this.array.get(this.array.size() - 1);
         } else {
             return null;
         }

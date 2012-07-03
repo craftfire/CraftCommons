@@ -19,6 +19,8 @@
  */
 package com.craftfire.commons.database;
 
+import com.craftfire.commons.enums.FieldType;
+
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSetMetaData;
@@ -37,20 +39,25 @@ public class DataField {
         this.data = data;
     }
 
-    public String getName() {
+    public String getFieldName() {
         return this.name;
+    }
+
+    public FieldType getFieldType() {
+        for (FieldType fieldType : FieldType.values()) {
+            if (fieldType.toString().equalsIgnoreCase(this.type)) {
+                return fieldType;
+            }
+        }
+        return FieldType.UNKNOWN;
+    }
+
+    public int getFieldSize() {
+        return this.size;
     }
 
     public String getTable() {
         return this.table;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public int getSize() {
-        return this.size;
     }
 
     public Object getData() {
