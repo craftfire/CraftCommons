@@ -19,6 +19,7 @@
  */
 package com.craftfire.commons;
 
+import com.craftfire.commons.database.Results;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
 
@@ -376,10 +377,25 @@ public class DataManager {
         }
     }
 
+    public Results getResults(String query) {
+        try {
+            connect();
+            this.stmt = this.con.createStatement();
+            this.rs = this.stmt.executeQuery(query);
+            log(query);
+            Results results = new Results(query, this.rs);
+            close();
+            return results;
+        } catch (SQLException e) {
+            close();
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public HashMap<String, Object> getArray(String query) {
         try {
             connect();
-            List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
             log(query);
