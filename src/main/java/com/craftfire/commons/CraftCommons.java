@@ -19,7 +19,9 @@
  */
 package com.craftfire.commons;
 
+import com.craftfire.commons.encryption.BCrypt;
 import com.craftfire.commons.encryption.EncryptionUtil;
+import com.craftfire.commons.encryption.PHPass;
 import com.craftfire.commons.encryption.Whirlpool;
 import com.craftfire.commons.enums.Encryption;
 
@@ -137,6 +139,12 @@ public class CraftCommons {
     }
 
     public static String encrypt(Encryption encryption, Object object) {
+        return encrypt(encryption, object, null);
+    }
+    public static String encrypt(Encryption encryption, Object object, String salt) {
+        return encrypt(encryption, object, salt, 0);
+    }
+    public static String encrypt(Encryption encryption, Object object, String salt, int iteration_count) {
         try {
             String string = (String) object;
             MessageDigest md = null;
@@ -155,6 +163,27 @@ public class CraftCommons {
                 w.NESSIEadd(string);
                 w.NESSIEfinalize(digest);
                 return Whirlpool.display(digest);
+            } else if (encryption.equals(Encryption.PHPASS)) {
+                if (iteration_count == 0) {
+                    iteration_count = 8;
+                }
+                PHPass phpass = new PHPass(iteration_count);
+                if (salt == null || salt.isEmpty()) {
+                    salt = phpass.gensalt();
+                }
+                String hash = phpass.crypt(string, salt);
+                if (hash.length() == 34) {
+                    return hash;
+                }
+                return "*";
+            } else if (encryption.equals(Encryption.BLOWFISH)) {
+                if (iteration_count == 0) {
+                    iteration_count = 8;
+                }
+                if (salt == null || salt.isEmpty()) {
+                    salt = BCrypt.gensalt(iteration_count);
+                }
+                return BCrypt.hashpw(string, salt);
             }
             if (md != null) {
                 md.update(string.getBytes("ISO-8859-1"), 0, string.length());
@@ -168,6 +197,21 @@ public class CraftCommons {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public static Encryption unixHashIdentify(String hash){
+        if (hash.startsWith("$1$") || hash.startsWith("$md5$")) {
+            return Encryption.MD5;
+        } else if (hash.startsWith("$2")) {
+            return Encryption.BLOWFISH;
+        } else if (hash.startsWith("$5$")) {
+            return Encryption.SHA256;
+        } else if (hash.startsWith("$6$")) {
+            return Encryption.SHA512;
+        } else if (hash.startsWith("$P$") || hash.startsWith("$H$")) {
+            return Encryption.PHPASS;
+        }
+        return null;
     }
 
     public static String normalisedVersion(String version) {
