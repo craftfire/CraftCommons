@@ -1,3 +1,29 @@
+/*
+ * This file was developed by Wolf480pl before joining CraftFire.
+ * Wolf480pl allows CraftFire to do with this file anything they want and redistribute it on any license, with following limitations:
+ * - ONLY Wolf480pl may remove this note
+ * - NOONE may convert this file to Oracle formatting standards without Wolf480pl's permission.
+ * CraftFire's license should be just below.                                                                                                                                                      THIS IS A PRANK :D You may remove this note anytime you want.
+ */
+/*
+ * This file is part of CraftCommons.
+ *
+ * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * CraftCommons is licensed under the GNU Lesser General Public License.
+ *
+ * CraftCommons is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CraftCommons is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.craftfire.commons.encryption;
 
 import java.security.MessageDigest;
@@ -92,44 +118,4 @@ public class PHPass {
 	public Random getRandomGen(){
 		return random_gen;
 	}
-/*	public String HashPassword(String password){
-		byte random[] = new byte[6];
-		random_gen.nextBytes(random);
-		//TODO: Add unportable hashes (Blowfish, EXT_DES) here 
-		String hash = crypt_private(password, gensalt_private(new String(random)));
-		if(hash.length() == 34) return hash;
-		return "*";
-	}
-	public boolean CheckPassword(String password, String stored_hash){
-		String hash = crypt_private(password, stored_hash);
-		MessageDigest md = null;
-		if(hash.startsWith("*")){	//If not phpass, try some algorithms from Unix crypt()
-			if(stored_hash.startsWith("$6$"))	//Try SHA-512
-				try {
-					md = MessageDigest.getInstance("SHA-512");
-				} catch (NoSuchAlgorithmException e) {
-					md = null;
-				}
-			if(md == null && stored_hash.startsWith("$5$"))	//Try SHA-256
-				try {
-					md = MessageDigest.getInstance("SHA-256");
-				} catch (NoSuchAlgorithmException e) {
-					md = null;
-				}
-			if(md == null && stored_hash.startsWith("$2"))	//Try BlowFish
-				return BCrypt.checkpw(password, stored_hash);
-			if(md == null && stored_hash.startsWith("$1$"))	//Try MD5
-				try {
-					md = MessageDigest.getInstance("MD5");
-				} catch (NoSuchAlgorithmException e) {
-					md = null;
-				}
-			//STD_DES and EXT_DES not supported yet.
-			if(md != null)hash = new String(md.digest(password.getBytes()));
-		}
-		return hash.equals(stored_hash);
-		
-	}*/
-
-
 }
