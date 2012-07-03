@@ -19,6 +19,8 @@
  */
 package com.craftfire.commons.database;
 
+import java.sql.Blob;
+import java.sql.Date;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
@@ -53,5 +55,21 @@ public class DataField {
 
     public Object getData() {
         return this.data;
+    }
+
+    public String getString() {
+        return (String) this.data;
+    }
+
+    public int getInt() {
+        return (Integer) this.data;
+    }
+
+    public Date getDate() {
+        return (Date) this.data;
+    }
+
+    public Blob getBlob() {
+        return (Blob) this.data;
     }
 }

@@ -352,20 +352,15 @@ public class DataManager {
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
-
             for (int column = 0; column < numberOfColumns; column++) {
                 columnNames.addElement(metaData.getColumnLabel(column + 1));
             }
-
             Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
-
             while (rs.next()) {
                 Vector<Object> newRow = new Vector<Object>();
-
                 for (int i = 1; i <= numberOfColumns; i++) {
                     newRow.addElement(rs.getObject(i));
                 }
-
                 rows.addElement(newRow);
             }
             close();
