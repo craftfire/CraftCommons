@@ -202,17 +202,13 @@ public class CraftCommons {
     public static Encryption unixHashIdentify(String hash){
         if (hash.startsWith("$1$") || hash.startsWith("$md5$")) {
             return Encryption.MD5;
-        }
-        if (hash.startsWith("$2")) {
+        } else if (hash.startsWith("$2")) {
             return Encryption.BLOWFISH;
-        }
-        if (hash.startsWith("$5$")) {
+        } else if (hash.startsWith("$5$")) {
             return Encryption.SHA256;
-        }
-        if (hash.startsWith("$6$")) {
+        } else if (hash.startsWith("$6$")) {
             return Encryption.SHA512;
-        }
-        if (hash.startsWith("$P$") || hash.startsWith("$H$")) {
+        } else if (hash.startsWith("$P$") || hash.startsWith("$H$")) {
             return Encryption.PHPASS;
         }
         return null;
