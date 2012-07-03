@@ -180,7 +180,7 @@ public class CraftCommons {
                 if (iteration_count == 0) {
                     iteration_count = 8;
                 }
-                if(salt == null || salt.isEmpty()) {
+                if (salt == null || salt.isEmpty()) {
                     salt = BCrypt.gensalt(iteration_count);
                 }
                 return BCrypt.hashpw(string, salt);
