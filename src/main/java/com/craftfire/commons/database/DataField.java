@@ -26,8 +26,6 @@ import java.sql.Date;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 public class DataField {
     private final String name, table, type;
     private final int size;
