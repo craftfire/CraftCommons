@@ -65,18 +65,30 @@ public class DataField {
     }
 
     public String getString() {
-        return (String) this.data;
+    	if (getFieldType().equals(FieldType.STRING)) {
+    		return (String) this.data;
+    	}
+    	return null;
     }
 
     public int getInt() {
-        return (Integer) this.data;
+    	if (getFieldType().equals(FieldType.INTEGER)) {
+    		return (Integer) this.data;
+    	}
+    	return 0;
     }
 
     public Date getDate() {
-        return (Date) this.data;
+        if (getFieldType().equals(FieldType.DATE)) {
+        	return (Date) this.data;
+        }
+        return null;
     }
 
     public Blob getBlob() {
-        return (Blob) this.data;
+        if (getFieldType().equals(FieldType.BLOB)) {
+        	return (Blob) this.data;
+        }
+        return null;
     }
 }
