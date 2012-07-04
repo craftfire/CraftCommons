@@ -3,11 +3,11 @@ package com.craftfire.commons.database;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class DataList<E> extends ArrayList<E> {
+public class DataList extends ArrayList<DataField> {
     public DataField get(String fieldName) {
-        Iterator iterator = iterator();
+        Iterator<DataField> iterator = iterator();
         while (iterator.hasNext()) {
-            DataField dataField = (DataField) iterator.next();
+            DataField dataField = iterator.next();
             if (dataField.getFieldName().equalsIgnoreCase(fieldName)) {
                 return dataField;
             }
