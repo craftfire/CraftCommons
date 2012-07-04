@@ -27,7 +27,7 @@ import java.util.List;
 public class Results {
     private final String query;
     private final int rows;
-    private List<DataList<DataField>> array;
+    private List<DataList> array;
 
     public Results(String query, ResultSet rs) throws SQLException {
         this.query = query;
@@ -35,7 +35,7 @@ public class Results {
         ResultSetMetaData metaData = rs.getMetaData();
         this.rows = metaData.getColumnCount();
         while (rs.next()) {
-            DataList<DataField> data = new DataList<DataField>();
+            DataList data = new DataList();
             for (int i = 1; i <= this.rows; i++) {
                 data.add(new DataField(i, metaData, rs.getObject(i)));
             }
@@ -51,11 +51,11 @@ public class Results {
         return this.query;
     }
 
-    public List<DataList<DataField>> getArray() {
+    public List<DataList> getArray() {
         return this.array;
     }
 
-    public DataList<DataField> getFirstResult() {
+    public DataList getFirstResult() {
         if (this.array.size() > 0) {
             return this.array.get(0);
         } else {
@@ -63,7 +63,7 @@ public class Results {
         }
     }
 
-    public DataList<DataField> getLastResult() {
+    public DataList getLastResult() {
         if (this.array.size() > 0) {
             return this.array.get(this.array.size() - 1);
         } else {
