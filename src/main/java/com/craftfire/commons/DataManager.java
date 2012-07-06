@@ -19,6 +19,7 @@
  */
 package com.craftfire.commons;
 
+import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.Results;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
@@ -168,7 +169,7 @@ public class DataManager {
     protected void setURL() {
         switch(datatype) {
             case MYSQL:     this.url = "jdbc:mysql://" + this.host + "/"
-                                     + this.database + "?jdbcCompliantTruncation=false";
+                                     + this.database + "?zeroDateTimeBehavior=convertToNull&jdbcCompliantTruncation=false";
                             break;
             case H2:        this.url = "jdbc:h2:" + this.directory;
                             break;
@@ -189,11 +190,15 @@ public class DataManager {
     }
 
     public int getLastID(String field, String table, String where) {
-        return (Integer) getField(FieldType.INTEGER,
+        Object val = getField(FieldType.INTEGER,
                 "SELECT `" + field + "` " +
                 "FROM `" + getPrefix() + table + "` " +
                 "WHERE " + where + " " +
                 "ORDER BY `" + field + "` DESC LIMIT 1");
+        if (val != null) {
+        	return (Integer) val;
+        }
+        return 0;
     }
 
     public int getCount(String table, String where) {
@@ -219,11 +224,19 @@ public class DataManager {
     }
 
     public int getIntegerField(String query) {
-        return (Integer) getField(FieldType.INTEGER, query);
+    	Object val = getField(FieldType.INTEGER, query);
+    	if (val != null) {
+    		return (Integer) val; 
+    	}
+    	return 0;
     }
 
     public int getIntegerField(String table, String field, String where) {
-        return (Integer) getField(FieldType.INTEGER, table, field, where);
+    	Object val = getField(FieldType.INTEGER, table, field, where);
+        if (val != null) {
+        	return (Integer) val;
+        }
+        return 0;
     }
 
     public Date getDateField(String query) {
@@ -240,6 +253,22 @@ public class DataManager {
 
     public Blob getBlobField(String table, String field, String where) {
         return (Blob) getField(FieldType.BLOB, table, field, where);
+    }
+
+    public boolean getBooleanField(String query) {
+        return (Boolean) getField(FieldType.BOOLEAN, query);
+    }
+
+    public boolean getBooleanField(String table, String field, String where) {
+        return (Boolean) getField(FieldType.BOOLEAN, table, field, where);
+    }
+
+    public double getDoubleField(String query) {
+        return (Double) getField(FieldType.REAL, query);
+    }
+
+    public Double getDoubleField(String table, String field, String where) {
+        return (Double) getField(FieldType.REAL, table, field, where);
     }
 
     public String String(String query) {
@@ -273,9 +302,14 @@ public class DataManager {
                     value = this.rs.getBlob(1);
                 } else if (field.equals(FieldType.BINARY)) {
                     value = CraftCommons.convertStreamToString(this.rs.getBinaryStream(1));
+                } else if (field.equals(FieldType.BOOLEAN)) {
+                    value = this.rs.getBoolean(1);
+                } else if (field.equals(FieldType.REAL)) {
+                    value = this.rs.getDouble(1);
                 }
                 close();
                 return value;
+//                return new DataField(1, rs.getMetaData(), value);
             }
         } catch (SQLException e) {
             e.printStackTrace();

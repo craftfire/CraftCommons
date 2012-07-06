@@ -22,6 +22,7 @@ package com.craftfire.commons.database;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 public class Results {
@@ -37,7 +38,13 @@ public class Results {
         while (rs.next()) {
             DataList data = new DataList();
             for (int i = 1; i <= this.rows; i++) {
-                data.add(new DataField(i, metaData, rs.getObject(i)));
+                Object o;
+                if (metaData.getColumnType(i) == Types.BLOB) {
+                    o = rs.getBlob(i);
+                } else {
+                    o = rs.getObject(i);
+                }
+                data.add(new DataField(i, metaData, o));
             }
             this.array.add(data);
         }
