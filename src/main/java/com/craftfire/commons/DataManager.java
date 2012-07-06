@@ -34,7 +34,8 @@ import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepAlive, reconnect;
-    private String host, username, password, database, prefix, url = null, query, directory;
+    private String host, username, password, database, prefix, query, directory;
+    private String  url = null;
     private Map<Long, String> queries = new HashMap<Long, String>();
     private long startup;
     private int timeout = 0, port = 3306, queriesCount = 0;
@@ -169,7 +170,9 @@ public class DataManager {
     protected void setURL() {
         switch(datatype) {
             case MYSQL:     this.url = "jdbc:mysql://" + this.host + "/"
-                                     + this.database + "?zeroDateTimeBehavior=convertToNull&jdbcCompliantTruncation=false";
+                                     + this.database
+                                     + "?zeroDateTimeBehavior=convertToNull"
+                                     + "&jdbcCompliantTruncation=false";
                             break;
             case H2:        this.url = "jdbc:h2:" + this.directory;
                             break;
@@ -178,15 +181,15 @@ public class DataManager {
 
     public boolean exist(String table, String field, Object value) {
         return getField(FieldType.STRING,
-                                        ("SELECT `" + field + "` " +
-                                         "FROM `" + getPrefix() + table + "` " +
-                                         "WHERE `" + field + "` = '" + value + "' " +
-                                         "LIMIT 1")) != null;
+                "SELECT `" + field + "` " + "FROM `" + getPrefix() + table
+                + "` " + "WHERE `" + field + "` = '" + value + "' " + "LIMIT 1"
+                ) != null;
     }
 
     public int getLastID(String field, String table) {
-        return (Integer) getField(FieldType.INTEGER,
-                "SELECT `" + field + "` FROM `" + getPrefix() + table + "` ORDER BY `" + field + "` DESC LIMIT 1");
+        return getField(FieldType.INTEGER, "SELECT `" + field + "` FROM `"
+                        + getPrefix() + table + "` ORDER BY `" + field
+                        + "` DESC LIMIT 1").getInt();
     }
 
     public int getLastID(String field, String table, String where) {
@@ -202,89 +205,82 @@ public class DataManager {
     }
 
     public int getCount(String table, String where) {
-        return (Integer) getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE " +
-                                                                                                    where + " LIMIT 1");
+        return getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+            + getPrefix() + table + "` WHERE " + where + " LIMIT 1").getInt();
 }
 
     public int getCount(String table) {
-        return (Integer) getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1");
+        return getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+                        + getPrefix() + table + "` LIMIT 1").getInt();
     }
 
     public void increaseField(String table, String field, String where) {
-        executeQueryVoid("UPDATE `" + getPrefix() + table + "` SET `" + field + "` =" + " " + field +
-                " + 1 WHERE " + where);
+        executeQueryVoid("UPDATE `" + getPrefix() + table + "` SET `" + field
+                         + "` =" + " " + field + " + 1 WHERE " + where);
     }
 
     public String getStringField(String query) {
-        return (String) getField(FieldType.STRING, query);
+        return getField(FieldType.STRING, query).getString();
     }
 
     public String getStringField(String table, String field, String where) {
-        return (String) getField(FieldType.STRING, table, field, where);
+        return getField(FieldType.STRING, table, field, where).getString();
     }
 
     public int getIntegerField(String query) {
-    	Object val = getField(FieldType.INTEGER, query);
-    	if (val != null) {
-    		return (Integer) val; 
-    	}
-    	return 0;
+    	return getField(FieldType.INTEGER, query).getInt();
     }
 
     public int getIntegerField(String table, String field, String where) {
-    	Object val = getField(FieldType.INTEGER, table, field, where);
-        if (val != null) {
-        	return (Integer) val;
-        }
-        return 0;
+    	return getField(FieldType.INTEGER, table, field, where).getInt();
     }
 
     public Date getDateField(String query) {
-        return (Date) getField(FieldType.DATE, query);
+        return getField(FieldType.DATE, query).getDate();
     }
 
     public Date getDateField(String table, String field, String where) {
-        return (Date) getField(FieldType.INTEGER, table, field, where);
+        return getField(FieldType.INTEGER, table, field, where).getDate();
     }
 
     public Blob getBlobField(String query) {
-        return (Blob) getField(FieldType.BLOB, query);
+        return getField(FieldType.BLOB, query).getBlob();
     }
 
     public Blob getBlobField(String table, String field, String where) {
-        return (Blob) getField(FieldType.BLOB, table, field, where);
+        return getField(FieldType.BLOB, table, field, where).getBlob();
     }
 
     public boolean getBooleanField(String query) {
-        return (Boolean) getField(FieldType.BOOLEAN, query);
+        return getField(FieldType.BOOLEAN, query).getBool();
     }
 
     public boolean getBooleanField(String table, String field, String where) {
-        return (Boolean) getField(FieldType.BOOLEAN, table, field, where);
+        return getField(FieldType.BOOLEAN, table, field, where).getBool();
     }
 
     public double getDoubleField(String query) {
-        return (Double) getField(FieldType.REAL, query);
+        return getField(FieldType.REAL, query).getDouble();
     }
 
     public Double getDoubleField(String table, String field, String where) {
-        return (Double) getField(FieldType.REAL, table, field, where);
+        return getField(FieldType.REAL, table, field, where).getDouble();
     }
 
     public String String(String query) {
-        return (String) getField(FieldType.BINARY, query);
+        return getField(FieldType.BINARY, query).getString();
     }
 
     public String getBinaryField(String table, String field, String where) {
-        return (String) getField(FieldType.BINARY, table, field, where);
+        return getField(FieldType.BINARY, table, field, where).getString();
     }
 
-    public Object getField(FieldType fieldType, String table, String field, String where) {
+    public DataField getField(FieldType fieldType, String table, String field, String where) {
         return getField(fieldType, "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where +
                 " LIMIT 1");
     }
 
-    public Object getField(FieldType field, String query) {
+    public DataField getField(FieldType field, String query) {
         try {
             connect();
             this.stmt = this.con.createStatement();
@@ -308,8 +304,11 @@ public class DataManager {
                     value = this.rs.getDouble(1);
                 }
                 close();
-                return value;
-//                return new DataField(1, rs.getMetaData(), value);
+//                return value;
+                if (value == null) {
+                    return null;
+                }
+                return new DataField(1, rs.getMetaData(), value);
             }
         } catch (SQLException e) {
             e.printStackTrace();
