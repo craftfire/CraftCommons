@@ -157,12 +157,17 @@ public class DataField {
             return ((Date) data).getTime();
         } else if (getFieldType().equals(FieldType.BINARY)) {
             byte[] bytes = {0, 0, 0, 0, 0, 0, 0, 0};
-            System.arraycopy(data, 0, bytes, 0, ((byte[]) data).length);
-            InputStream stream = new ByteArrayInputStream(bytes);
+            if (((byte[]) data).length >= 8) { 
+                System.arraycopy(data, 0, bytes, 0, 8);
+            } else {
+                System.arraycopy(data, 0, bytes, 8 - ((byte[]) data).length, ((byte[]) data).length);
+            }
+            /*InputStream stream = new ByteArrayInputStream(bytes);
             try {
                 return new DataInputStream(stream).readLong();
             } catch (IOException e) {
-            }
+            }*/
+            return ByteBuffer.wrap(bytes).getLong();
         } else if (getFieldType().equals(FieldType.STRING)) {
             try {
                 return Long.parseLong((String) data);
@@ -173,7 +178,7 @@ public class DataField {
     }
     public BigInteger getBigInt() {
         try {
-            if (this.sqltype == Types.BIGINT) {
+            if (this.sqltype == Types.BIGINT) { //TODO: check if unsigned!
                 return (BigInteger) data;
             } else if (getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) data).booleanValue()

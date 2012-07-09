@@ -76,6 +76,8 @@ public class DbTest extends TestCase {
         byte[] x = data.getBinaryField("bitm");
         Assert.assertNotNull(x);
         System.out.println(x);
+        int y = data.getIntField("bitm");
+        System.out.println(y);
     }
     @Test
     public final void testTint1(){
