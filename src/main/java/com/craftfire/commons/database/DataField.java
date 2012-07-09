@@ -21,18 +21,17 @@ package com.craftfire.commons.database;
 
 import com.craftfire.commons.enums.FieldType;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Blob;
 import java.util.Date;
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 public class DataField {
     private final String name, table /*, type*/ ;
@@ -40,32 +39,66 @@ public class DataField {
     private final Object data;
     private final FieldType ftype;
     private final int sqltype;
+    private final boolean unsigned;
 
-    public DataField(int i, ResultSetMetaData metaData, Object data)
-            throws SQLException {
-        this(i, metaData.getColumnType(i), metaData.getColumnLabel(i),
-             metaData.getTableName(i), metaData.getColumnDisplaySize(i), data);
-//        this.type = metaData.getColumnTypeName(i); 
+    public DataField(FieldType type, int size, boolean unsigned, Object data) {
+        this(type, "", size, unsigned, data);
     }
-    public DataField(int i, int columnType, int columnDisplaySize, Object data)
-            throws SQLException {
-        this(i, columnType, "", "", columnDisplaySize, data);
+    public DataField(FieldType type, String name, int size, boolean unsigned, Object data) {
+        this(type, name, "", size, unsigned, data);
     }
-    public DataField(int i, int columnType, String columnLabel, String table,
-                     int columnDisplaySize, Object data) throws SQLException {
-        this.name = columnLabel;
+    public DataField(FieldType type, String name, String table, int size, boolean unsigned, Object data) {
+        sqltype = Types.NULL;
+        this.ftype = type;
+        this.name = name;
         this.table = table;
-//        this.type = metaData.getColumnTypeName(i);
-        this.size = columnDisplaySize;
+        this.size = size;
+        this.unsigned = unsigned;
         this.data = data;
+        IllegalArgumentException e = new IllegalArgumentException("Data: " + data.toString() + " doesn't match the type: " + ftype.name());
+        if (ftype.equals(FieldType.STRING)) {
+            if (! (data instanceof String)) {
+                throw e;
+            }
+        } else if (ftype.equals(FieldType.INTEGER) || ftype.equals(FieldType.REAL)) {
+            if (! (data instanceof Number)) {
+                throw e;
+            }
+        } else if (ftype.equals(FieldType.DATE)) {
+            if (! (data instanceof Date)) {
+                throw e;
+            }
+        } else if (ftype.equals(FieldType.BLOB)) {
+            if (! (data instanceof Blob)) {
+                throw e;
+            }
+        } else if (ftype.equals(FieldType.BINARY)) {
+            if (! (data instanceof byte[])) {
+                throw e;
+            }
+        } else if (ftype.equals(FieldType.BOOLEAN)) {
+            if (! (data instanceof Boolean)) {
+                throw e;
+            }
+        }
+    }
+    public DataField(int i, ResultSet resultset) throws SQLException {
+        ResultSetMetaData metaData = resultset.getMetaData();
+        this.name = metaData.getCatalogName(i);
+        this.table = metaData.getTableName(i);
+//        this.type = metaData.getColumnTypeName(i);
+        this.size = metaData.getColumnDisplaySize(i);
+        this.data = resultset.getObject(i);
         if (data == null) {
             this.sqltype = Types.NULL;
         } else {
-            this.sqltype = columnType;
+            this.sqltype = metaData.getColumnType(i);
         }
+        this.unsigned = metaData.getColumnTypeName(i).contains("UNSIGNED");
         switch (sqltype) {
         case Types.CHAR:
         case Types.VARCHAR:
+        case Types.LONGVARCHAR:
             this.ftype = FieldType.STRING;
             break;
         case Types.BLOB:
@@ -140,6 +173,8 @@ public class DataField {
     public String getString() {
         if (getFieldType().equals(FieldType.STRING)) {
             return (String) this.data;
+        } else if (getFieldType().equals(FieldType.BINARY) || getFieldType().equals(FieldType.BLOB)) {
+            return new String(getBytes());
         }
         return data.toString();
     }
@@ -162,11 +197,6 @@ public class DataField {
             } else {
                 System.arraycopy(data, 0, bytes, 8 - ((byte[]) data).length, ((byte[]) data).length);
             }
-            /*InputStream stream = new ByteArrayInputStream(bytes);
-            try {
-                return new DataInputStream(stream).readLong();
-            } catch (IOException e) {
-            }*/
             return ByteBuffer.wrap(bytes).getLong();
         } else if (getFieldType().equals(FieldType.STRING)) {
             try {
@@ -178,7 +208,7 @@ public class DataField {
     }
     public BigInteger getBigInt() {
         try {
-            if (this.sqltype == Types.BIGINT) { //TODO: check if unsigned!
+            if (data instanceof BigInteger) {
                 return (BigInteger) data;
             } else if (getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) data).booleanValue()
@@ -199,7 +229,7 @@ public class DataField {
             }
         } catch (NumberFormatException e) {
         }
-        return BigInteger.ZERO;
+        return null;
     }
     public double getDouble() {
         if (getFieldType().equals(FieldType.INTEGER)
@@ -211,15 +241,19 @@ public class DataField {
             return new Long(((Date) data).getTime()).doubleValue();
         } else if (getFieldType().equals(FieldType.BINARY)) {
             byte[] bytes = {0, 0, 0, 0, 0, 0, 0, 0};
-            System.arraycopy(data, 0, bytes, 0, ((byte[]) data).length);
-            InputStream stream = new ByteArrayInputStream(bytes);
-            try {
-                return new DataInputStream(stream).readDouble();
-            } catch (IOException e) {
+            if (((byte[]) data).length >= 8) { 
+                System.arraycopy(data, 0, bytes, 0, 8);
+            } else {
+                System.arraycopy(data, 0, bytes, 8 - ((byte[]) data).length, ((byte[]) data).length);
             }
+            return ByteBuffer.wrap(bytes).getLong();
         } else if (getFieldType().equals(FieldType.STRING)) {
             try {
                 return Double.parseDouble((String) data);
+            } catch (NumberFormatException e) {
+            }
+            try {
+                return Long.parseLong(((String) data).replace(',', '.'));
             } catch (NumberFormatException e) {
             }
         }
@@ -230,7 +264,7 @@ public class DataField {
     }
     public BigDecimal getDecimal() {
         try {
-            if (this.sqltype == Types.DECIMAL) {
+            if (data instanceof BigDecimal) {
                 return (BigDecimal) data;
             } else if (getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) data).booleanValue()
@@ -245,15 +279,16 @@ public class DataField {
             }
         } catch (NumberFormatException e) {
         }
-        return BigDecimal.ZERO;
+        return null;
     }
     public byte[] getBytes() {
         if (getFieldType().equals(FieldType.BINARY)) {
             return (byte[]) data;
         } else if (getFieldType().equals(FieldType.BLOB)) {
             try {
-                return ((Blob) data).getBytes(0, (int) ((Blob) data).length());
+                return ((Blob) data).getBytes(1, (int) ((Blob) data).length());
             } catch (SQLException e) {
+                e.getClass();
             }
         } else if (getFieldType().equals(FieldType.BOOLEAN)) {
             return ByteBuffer.allocate(1).put(
@@ -270,10 +305,25 @@ public class DataField {
     public Date getDate() {
         if (getFieldType().equals(FieldType.DATE)) {
             return (Date) this.data;
-        } else if (getFieldType().equals(FieldType.INTEGER)) {
-            return new Date(((Number) data).longValue());
+        } else if (getFieldType().equals(FieldType.INTEGER) || getFieldType().equals(FieldType.BINARY)) {
+            return new Date(getLong());
         } else if (getFieldType().equals(FieldType.STRING)) {
-            return new Date(data.toString());
+            try {
+                return DateFormat.getDateInstance().parse((String) data);
+            } catch (ParseException e) {
+            }
+            try {
+                return DateFormat.getDateTimeInstance().parse((String) data);
+            } catch (ParseException e) {
+            }
+            try {
+                return DateFormat.getTimeInstance().parse((String) data);
+            } catch (ParseException e) {
+            }
+            try {
+                return DateFormat.getInstance().parse((String) data);
+            } catch (ParseException e) {
+            }
         }
         return null;
     }
@@ -290,7 +340,7 @@ public class DataField {
             return (Boolean) data;
         } else if (getFieldType().equals(FieldType.INTEGER) || getFieldType().equals(FieldType.REAL) || getFieldType().equals(FieldType.DATE)) {
             return getInt() != 0;
-        } else if (getFieldType().equals(FieldType.BINARY) || getFieldType().equals(FieldType.STRING)) {
+        } else if (getFieldType().equals(FieldType.BINARY) || getFieldType().equals(FieldType.BLOB) || getFieldType().equals(FieldType.STRING)) {
             String s = getString();
             return (s != null) && !s.isEmpty();
         }
@@ -298,5 +348,12 @@ public class DataField {
     }
     public boolean isNull() {
         return getFieldType().equals(FieldType.NULL);
+    }
+    public boolean isUnsigned() {
+        return this.unsigned;
+    }
+    @Override
+    public String toString() {
+        return "DataField " + this.getFieldType().name() + "(" + this.size + ") " + this.name + " = " + this.data.toString();
     }
 }
