@@ -35,7 +35,7 @@ public class DataList extends ArrayList<DataField> {
         if (f != null) return f.getDouble();
         return 0;
     }
-    public float getFloadField(String fieldName) {
+    public float getFloatField(String fieldName) {
         DataField f = get(fieldName);
         if (f != null) return f.getFloat();
         return 0;
@@ -60,7 +60,7 @@ public class DataList extends ArrayList<DataField> {
         if (f != null) return f.getBlob();
         return null;
     }
-    public Date getdateField(String fieldName) {
+    public Date getDateField(String fieldName) {
         DataField f = get(fieldName);
         if (f != null) return f.getDate();
         return null;

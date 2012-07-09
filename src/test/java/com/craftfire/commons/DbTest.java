@@ -8,8 +8,9 @@ import java.math.BigInteger;
 import java.sql.Blob;
 import java.util.Date;
 
+import com.craftfire.commons.database.DataList;
 import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.enums.FieldType;
+//import com.craftfire.commons.enums.FieldType;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -17,8 +18,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 public class DbTest extends TestCase {
-    static DataManager datamanager;
+    static DataManager datamanager = null;
     static final String newline = System.getProperty("line.separator");
+    static DataList data = null;
 
 	public static void main(String[] args) {
 	    String user = ask("MySQL user:", "root");
@@ -55,267 +57,270 @@ public class DbTest extends TestCase {
 		junit.textui.TestRunner.run(DbTest.class);
 	}
 	@Test
-	public final void Text(){
+	public final void testText(){
         Setup();
-	    String x = datamanager.getField(FieldType.STRING, "SELECT `text` FROM `typetest`").getString();
+	    String x = data.getStringField("text");
 	    Assert.assertNotNull(x);
 	    System.out.println(x);
 	}
     @Test
-    public final void Bit1(){
+    public final void testBit1(){
         Setup();
-        boolean x = datamanager.getField(FieldType.STRING, "SELECT `bit1` FROM `typetest`").getBool();
+        boolean x = data.getBoolField("bit1");
         Assert.assertTrue(x);
         System.out.println(x);
     }
     @Test
-    public final void Bitm(){
+    public final void testBitm(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `bitm` FROM `typetest`").getInt();
-        Assert.assertTrue(x != 0);
+        byte[] x = data.getBinaryField("bitm");
+        Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Tint1(){
+    public final void testTint1(){
         Setup();
-        boolean x = datamanager.getField(FieldType.STRING, "SELECT `tint1` FROM `typetest`").getBool();
+        boolean x = data.getBoolField("tint1");
         Assert.assertTrue(x);
         System.out.println(x);
     }
     @Test
-    public final void Tint(){
+    public final void testTint(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `tint` FROM `typetest`").getInt();
+        int x = data.getIntField("tint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Sint(){
+    public final void testSint(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `sint` FROM `typetest`").getInt();
+        int x = data.getIntField("sint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Usint(){
+    public final void testUsint(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `usint` FROM `typetest`").getInt();
+        int x = data.getIntField("usint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Mint(){
+    public final void testMint(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `mint` FROM `typetest`").getInt();
+        int x = data.getIntField("mint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Umint(){
+    public final void testUmint(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `umint` FROM `typetest`").getInt();
+        int x = data.getIntField("umint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Int(){
+    public final void testInt(){
         Setup();
-        int x = datamanager.getField(FieldType.STRING, "SELECT `int` FROM `typetest`").getInt();
+        int x = data.getIntField("int");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Uint(){
+    public final void testUint(){
         Setup();
-        long x = datamanager.getField(FieldType.STRING, "SELECT `uint` FROM `typetest`").getLong();
+        long x = data.getLongField("uint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Bint(){
+    public final void testBint(){
         Setup();
-        long x = datamanager.getField(FieldType.STRING, "SELECT `bint` FROM `typetest`").getLong();
+        long x = data.getLongField("bint");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Ubint(){
+    public final void testUbint(){
         Setup();
-        BigInteger x = datamanager.getField(FieldType.STRING, "SELECT `ubint` FROM `typetest`").getBigInt();
+        BigInteger x = data.getBigIntField("ubint");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Dec(){
+    public final void testDec(){
         Setup();
-        BigDecimal x = datamanager.getField(FieldType.STRING, "SELECT `dec` FROM `typetest`").getDecimal();
+        BigDecimal x = data.getDecimalField("dec");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Float(){
+    public final void testFloat(){
         Setup();
-        float x = datamanager.getField(FieldType.STRING, "SELECT `float` FROM `typetest`").getFloat();
+        float x = data.getFloatField("float");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Double(){
+    public final void testDouble(){
         Setup();
-        double x = datamanager.getField(FieldType.STRING, "SELECT `double` FROM `typetest`").getDouble();
+        double x = data.getDoubleField("double");
         Assert.assertTrue(x != 0);
         System.out.println(x);
     }
     @Test
-    public final void Date(){
+    public final void testDate(){
         Setup();
-        Date x = datamanager.getField(FieldType.STRING, "SELECT `date` FROM `typetest`").getDate();
+        Date x = data.getDateField("date");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void DateTime(){
+    public final void testDateTime(){
         Setup();
-        Date x = datamanager.getField(FieldType.STRING, "SELECT `datetime` FROM `typetest`").getDate();
+        Date x = data.getDateField("datetime");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Time(){
+    public final void testTime(){
         Setup();
-        Date x = datamanager.getField(FieldType.STRING, "SELECT `time` FROM `typetest`").getDate();
+        Date x = data.getDateField("time");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Timestamp(){
+    public final void testTimestamp(){
         Setup();
-        Date x = datamanager.getField(FieldType.STRING, "SELECT `timestamp` FROM `typetest`").getDate();
+        Date x = data.getDateField("timestamp");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Year(){
+    public final void testYear(){
         Setup();
-        Date x = datamanager.getField(FieldType.STRING, "SELECT `year` FROM `typetest`").getDate();
+        Date x = data.getDateField("year");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Char(){
+    public final void testChar(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `char` FROM `typetest`").getString();
+        String x = data.getStringField("char");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void VChar(){
+    public final void testVChar(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `vchar` FROM `typetest`").getString();
+        String x = data.getStringField("vchar");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void VCharb(){
+    public final void testVCharb(){
         Setup();
-        byte[] x = datamanager.getField(FieldType.STRING, "SELECT `vcharb` FROM `typetest`").getBytes();
+        byte[] x = data.getBinaryField("vcharb");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Bin(){
+    public final void testBin(){
         Setup();
-        byte[] x = datamanager.getField(FieldType.STRING, "SELECT `bin` FROM `typetest`").getBytes();
+        byte[] x = data.getBinaryField("bin");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void VBin(){
+    public final void testVBin(){
         Setup();
-        byte[] x = datamanager.getField(FieldType.STRING, "SELECT `vbin` FROM `typetest`").getBytes();
+        byte[] x = data.getBinaryField("vbin");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Bool(){
+    public final void testBool(){
         Setup();
-        boolean x = datamanager.getField(FieldType.STRING, "SELECT `bool` FROM `typetest`").getBool();
+        boolean x = data.getBoolField("bool");
         Assert.assertTrue(x);
         System.out.println(x);
     }
     @Test
-    public final void TText(){
+    public final void testTText(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `ttext` FROM `typetest`").getString();
+        String x = data.getStringField("ttext");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void MText(){
+    public final void testMText(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `mtext` FROM `typetest`").getString();
+        String x = data.getStringField("mtext");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void LText(){
+    public final void testLText(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `ltext` FROM `typetest`").getString();
+        String x = data.getStringField("ltext");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void TBlob(){
+    public final void testTBlob(){
         Setup();
-        Blob x = datamanager.getField(FieldType.STRING, "SELECT `tblob` FROM `typetest`").getBlob();
+        byte[] x = data.getBinaryField("tblob");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Blob(){
+    public final void testBlob(){
         Setup();
-        Blob x = datamanager.getField(FieldType.STRING, "SELECT `blob` FROM `typetest`").getBlob();
+        Blob x = data.getBlobField("blob");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void MBlob(){
+    public final void testMBlob(){
         Setup();
-        Blob x = datamanager.getField(FieldType.STRING, "SELECT `mblob` FROM `typetest`").getBlob();
+        Blob x = data.getBlobField("mblob");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void LBlob(){
+    public final void testLBlob(){
         Setup();
-        Blob x = datamanager.getField(FieldType.STRING, "SELECT `lblob` FROM `typetest`").getBlob();
+        Blob x = data.getBlobField("lblob");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Set(){
+    public final void testSet(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `set` FROM `typetest`").getString();
+        String x = data.getStringField("set");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     @Test
-    public final void Enum(){
+    public final void testEnum(){
         Setup();
-        String x = datamanager.getField(FieldType.STRING, "SELECT `enum` FROM `typetest`").getString();
+        String x = data.getStringField("enum");
         Assert.assertNotNull(x);
         System.out.println(x);
     }
     public void Setup(){
-        if (datamanager != null) {
-            return;
+        if (datamanager == null) {
+            datamanager = new DataManager(DataType.MYSQL, "root", "AuthAPI");
+            datamanager.setDatabase("test");
+            datamanager.setHost("localhost");
+            datamanager.setPort(3306);
+            datamanager.setTimeout(0);
+            datamanager.setKeepAlive(true);
         }
-        datamanager = new DataManager(DataType.MYSQL, "root", "AuthAPI");
-        datamanager.setDatabase("test");
-        datamanager.setHost("localhost");
-        datamanager.setPort(3306);
-        datamanager.setTimeout(0);
-        datamanager.setKeepAlive(true);
+        if (data == null) {
+            data = datamanager.getResults("SELECT * FROM `typetest` LIMIT 1").getFirstResult();
+        }
+        
     }
     public static String ask(String name, String defaultvalue) {
         String line = null;

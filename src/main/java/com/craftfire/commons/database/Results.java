@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Results {
@@ -32,6 +33,7 @@ public class Results {
 
     public Results(String query, ResultSet rs) throws SQLException {
         this.query = query;
+        this.array = new ArrayList<DataList>();
 
         ResultSetMetaData metaData = rs.getMetaData();
         this.rows = metaData.getColumnCount();
@@ -39,7 +41,7 @@ public class Results {
             DataList data = new DataList();
             for (int i = 1; i <= this.rows; i++) {
                 Object o;
-                if (metaData.getColumnType(i) == Types.BLOB) {
+                if (metaData.getColumnType(i) == Types.BLOB || metaData.getColumnType(i) == Types.LONGVARBINARY) {
                     o = rs.getBlob(i);
                 } else {
                     o = rs.getObject(i);

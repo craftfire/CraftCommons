@@ -69,6 +69,7 @@ public class DataField {
             this.ftype = FieldType.STRING;
             break;
         case Types.BLOB:
+        case Types.LONGVARBINARY:
             this.ftype = FieldType.BLOB;
             break;
         case Types.BIT:
@@ -94,6 +95,7 @@ public class DataField {
             break;
         case Types.FLOAT:
         case Types.DOUBLE:
+        case Types.REAL:
         case Types.DECIMAL:
             this.ftype = FieldType.REAL;
             break;
