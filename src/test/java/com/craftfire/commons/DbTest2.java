@@ -9,15 +9,7 @@ import java.sql.Blob;
 import java.util.Date;
 import java.util.Iterator;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunListener;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
 
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataList;
@@ -27,17 +19,18 @@ public class DbTest2 {
     static DataManager datamanager;
     static DataField field;
     static final String newline = System.getProperty("line.separator");
-    static String seperate = newline + "|------------------------------------------------------------------|" +
-            newline;
+    static String seperate = newline
+            + "|------------------------------------------------------------------|"
+            + newline;
     static int succeed = 0;
     static int gsucceed = 0;
     static int count = 0;
     static int gcount = 0;
-    
+
     public static void main(String[] args) {
         String user = ask("MySQL user", "root");
         String password = ask("MySQL password", "AuthAPI");
-        datamanager =  new DataManager(DataType.MYSQL, user, password);
+        datamanager = new DataManager(DataType.MYSQL, user, password);
         datamanager.setHost(ask("MySQL host", "localhost"));
         String s_port = ask("MySQL port", "3306");
         int port = 0;
@@ -62,18 +55,21 @@ public class DbTest2 {
         datamanager.setTimeout(timeout);
         String s_keepalive = ask("MySQL keepalive", "true");
         boolean keepalive = false;
-        if (s_keepalive.equalsIgnoreCase("true") || s_keepalive.equalsIgnoreCase("1")) {
+        if (s_keepalive.equalsIgnoreCase("true")
+                || s_keepalive.equalsIgnoreCase("1")) {
             keepalive = true;
         }
         datamanager.setKeepAlive(keepalive);
-        
-        DataList data = datamanager.getResults("SELECT * FROM `typetest` LIMIT 1").getFirstResult();
+
+        DataList data = datamanager.getResults(
+                "SELECT * FROM `typetest` LIMIT 1").getFirstResult();
         Iterator<DataField> I = data.iterator();
         while (I.hasNext()) {
             field = I.next();
             System.out.println(seperate);
-            System.out.println(field.getFieldName() + " from " + field.getTable());
-            System.out.println("Type: " +  field.getFieldType().name());
+            System.out.println(field.getFieldName() + " from "
+                    + field.getTable());
+            System.out.println("Type: " + field.getFieldType().name());
             System.out.println("Size: " + field.getFieldSize());
             System.out.println("SQL Type: " + field.getSQLType());
             DbTest2 instance = new DbTest2();
@@ -103,9 +99,10 @@ public class DbTest2 {
         try {
             do {
                 System.out.println(newline + name + ": ");
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                        System.in));
                 line = br.readLine();
-                if (line != null && ! line.isEmpty()) {
+                if (line != null && !line.isEmpty()) {
                     data = line;
                     valid = true;
                 } else {
@@ -113,13 +110,13 @@ public class DbTest2 {
                     System.out.println(defaultvalue);
                     valid = true;
                 }
-            } while (! valid);
+            } while (!valid);
         } catch (IOException ioe) {
             System.out.println("IO exception = " + ioe);
         }
         return data;
     }
-    
+
     public static void printResult(String name, boolean success, Object x) {
         String s = success ? "+" : "-";
         ++count;
@@ -137,10 +134,12 @@ public class DbTest2 {
         }
         System.out.println(s);
     }
+
     public static void printResult(String name, Object x) {
         printResult(name, x != null, x);
     }
-    public static String arrayToString(Object[] array){
+
+    public static String arrayToString(Object[] array) {
         String s = "";
         if (array == null) {
             return null;
@@ -150,7 +149,8 @@ public class DbTest2 {
         }
         return s;
     }
-    public static String arrayToString(byte[] array){
+
+    public static String arrayToString(byte[] array) {
         String s = "";
         if (array == null) {
             return null;
@@ -160,57 +160,67 @@ public class DbTest2 {
         }
         return s;
     }
-    
+
     @Test
     public void testBigInt() {
         BigInteger x = field.getBigInt();
         printResult("asBigInt", x);
     }
+
     @Test
     public void testBlob() {
         Blob x = field.getBlob();
         printResult("asBlob", x);
     }
+
     @Test
     public void testBool() {
         boolean x = field.getBool();
         printResult("asBool", x, x);
     }
+
     @Test
     public void testBytes() {
         byte[] x = field.getBytes();
         printResult("asBytes", arrayToString(x));
     }
+
     @Test
     public void testDate() {
         Date x = field.getDate();
         printResult("asDate", x);
     }
+
     @Test
     public void testDecimal() {
         BigDecimal x = field.getDecimal();
         printResult("asDecimal", x);
     }
+
     @Test
     public void testDouble() {
         double x = field.getDouble();
         printResult("asDouble", x != 0, x);
     }
+
     @Test
     public void testFloat() {
         float x = field.getFloat();
         printResult("asFloat", x != 0, x);
     }
+
     @Test
     public void testInt() {
         int x = field.getInt();
         printResult("asInt", x != 0, x);
     }
+
     @Test
     public void testLong() {
         long x = field.getLong();
         printResult("asLong", x != 0, x);
     }
+
     @Test
     public void testString() {
         String x = field.getString();
