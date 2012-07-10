@@ -98,10 +98,11 @@ public class DataField {
 
     public DataField(int column, ResultSet resultset) throws SQLException {
         ResultSetMetaData metaData = resultset.getMetaData();
-        this.name = metaData.getCatalogName(column);
+        this.name = metaData.getColumnLabel(column);
         this.table = metaData.getTableName(column);
         this.size = metaData.getColumnDisplaySize(column);
-        if (metaData.getColumnType(column) == Types.BLOB) {
+        if (metaData.getColumnType(column) == Types.BLOB
+                || metaData.getColumnType(column) == Types.LONGVARBINARY) {
             this.data = resultset.getBlob(column);
         } else {
             this.data = resultset.getObject(column);
@@ -259,14 +260,15 @@ public class DataField {
             return ((Boolean) this.data).booleanValue() ? 1 : 0;
         } else if (getFieldType().equals(FieldType.DATE)) {
             return ((Date) this.data).getTime();
-        } else if (getFieldType().equals(FieldType.BINARY)) {
+        } else if (getFieldType().equals(FieldType.BINARY)
+                || getFieldType().equals(FieldType.BLOB)) {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
-            if (((byte[]) this.data).length >= 8) {
-                System.arraycopy(this.data, 0, bytes, 0, 8);
+            byte[] bytes1 = this.getBytes();
+            if (bytes1.length >= 8) {
+                System.arraycopy(bytes1, 0, bytes, 0, 8);
             } else {
-                System.arraycopy(this.data, 0, bytes,
-                        8 - ((byte[]) this.data).length,
-                        ((byte[]) this.data).length);
+                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length,
+                        bytes1.length);
             }
             return ByteBuffer.wrap(bytes).getLong();
         } else if (getFieldType().equals(FieldType.STRING)) {
@@ -274,6 +276,7 @@ public class DataField {
                 return Long.parseLong((String) this.data);
             } catch (NumberFormatException e) {
             }
+            return new Double(this.getDouble()).longValue();
         }
         return 0;
     }
@@ -285,8 +288,10 @@ public class DataField {
             } else if (getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) this.data).booleanValue() ? BigInteger.ONE
                         : BigInteger.ZERO;
-            } else if (getFieldType().equals(FieldType.BINARY)) {
-                return new BigInteger((byte[]) this.data);
+            } else if (getFieldType().equals(FieldType.BINARY)
+                    || getFieldType().equals(FieldType.BLOB)) {
+                byte[] bytes = this.getBytes();
+                return new BigInteger(bytes);
             } else if (getFieldType().equals(FieldType.STRING)) {
                 return new BigInteger(this.data.toString());
             } else {
@@ -296,6 +301,8 @@ public class DataField {
                     l = ((Number) this.data).longValue();
                 } else if (getFieldType().equals(FieldType.DATE)) {
                     l = ((Date) this.data).getTime();
+                } else {
+                    return null;
                 }
                 return new BigInteger(String.valueOf(l));
             }
@@ -312,14 +319,15 @@ public class DataField {
             return ((Boolean) this.data).booleanValue() ? 1 : 0;
         } else if (getFieldType().equals(FieldType.DATE)) {
             return new Long(((Date) this.data).getTime()).doubleValue();
-        } else if (getFieldType().equals(FieldType.BINARY)) {
+        } else if (getFieldType().equals(FieldType.BINARY)
+                || getFieldType().equals(FieldType.BLOB)) {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
-            if (((byte[]) this.data).length >= 8) {
-                System.arraycopy(this.data, 0, bytes, 0, 8);
+            byte[] bytes1 = this.getBytes();
+            if (bytes1.length >= 8) {
+                System.arraycopy(bytes1, 0, bytes, 0, 8);
             } else {
-                System.arraycopy(this.data, 0, bytes,
-                        8 - ((byte[]) this.data).length,
-                        ((byte[]) this.data).length);
+                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length,
+                        bytes1.length);
             }
             return ByteBuffer.wrap(bytes).getLong();
         } else if (getFieldType().equals(FieldType.STRING)) {
@@ -328,8 +336,10 @@ public class DataField {
             } catch (NumberFormatException e) {
             }
             try {
-                return Long.parseLong(((String) this.data).replace(',', '.'));
+                return Double.parseDouble(((String) this.data)
+                        .replace(',', '.'));
             } catch (NumberFormatException e) {
+                e.getCause();
             }
         }
         return 0;
@@ -386,8 +396,7 @@ public class DataField {
     public Date getDate() {
         if (getFieldType().equals(FieldType.DATE)) {
             return (Date) this.data;
-        } else if (getFieldType().equals(FieldType.INTEGER)
-                || getFieldType().equals(FieldType.BINARY)) {
+        } else if (getFieldType().equals(FieldType.INTEGER)) {
             return new Date(getLong());
         } else if (getFieldType().equals(FieldType.STRING)) {
             try {
@@ -424,7 +433,7 @@ public class DataField {
         } else if (getFieldType().equals(FieldType.INTEGER)
                 || getFieldType().equals(FieldType.REAL)
                 || getFieldType().equals(FieldType.DATE)) {
-            return getInt() != 0;
+            return getLong() != 0;
         } else if (getFieldType().equals(FieldType.BINARY)
                 || getFieldType().equals(FieldType.BLOB)
                 || getFieldType().equals(FieldType.STRING)) {
