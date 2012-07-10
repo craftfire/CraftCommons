@@ -34,6 +34,9 @@ public class LoggingManager {
     private String prefix, directory, format;
     private boolean debug = false, logging = false;
     
+    public LoggingManager(String logger, String prefix, String format) {
+        this(logger, null, prefix, format);
+    }
     public LoggingManager(String logger, String directory, String prefix, String format) {
         this.logger = Logger.getLogger(logger);
         this.directory = directory;
@@ -63,6 +66,9 @@ public class LoggingManager {
     
     public void setDirectory(String directory) {
         this.directory = directory;
+        if (directory == null || directory.isEmpty()) {
+            logging = false;
+        }
     }
 
     public boolean isDebug() {
@@ -78,7 +84,11 @@ public class LoggingManager {
     }
 
     public void setLogging(boolean logging) {
-        this.logging = logging;
+        if ((this.directory != null) && (!this.directory.isEmpty())) {
+            this.logging = logging;
+        } else {
+            this.logging = false;
+        }
     }
     
     public String getFormat() {

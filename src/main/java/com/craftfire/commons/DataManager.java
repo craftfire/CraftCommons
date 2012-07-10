@@ -44,16 +44,25 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
+    private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]", "HH:mm:ss");
     
     public DataManager(DataType type, String username, String password) {
         this.datatype = type;
         this.username = username;
         this.password = password;
         this.startup = System.currentTimeMillis() / 1000;
+        if (!logMgr.isLogging()) {
+            logMgr.setDirectory(directory);
+            logMgr.setLogging(true);
+        }
     }
 
     public String getURL() {
         return this.url;
+    }
+    
+    public static LoggingManager getLogManager() {
+        return DataManager.logMgr;
     }
 
     public boolean isKeepAlive() {
@@ -304,11 +313,10 @@ public class DataManager {
                     value = this.rs.getDouble(1);
                 }
                 close();
-//                return value;
                 if (value == null) {
                     return null;
                 }
-                return new DataField(1, rs.getMetaData(), value);
+                return new DataField(field, rs.getMetaData().getColumnDisplaySize(1), value);
             }
         } catch (SQLException e) {
             e.printStackTrace();

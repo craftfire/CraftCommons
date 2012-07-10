@@ -19,6 +19,7 @@
  */
 package com.craftfire.commons.database;
 
+import com.craftfire.commons.DataManager;
 import com.craftfire.commons.enums.FieldType;
 
 import java.math.BigDecimal;
@@ -41,11 +42,36 @@ public class DataField {
     private final int sqltype;
     private final boolean unsigned;
 
+    public DataField(int column, ResultSetMetaData metaData, Object data) throws SQLException {
+        this.sqltype = metaData.getColumnType(column);
+        this.size = metaData.getColumnDisplaySize(column);
+        this.data = data;
+        this.ftype = sqlTypeParse(sqltype, size, data);
+        typeCheck();
+        this.name = metaData.getColumnLabel(column);
+        this.table = metaData.getTableName(column);
+        this.unsigned = metaData.getColumnTypeName(column).contains("UNSIGNED");
+    }
+    public DataField(int size, Object data) {
+        this(size, false, data);
+    }
+    public DataField(FieldType type, int size, Object data) {
+        this(type, size, false, data);
+    }
+    public DataField(int size, boolean unsigned, Object data) {
+        this("", size, unsigned, data);
+    }
     public DataField(FieldType type, int size, boolean unsigned, Object data) {
         this(type, "", size, unsigned, data);
     }
+    public DataField(String name, int size, boolean  unsigned, Object data) {
+        this(name, "", size, unsigned, data);
+    }
     public DataField(FieldType type, String name, int size, boolean unsigned, Object data) {
         this(type, name, "", size, unsigned, data);
+    }
+    public DataField(String name, String table, int size, boolean unsigned, Object data) {
+        this(typeDetect(data), name, table, size, unsigned, data);
     }
     public DataField(FieldType type, String name, String table, int size, boolean unsigned, Object data) {
         sqltype = Types.NULL;
@@ -55,6 +81,23 @@ public class DataField {
         this.size = size;
         this.unsigned = unsigned;
         this.data = data;
+        typeCheck();
+    }
+    public DataField(int column, ResultSet resultset) throws SQLException {
+        ResultSetMetaData metaData = resultset.getMetaData();
+        this.name = metaData.getCatalogName(column);
+        this.table = metaData.getTableName(column);
+        this.size = metaData.getColumnDisplaySize(column);
+        if (metaData.getColumnType(column) == Types.BLOB) {
+            this.data = resultset.getBlob(column);
+        } else {
+            this.data = resultset.getObject(column);
+        }
+        this.sqltype = metaData.getColumnType(column);
+        this.unsigned = metaData.getColumnTypeName(column).contains("UNSIGNED");
+        this.ftype = sqlTypeParse(sqltype, size, data);
+    }
+    private void typeCheck() {
         IllegalArgumentException e = new IllegalArgumentException("Data: " + data.toString() + " doesn't match the type: " + ftype.name());
         if (ftype.equals(FieldType.STRING)) {
             if (! (data instanceof String)) {
@@ -82,67 +125,69 @@ public class DataField {
             }
         }
     }
-    public DataField(int i, ResultSet resultset) throws SQLException {
-        ResultSetMetaData metaData = resultset.getMetaData();
-        this.name = metaData.getCatalogName(i);
-        this.table = metaData.getTableName(i);
-//        this.type = metaData.getColumnTypeName(i);
-        this.size = metaData.getColumnDisplaySize(i);
-        this.data = resultset.getObject(i);
+    private static FieldType typeDetect(Object data) {
         if (data == null) {
-            this.sqltype = Types.NULL;
-        } else {
-            this.sqltype = metaData.getColumnType(i);
+            return FieldType.NULL;
+        } else if (data instanceof String) {
+            return FieldType.STRING;
+        } else if (data instanceof Number) {
+            if (((Number) data).doubleValue() == ((Number) data).longValue()) {
+                return FieldType.INTEGER;
+            } else {
+                return FieldType.REAL;
+            }
+        } else if (data instanceof Date) {
+            return FieldType.DATE;
+        } else if (data instanceof Blob) {
+            return FieldType.BLOB;
+        } else if (data instanceof byte[]) {
+            return FieldType.BINARY;
+        } else if (data instanceof Boolean) {
+            return FieldType.BOOLEAN;
         }
-        this.unsigned = metaData.getColumnTypeName(i).contains("UNSIGNED");
+        DataManager.getLogManager().warning("Unknown data type: " + data.toString());
+        return FieldType.UNKNOWN;
+    }
+    private static FieldType sqlTypeParse(int sqltype, int size, Object data) {
         switch (sqltype) {
         case Types.CHAR:
         case Types.VARCHAR:
         case Types.LONGVARCHAR:
-            this.ftype = FieldType.STRING;
-            break;
+            return FieldType.STRING;
         case Types.BLOB:
         case Types.LONGVARBINARY:
-            this.ftype = FieldType.BLOB;
-            break;
+            return FieldType.BLOB;
         case Types.BIT:
             if (size <= 1) {
-                this.ftype = FieldType.BOOLEAN;
-                break;
+                return FieldType.BOOLEAN;
             }
             /* falls through */
         case Types.BINARY:
         case Types.VARBINARY:
-            this.ftype = FieldType.BINARY;
-            break;
+            return FieldType.BINARY;
         case Types.TINYINT:
             if (size <= 1) {
-                this.ftype = FieldType.BOOLEAN;
-                break;
+                return FieldType.BOOLEAN;
             }
             /* falls through */
         case Types.SMALLINT:
         case Types.INTEGER:
         case Types.BIGINT:
-            this.ftype = FieldType.INTEGER;
-            break;
+            return FieldType.INTEGER;
         case Types.FLOAT:
         case Types.DOUBLE:
         case Types.REAL:
         case Types.DECIMAL:
-            this.ftype = FieldType.REAL;
-            break;
+            return FieldType.REAL;
         case Types.DATE:
         case Types.TIMESTAMP:
         case Types.TIME:
-            this.ftype = FieldType.DATE;
-            break;
+            return FieldType.DATE;
         case Types.NULL:
-            this.ftype = FieldType.NULL;
-            break;
+            return FieldType.NULL;
         default:
-            this.ftype = FieldType.UNKNOWN;
-            break;
+            DataManager.getLogManager().warning("Unknown sql type: " + sqltype + " Field data:" + data.toString());
+            return FieldType.UNKNOWN;
         }
     }
 

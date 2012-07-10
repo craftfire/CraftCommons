@@ -40,13 +40,7 @@ public class Results {
         while (rs.next()) {
             DataList data = new DataList();
             for (int i = 1; i <= this.rows; i++) {
-                Object o;
-                if (metaData.getColumnType(i) == Types.BLOB || metaData.getColumnType(i) == Types.LONGVARBINARY) {
-                    o = rs.getBlob(i);
-                } else {
-                    o = rs.getObject(i);
-                }
-                data.add(new DataField(i, metaData, o));
+                data.add(new DataField(i, rs));
             }
             this.array.add(data);
         }
