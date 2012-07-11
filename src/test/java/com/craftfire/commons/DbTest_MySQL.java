@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.junit.Test;
@@ -14,8 +15,9 @@ import org.junit.Test;
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataList;
 import com.craftfire.commons.enums.DataType;
+import com.craftfire.commons.enums.FieldType;
 
-public class DbTest2 {
+public class DbTest_MySQL {
     static DataManager datamanager;
     static DataField field;
     static final String newline = System.getProperty("line.separator");
@@ -26,6 +28,8 @@ public class DbTest2 {
     static int gsucceed = 0;
     static int count = 0;
     static int gcount = 0;
+    static int[] asucceed = new int[4];
+    static int[] acount = new int[4];
 
     public static void main(String[] args) {
         String user = ask("MySQL user", "root");
@@ -60,7 +64,9 @@ public class DbTest2 {
             keepalive = true;
         }
         datamanager.setKeepAlive(keepalive);
-
+        datamanager.setPrefix("");
+        System.out.println(seperate + seperate);
+        System.out.println("TESTING getResults");
         DataList data = datamanager.getResults(
                 "SELECT * FROM `typetest` LIMIT 1").getFirstResult();
         Iterator<DataField> I = data.iterator();
@@ -72,24 +78,143 @@ public class DbTest2 {
             System.out.println("Type: " + field.getFieldType().name());
             System.out.println("Size: " + field.getFieldSize());
             System.out.println("SQL Type: " + field.getSQLType());
-            DbTest2 instance = new DbTest2();
-            instance.testBigInt();
-            instance.testBlob();
-            instance.testBool();
-            instance.testBytes();
-            instance.testDate();
-            instance.testDecimal();
-            instance.testDouble();
-            instance.testFloat();
-            instance.testInt();
-            instance.testLong();
-            instance.testString();
+            runTest();
             System.out.println("SUCCEED: " + succeed + "/" + count);
             succeed = 0;
             count = 0;
         }
         System.out.println(seperate);
-        System.out.println("GLOBAL SUCCEED: " + gsucceed + "/" + gcount);
+        System.out.println("getResults SUCCEED: " + gsucceed + "/" + gcount);
+        asucceed[0] = gsucceed;
+        acount[0] = gcount;
+        gsucceed = 0;
+        gcount = 0;
+        System.out.println(seperate + seperate);
+        System.out.println("TESTING getField");
+        HashMap<String, Object> labels = datamanager
+                .getArray("SELECT * FROM `typetest` LIMIT 1");
+        for (Object o : labels.keySet().toArray()) {
+            String s = (String) o;
+            field = datamanager.getField(FieldType.UNKNOWN, "typetest", s, "1");
+            System.out.println(seperate);
+            System.out.println(field.getFieldName() + " from "
+                    + field.getTable());
+            System.out.println("Type: " + field.getFieldType().name());
+            System.out.println("Size: " + field.getFieldSize());
+            System.out.println("SQL Type: " + field.getSQLType());
+            runTest();
+            System.out.println("SUCCEED: " + succeed + "/" + count);
+            succeed = 0;
+            count = 0;
+        }
+        System.out.println(seperate);
+        System.out.println("getField SUCCEED: " + gsucceed + "/" + gcount);
+        asucceed[1] = gsucceed;
+        acount[1] = gcount;
+        gsucceed = 0;
+        gcount = 0;
+        System.out.println(seperate + seperate);
+        System.out.println("TESTING get<Kinda>Field");
+        for (Object o : labels.keySet().toArray()) {
+            String s = (String) o;
+            System.out.println(seperate);
+            System.out.println(s + " from " + "typetest");
+            runTest2(s);
+            System.out.println("SUCCEED: " + succeed + "/" + count);
+            succeed = 0;
+            count = 0;
+        }
+        System.out.println(seperate);
+        System.out.println("get<Kinda>Field SUCCEED: " + gsucceed + "/"
+                + gcount);
+        asucceed[2] = gsucceed;
+        acount[2] = gcount;
+        gsucceed = 0;
+        gcount = 0;
+        System.out.println(seperate + seperate);
+        System.out.println("TESTING DataList");
+        for (Object o : labels.keySet().toArray()) {
+            String s = (String) o;
+            System.out.println(seperate);
+            System.out.println(s + " from " + data.getTable(s));
+            System.out.println("Type: " + data.getFieldType(s).name());
+            System.out.println("Size: " + data.getFieldSize(s));
+            System.out.println("SQL Type: " + data.getFieldSQLType(s));
+            runTest3(data, s);
+            System.out.println("SUCCEED: " + succeed + "/" + count);
+            succeed = 0;
+            count = 0;
+        }
+        System.out.println(seperate);
+        System.out.println("DataList SUCCEED: " + gsucceed + "/" + gcount);
+        asucceed[3] = gsucceed;
+        acount[3] = gcount;
+        gsucceed = 0;
+        gcount = 0;
+        System.out.println(seperate + seperate);
+        System.out
+                .println("getResult SUCCEED " + asucceed[0] + "/" + acount[0]);
+        System.out.println("getField SUCCEED " + asucceed[1] + "/" + acount[1]);
+        System.out.println("get<Kinda>Field SUCCEED " + asucceed[2] + "/"
+                + acount[2]);
+        System.out.println("DataList SUCCEED " + asucceed[3] + "/" + acount[3]);
+    }
+
+    public static void runTest() {
+        DbTest_MySQL instance = new DbTest_MySQL();
+        instance.testBigInt();
+        instance.testBlob();
+        instance.testBool();
+        instance.testBytes();
+        instance.testDate();
+        instance.testDecimal();
+        instance.testDouble();
+        instance.testFloat();
+        instance.testInt();
+        instance.testLong();
+        instance.testString();
+    }
+
+    public static void runTest2(String field) {
+        boolean b = datamanager.getBooleanField("typetest", field, "1");
+        printResult("getBooleanField", b, b);
+        String s = datamanager.getBinaryField("typetest", field, "1");
+        printResult("getBinaryField", s);
+        Blob blob = datamanager.getBlobField("typetest", field, "1");
+        printResult("getBlobField", blob);
+        Date date = datamanager.getDateField("typetest", field, "1");
+        printResult("getDateField", date);
+        double d = datamanager.getDoubleField("typetest", field, "1");
+        printResult("getDoubleField", d != 0, d);
+        int i = datamanager.getIntegerField("typetest", field, "1");
+        printResult("getIntegerField", i != 0, i);
+        s = datamanager.getStringField("typetest", field, "1");
+        printResult("getStringField", s);
+    }
+
+    public static void runTest3(DataList data, String fieldName) {
+        BigInteger bint = data.getBigIntField(fieldName);
+        printResult("getBigIntField", bint);
+        byte[] bytes = data.getBinaryField(fieldName);
+        printResult("getBinaryField", bytes);
+        Blob blob = data.getBlobField(fieldName);
+        printResult("getBlobField", blob);
+        boolean b = data.getBoolField(fieldName);
+        printResult("getBoolField", b, b);
+        Date date = data.getDateField(fieldName);
+        printResult("getDateField", date);
+        BigDecimal dec = data.getDecimalField(fieldName);
+        printResult("getDecimalField", dec);
+        double d = data.getDoubleField(fieldName);
+        printResult("getDoubleField", d != 0, d);
+        float fl = data.getFloatField(fieldName);
+        printResult("getFloatField", fl != 0, fl);
+        int i = data.getIntField(fieldName);
+        printResult("getIntField", i != 0, i);
+        long l = data.getLongField(fieldName);
+        printResult("getLongField", l != 0, l);
+        String s = data.getStringField(fieldName);
+        printResult("getStringField", s);
     }
 
     public static String ask(String name, String defaultvalue) {

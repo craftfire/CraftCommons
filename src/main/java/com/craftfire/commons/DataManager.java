@@ -87,7 +87,7 @@ public class DataManager {
     public void setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
         if (keepAlive) {
-            connect();
+            this.connect();
         }
     }
 
@@ -205,21 +205,21 @@ public class DataManager {
     }
 
     public boolean exist(String table, String field, Object value) {
-        return getField(FieldType.STRING, "SELECT `" + field + "` " + "FROM `"
-                + getPrefix() + table + "` " + "WHERE `" + field + "` = '"
+        return this.getField(FieldType.STRING, "SELECT `" + field + "` " + "FROM `"
+                + this.getPrefix() + table + "` " + "WHERE `" + field + "` = '"
                 + value + "' " + "LIMIT 1") != null;
     }
 
     public int getLastID(String field, String table) {
-        return getField(
+        return this.getField(
                 FieldType.INTEGER,
-                "SELECT `" + field + "` FROM `" + getPrefix() + table
+                "SELECT `" + field + "` FROM `" + this.getPrefix() + table
                         + "` ORDER BY `" + field + "` DESC LIMIT 1").getInt();
     }
 
     public int getLastID(String field, String table, String where) {
-        Object val = getField(FieldType.INTEGER, "SELECT `" + field + "` "
-                + "FROM `" + getPrefix() + table + "` " + "WHERE " + where
+        Object val = this.getField(FieldType.INTEGER, "SELECT `" + field + "` "
+                + "FROM `" + this.getPrefix() + table + "` " + "WHERE " + where
                 + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
         if (val != null) {
             return (Integer) val;
@@ -228,91 +228,147 @@ public class DataManager {
     }
 
     public int getCount(String table, String where) {
-        return getField(
+        return this.getField(
                 FieldType.INTEGER,
-                "SELECT COUNT(*) FROM `" + getPrefix() + table + "` WHERE "
+                "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` WHERE "
                         + where + " LIMIT 1").getInt();
     }
 
     public int getCount(String table) {
-        return getField(FieldType.INTEGER,
-                "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1")
+        return this.getField(FieldType.INTEGER,
+                "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` LIMIT 1")
                 .getInt();
     }
 
     public void increaseField(String table, String field, String where) {
-        executeQueryVoid("UPDATE `" + getPrefix() + table + "` SET `" + field
+        this.executeQueryVoid("UPDATE `" + this.getPrefix() + table + "` SET `" + field
                 + "` =" + " " + field + " + 1 WHERE " + where);
     }
 
     public String getStringField(String query) {
-        return getField(FieldType.STRING, query).getString();
+        DataField f = this.getField(FieldType.STRING, query);
+        if (f != null) {
+            return f.getString();
+        }
+        return null;
     }
 
     public String getStringField(String table, String field, String where) {
-        return getField(FieldType.STRING, table, field, where).getString();
+        DataField f = this.getField(FieldType.STRING, table, field, where);
+        if (f != null) {
+            return f.getString();
+        }
+        return null;
     }
 
     public int getIntegerField(String query) {
-        return getField(FieldType.INTEGER, query).getInt();
+        DataField f = this.getField(FieldType.INTEGER, query);
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public int getIntegerField(String table, String field, String where) {
-        return getField(FieldType.INTEGER, table, field, where).getInt();
+        DataField f = this.getField(FieldType.INTEGER, table, field, where);
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public Date getDateField(String query) {
-        return getField(FieldType.DATE, query).getDate();
+        DataField f = this.getField(FieldType.DATE, query);
+        if (f != null) {
+            return f.getDate();
+        }
+        return null;
     }
 
     public Date getDateField(String table, String field, String where) {
-        return getField(FieldType.INTEGER, table, field, where).getDate();
+        DataField f = this.getField(FieldType.DATE, table, field, where);
+        if (f != null) {
+            return f.getDate();
+        }
+        return null;
     }
 
     public Blob getBlobField(String query) {
-        return getField(FieldType.BLOB, query).getBlob();
+        DataField f = this.getField(FieldType.BLOB, query);
+        if (f != null) {
+            return f.getBlob();
+        }
+        return null;
     }
 
     public Blob getBlobField(String table, String field, String where) {
-        return getField(FieldType.BLOB, table, field, where).getBlob();
+        DataField f = this.getField(FieldType.BLOB, table, field, where);
+        if (f != null) {
+            return f.getBlob();
+        }
+        return null;
     }
 
     public boolean getBooleanField(String query) {
-        return getField(FieldType.BOOLEAN, query).getBool();
+        DataField f = this.getField(FieldType.BOOLEAN, query);
+        if (f != null) {
+            return f.getBool();
+        }
+        return false;
     }
 
     public boolean getBooleanField(String table, String field, String where) {
-        return getField(FieldType.BOOLEAN, table, field, where).getBool();
+        DataField f = this.getField(FieldType.BOOLEAN, table, field, where);
+        if (f != null) {
+            return f.getBool();
+        }
+        return false;
     }
 
     public double getDoubleField(String query) {
-        return getField(FieldType.REAL, query).getDouble();
+        DataField f = this.getField(FieldType.REAL, query);
+        if (f != null) {
+            return f.getDouble();
+        }
+        return 0;
     }
 
-    public Double getDoubleField(String table, String field, String where) {
-        return getField(FieldType.REAL, table, field, where).getDouble();
+    public double getDoubleField(String table, String field, String where) {
+        DataField f = this.getField(FieldType.REAL, table, field, where);
+        if (f != null) {
+            return f.getDouble();
+        }
+        return 0;
     }
 
     public String String(String query) {
-        return getField(FieldType.BINARY, query).getString();
+        DataField f = this.getField(FieldType.BINARY, query);
+        if (f != null) {
+            return f.getString();
+        }
+        return null;
     }
 
     public String getBinaryField(String table, String field, String where) {
-        return getField(FieldType.BINARY, table, field, where).getString();
+        DataField f = this.getField(FieldType.BINARY, table, field, where);
+        if (f != null) {
+            return f.getString();
+        }
+        return null;
     }
 
     public DataField getField(FieldType fieldType, String table, String field,
             String where) {
-        return getField(fieldType, "SELECT `" + field + "` FROM `"
-                + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+        return this.getField(fieldType, "SELECT `" + field + "` FROM `"
+                + this.getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public DataField getField(FieldType field, String query) {
         try {
-            connect();
+            this.connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.log(query);
             if (this.rs.next()) {
                 Object value = null;
                 if (field.equals(FieldType.STRING)) {
@@ -324,14 +380,15 @@ public class DataManager {
                 } else if (field.equals(FieldType.BLOB)) {
                     value = this.rs.getBlob(1);
                 } else if (field.equals(FieldType.BINARY)) {
-                    value = CraftCommons.convertStreamToString(this.rs
-                            .getBinaryStream(1));
+                    value = this.rs.getBytes(1);
                 } else if (field.equals(FieldType.BOOLEAN)) {
                     value = this.rs.getBoolean(1);
                 } else if (field.equals(FieldType.REAL)) {
                     value = this.rs.getDouble(1);
+                } else if (field.equals(FieldType.UNKNOWN)) {
+                    return new DataField(1, this.rs);
                 }
-                close();
+                this.close();
                 if (value == null) {
                     return null;
                 }
@@ -340,26 +397,26 @@ public class DataManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            close();
+            this.close();
         }
         return null;
     }
 
     public void executeQuery(String query) throws SQLException {
-        connect();
+        this.connect();
         this.pStmt = this.con.prepareStatement(query);
         this.pStmt.executeUpdate();
-        log(query);
-        close();
+        this.log(query);
+        this.close();
     }
 
     public void executeQueryVoid(String query) {
         try {
-            connect();
+            this.connect();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
-            log(query);
-            close();
+            this.log(query);
+            this.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -367,17 +424,17 @@ public class DataManager {
 
     public void updateBlob(String table, String field, String where, String data) {
         try {
-            String query = "UPDATE `" + getPrefix() + table + "` " + "SET `"
+            String query = "UPDATE `" + this.getPrefix() + table + "` " + "SET `"
                     + field + "` = ? " + "WHERE " + where;
             byte[] array = data.getBytes();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
-            connect();
-            log(query);
+            this.connect();
+            this.log(query);
             this.stmt = this.con.createStatement();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.setBlob(1, inputStream, array.length);
             this.pStmt.executeUpdate();
-            close();
+            this.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -385,33 +442,33 @@ public class DataManager {
 
     public void updateFields(HashMap<String, Object> data, String table,
             String where) throws SQLException {
-        String update = updateFieldsString(data);
-        String query = "UPDATE `" + getPrefix() + table + "`" + update
+        String update = this.updateFieldsString(data);
+        String query = "UPDATE `" + this.getPrefix() + table + "`" + update
                 + " WHERE " + where;
-        connect();
+        this.connect();
         this.pStmt = this.con.prepareStatement(query);
-        log(query);
+        this.log(query);
         this.pStmt.executeUpdate();
-        close();
+        this.close();
     }
 
     public void insertFields(HashMap<String, Object> data, String table)
             throws SQLException {
-        String insert = insertFieldString(data);
-        String query = "INSERT INTO `" + getPrefix() + table + "` " + insert;
-        connect();
+        String insert = this.insertFieldString(data);
+        String query = "INSERT INTO `" + this.getPrefix() + table + "` " + insert;
+        this.connect();
         this.pStmt = this.con.prepareStatement(query);
-        log(query);
+        this.log(query);
         this.pStmt.executeUpdate();
-        close();
+        this.close();
     }
 
     public TableModel resultSetToTableModel(String query) {
         try {
-            connect();
+            this.connect();
             Statement stmt = this.con.createStatement();
             this.rs = stmt.executeQuery(query);
-            log(query);
+            this.log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
@@ -426,26 +483,26 @@ public class DataManager {
                 }
                 rows.addElement(newRow);
             }
-            close();
+            this.close();
             return new DefaultTableModel(rows, columnNames);
         } catch (Exception e) {
             e.printStackTrace();
-            close();
+            this.close();
             return null;
         }
     }
 
     public Results getResults(String query) {
         try {
-            connect();
+            this.connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.log(query);
             Results results = new Results(query, this.rs);
-            close();
+            this.close();
             return results;
         } catch (SQLException e) {
-            close();
+            this.close();
             e.printStackTrace();
         }
         return null;
@@ -453,10 +510,10 @@ public class DataManager {
 
     public HashMap<String, Object> getArray(String query) {
         try {
-            connect();
+            this.connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             HashMap<String, Object> data = new HashMap<String, Object>();
@@ -465,10 +522,10 @@ public class DataManager {
                     data.put(metaData.getColumnLabel(i), this.rs.getObject(i));
                 }
             }
-            close();
+            this.close();
             return data;
         } catch (SQLException e) {
-            close();
+            this.close();
             e.printStackTrace();
         }
         return null;
@@ -476,11 +533,11 @@ public class DataManager {
 
     public List<HashMap<String, Object>> getArrayList(String query) {
         try {
-            connect();
+            this.connect();
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while (this.rs.next()) {
@@ -490,19 +547,19 @@ public class DataManager {
                 }
                 list.add(data);
             }
-            close();
+            this.close();
             return list;
         } catch (SQLException e) {
-            close();
+            this.close();
             e.printStackTrace();
         }
         return null;
     }
 
     public ResultSet getResultSet(String query) throws SQLException {
-        connect();
+        this.connect();
         this.stmt = this.con.createStatement();
-        log(query);
+        this.log(query);
         this.rs = this.stmt.executeQuery(query);
         return this.rs;
     }
@@ -527,11 +584,11 @@ public class DataManager {
     public boolean hasConnection() {
         try {
             boolean result = false;
-            connect();
+            this.connect();
             if (this.con != null) {
                 result = !this.con.isClosed();
             }
-            close();
+            this.close();
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -541,9 +598,9 @@ public class DataManager {
 
     public void connect() {
         if (this.url == null) {
-            setURL();
+            this.setURL();
         }
-        if (this.con != null && isConnected()) {
+        if (this.con != null && this.isConnected()) {
             return;
         }
         try {
@@ -589,7 +646,7 @@ public class DataManager {
                 this.stmt = null;
             }
             if (this.keepAlive) {
-                connect();
+                this.connect();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -598,8 +655,8 @@ public class DataManager {
 
     public void reconnect() {
         this.reconnect = true;
-        close();
-        connect();
+        this.close();
+        this.connect();
     }
 
     private String updateFieldsString(HashMap<String, Object> data) {
