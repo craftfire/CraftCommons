@@ -36,7 +36,7 @@ import com.craftfire.commons.database.DataList;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
 
-public class DbTest_MySQL {
+public class DbTest_H2 {
     static DataManager datamanager;
     static DataField field;
     static final String newline = System.getProperty("line.separator");
@@ -51,38 +51,13 @@ public class DbTest_MySQL {
     static int[] acount = new int[4];
 
     public static void main(String[] args) {
-        String user = ask("MySQL user", "root");
-        String password = ask("MySQL password", "AuthAPI");
-        datamanager = new DataManager(DataType.MYSQL, user, password);
-        datamanager.setHost(ask("MySQL host", "localhost"));
-        String s_port = ask("MySQL port", "3306");
-        int port = 0;
-        try {
-            port = Integer.parseInt(s_port);
-        } catch (NumberFormatException e) {
-        }
-        if (port <= 0) {
-            port = 3306;
-        }
-        datamanager.setPort(port);
-        datamanager.setDatabase(ask("MySQL database", "test"));
-        String s_timeout = ask("MySQL timeout", "0");
-        int timeout = 0;
-        try {
-            timeout = Integer.parseInt(s_timeout);
-        } catch (NumberFormatException e) {
-        }
-        if (timeout < 0) {
-            timeout = 0;
-        }
-        datamanager.setTimeout(timeout);
-        String s_keepalive = ask("MySQL keepalive", "true");
-        boolean keepalive = false;
-        if (s_keepalive.equalsIgnoreCase("true")
-                || s_keepalive.equalsIgnoreCase("1")) {
-            keepalive = true;
-        }
-        datamanager.setKeepAlive(keepalive);
+        String user = "sa";
+        String password = "";
+        datamanager = new DataManager(DataType.H2, user, password);
+        datamanager.setDatabase("test");
+        datamanager.setDirectory("./src/test/resource/");
+        datamanager.setTimeout(0);
+        datamanager.setKeepAlive(true);
         datamanager.setPrefix("");
         System.out.println(seperate + seperate);
         System.out.println("TESTING getResults");
@@ -180,7 +155,7 @@ public class DbTest_MySQL {
     }
 
     public static void runTest() {
-        DbTest_MySQL instance = new DbTest_MySQL();
+        DbTest_H2 instance = new DbTest_H2();
         instance.testBigInt();
         instance.testBlob();
         instance.testBool();

@@ -199,7 +199,7 @@ public class DataManager {
                     + "&jdbcCompliantTruncation=false";
             break;
         case H2:
-            this.url = "jdbc:h2:" + this.directory;
+            this.url = "jdbc:h2:" + this.directory + this.database;
             break;
         }
     }

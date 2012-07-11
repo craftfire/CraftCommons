@@ -48,7 +48,7 @@ public class DataField {
         this.size = metaData.getColumnDisplaySize(column);
         this.data = data;
         this.ftype = sqlTypeParse(this.sqltype, this.size, data);
-        typeCheck();
+        this.typeCheck();
         this.name = metaData.getColumnLabel(column);
         this.table = metaData.getTableName(column);
         this.unsigned = metaData.getColumnTypeName(column).contains("UNSIGNED");
@@ -93,7 +93,7 @@ public class DataField {
         this.size = size;
         this.unsigned = unsigned;
         this.data = data;
-        typeCheck();
+        this.typeCheck();
     }
 
     public DataField(int column, ResultSet resultset) throws SQLException {
@@ -104,6 +104,8 @@ public class DataField {
         if (metaData.getColumnType(column) == Types.BLOB
                 || metaData.getColumnType(column) == Types.LONGVARBINARY) {
             this.data = resultset.getBlob(column);
+        } else if (metaData.getColumnType(column) == Types.CLOB) {
+            this.data = resultset.getString(column);
         } else {
             this.data = resultset.getObject(column);
         }
@@ -174,10 +176,13 @@ public class DataField {
         case Types.CHAR:
         case Types.VARCHAR:
         case Types.LONGVARCHAR:
+        case Types.CLOB:
             return FieldType.STRING;
         case Types.BLOB:
         case Types.LONGVARBINARY:
             return FieldType.BLOB;
+        case Types.BOOLEAN:
+            return FieldType.BOOLEAN;
         case Types.BIT:
             if (size <= 1) {
                 return FieldType.BOOLEAN;
@@ -239,29 +244,29 @@ public class DataField {
     }
 
     public String getString() {
-        if (getFieldType().equals(FieldType.STRING)) {
+        if (this.getFieldType().equals(FieldType.STRING)) {
             return (String) this.data;
-        } else if (getFieldType().equals(FieldType.BINARY)
-                || getFieldType().equals(FieldType.BLOB)) {
-            return new String(getBytes());
+        } else if (this.getFieldType().equals(FieldType.BINARY)
+                || this.getFieldType().equals(FieldType.BLOB)) {
+            return new String(this.getBytes());
         }
         return this.data.toString();
     }
 
     public int getInt() {
-        return (int) getLong();
+        return (int) this.getLong();
     }
 
     public long getLong() {
-        if (getFieldType().equals(FieldType.INTEGER)
-                || getFieldType().equals(FieldType.REAL)) {
+        if (this.getFieldType().equals(FieldType.INTEGER)
+                || this.getFieldType().equals(FieldType.REAL)) {
             return ((Number) this.data).longValue();
-        } else if (getFieldType().equals(FieldType.BOOLEAN)) {
+        } else if (this.getFieldType().equals(FieldType.BOOLEAN)) {
             return ((Boolean) this.data).booleanValue() ? 1 : 0;
-        } else if (getFieldType().equals(FieldType.DATE)) {
+        } else if (this.getFieldType().equals(FieldType.DATE)) {
             return ((Date) this.data).getTime();
-        } else if (getFieldType().equals(FieldType.BINARY)
-                || getFieldType().equals(FieldType.BLOB)) {
+        } else if (this.getFieldType().equals(FieldType.BINARY)
+                || this.getFieldType().equals(FieldType.BLOB)) {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
             byte[] bytes1 = this.getBytes();
             if (bytes1.length >= 8) {
@@ -271,7 +276,7 @@ public class DataField {
                         bytes1.length);
             }
             return ByteBuffer.wrap(bytes).getLong();
-        } else if (getFieldType().equals(FieldType.STRING)) {
+        } else if (this.getFieldType().equals(FieldType.STRING)) {
             try {
                 return Long.parseLong((String) this.data);
             } catch (NumberFormatException e) {
@@ -285,21 +290,21 @@ public class DataField {
         try {
             if (this.data instanceof BigInteger) {
                 return (BigInteger) this.data;
-            } else if (getFieldType().equals(FieldType.BOOLEAN)) {
+            } else if (this.getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) this.data).booleanValue() ? BigInteger.ONE
                         : BigInteger.ZERO;
-            } else if (getFieldType().equals(FieldType.BINARY)
-                    || getFieldType().equals(FieldType.BLOB)) {
+            } else if (this.getFieldType().equals(FieldType.BINARY)
+                    || this.getFieldType().equals(FieldType.BLOB)) {
                 byte[] bytes = this.getBytes();
                 return new BigInteger(bytes);
-            } else if (getFieldType().equals(FieldType.STRING)) {
+            } else if (this.getFieldType().equals(FieldType.STRING)) {
                 return new BigInteger(this.data.toString());
             } else {
                 long l = 0;
-                if (getFieldType().equals(FieldType.INTEGER)
-                        || getFieldType().equals(FieldType.REAL)) {
+                if (this.getFieldType().equals(FieldType.INTEGER)
+                        || this.getFieldType().equals(FieldType.REAL)) {
                     l = ((Number) this.data).longValue();
-                } else if (getFieldType().equals(FieldType.DATE)) {
+                } else if (this.getFieldType().equals(FieldType.DATE)) {
                     l = ((Date) this.data).getTime();
                 } else {
                     return null;
@@ -312,15 +317,15 @@ public class DataField {
     }
 
     public double getDouble() {
-        if (getFieldType().equals(FieldType.INTEGER)
-                || getFieldType().equals(FieldType.REAL)) {
+        if (this.getFieldType().equals(FieldType.INTEGER)
+                || this.getFieldType().equals(FieldType.REAL)) {
             return ((Number) this.data).doubleValue();
-        } else if (getFieldType().equals(FieldType.BOOLEAN)) {
+        } else if (this.getFieldType().equals(FieldType.BOOLEAN)) {
             return ((Boolean) this.data).booleanValue() ? 1 : 0;
-        } else if (getFieldType().equals(FieldType.DATE)) {
+        } else if (this.getFieldType().equals(FieldType.DATE)) {
             return new Long(((Date) this.data).getTime()).doubleValue();
-        } else if (getFieldType().equals(FieldType.BINARY)
-                || getFieldType().equals(FieldType.BLOB)) {
+        } else if (this.getFieldType().equals(FieldType.BINARY)
+                || this.getFieldType().equals(FieldType.BLOB)) {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
             byte[] bytes1 = this.getBytes();
             if (bytes1.length >= 8) {
@@ -330,7 +335,7 @@ public class DataField {
                         bytes1.length);
             }
             return ByteBuffer.wrap(bytes).getLong();
-        } else if (getFieldType().equals(FieldType.STRING)) {
+        } else if (this.getFieldType().equals(FieldType.STRING)) {
             try {
                 return Double.parseDouble((String) this.data);
             } catch (NumberFormatException e) {
@@ -346,22 +351,22 @@ public class DataField {
     }
 
     public float getFloat() {
-        return (float) getDouble();
+        return (float) this.getDouble();
     }
 
     public BigDecimal getDecimal() {
         try {
             if (this.data instanceof BigDecimal) {
                 return (BigDecimal) this.data;
-            } else if (getFieldType().equals(FieldType.BOOLEAN)) {
+            } else if (this.getFieldType().equals(FieldType.BOOLEAN)) {
                 return ((Boolean) this.data).booleanValue() ? BigDecimal.ONE
                         : BigDecimal.ZERO;
-            } else if (getFieldType().equals(FieldType.STRING)) {
+            } else if (this.getFieldType().equals(FieldType.STRING)) {
                 return new BigDecimal(this.data.toString());
-            } else if (getFieldType().equals(FieldType.INTEGER)
-                    || getFieldType().equals(FieldType.REAL)) {
+            } else if (this.getFieldType().equals(FieldType.INTEGER)
+                    || this.getFieldType().equals(FieldType.REAL)) {
                 return new BigDecimal(((Number) this.data).doubleValue());
-            } else if (getFieldType().equals(FieldType.DATE)) {
+            } else if (this.getFieldType().equals(FieldType.DATE)) {
                 return new BigDecimal(((Date) this.data).getTime());
             }
         } catch (NumberFormatException e) {
@@ -370,35 +375,35 @@ public class DataField {
     }
 
     public byte[] getBytes() {
-        if (getFieldType().equals(FieldType.BINARY)) {
+        if (this.getFieldType().equals(FieldType.BINARY)) {
             return (byte[]) this.data;
-        } else if (getFieldType().equals(FieldType.BLOB)) {
+        } else if (this.getFieldType().equals(FieldType.BLOB)) {
             try {
                 return ((Blob) this.data).getBytes(1,
                         (int) ((Blob) this.data).length());
             } catch (SQLException e) {
                 e.getClass();
             }
-        } else if (getFieldType().equals(FieldType.BOOLEAN)) {
+        } else if (this.getFieldType().equals(FieldType.BOOLEAN)) {
             return ByteBuffer.allocate(1)
                     .put((byte) (((Boolean) this.data).booleanValue() ? 1 : 0))
                     .array();
-        } else if (getFieldType().equals(FieldType.INTEGER)) {
-            return ByteBuffer.allocate(8).putLong(getLong()).array();
-        } else if (getFieldType().equals(FieldType.REAL)) {
-            return ByteBuffer.allocate(8).putDouble(getDouble()).array();
-        } else if (getFieldType().equals(FieldType.STRING)) {
+        } else if (this.getFieldType().equals(FieldType.INTEGER)) {
+            return ByteBuffer.allocate(8).putLong(this.getLong()).array();
+        } else if (this.getFieldType().equals(FieldType.REAL)) {
+            return ByteBuffer.allocate(8).putDouble(this.getDouble()).array();
+        } else if (this.getFieldType().equals(FieldType.STRING)) {
             return this.data.toString().getBytes();
         }
         return null;
     }
 
     public Date getDate() {
-        if (getFieldType().equals(FieldType.DATE)) {
+        if (this.getFieldType().equals(FieldType.DATE)) {
             return (Date) this.data;
-        } else if (getFieldType().equals(FieldType.INTEGER)) {
-            return new Date(getLong());
-        } else if (getFieldType().equals(FieldType.STRING)) {
+        } else if (this.getFieldType().equals(FieldType.INTEGER)) {
+            return new Date(this.getLong());
+        } else if (this.getFieldType().equals(FieldType.STRING)) {
             try {
                 return DateFormat.getDateInstance().parse((String) this.data);
             } catch (ParseException e) {
@@ -421,30 +426,30 @@ public class DataField {
     }
 
     public Blob getBlob() {
-        if (getFieldType().equals(FieldType.BLOB)) {
+        if (this.getFieldType().equals(FieldType.BLOB)) {
             return (Blob) this.data;
         }
         return null;
     }
 
     public boolean getBool() {
-        if (getFieldType().equals(FieldType.BOOLEAN)) {
+        if (this.getFieldType().equals(FieldType.BOOLEAN)) {
             return (Boolean) this.data;
-        } else if (getFieldType().equals(FieldType.INTEGER)
-                || getFieldType().equals(FieldType.REAL)
-                || getFieldType().equals(FieldType.DATE)) {
-            return getLong() != 0;
-        } else if (getFieldType().equals(FieldType.BINARY)
-                || getFieldType().equals(FieldType.BLOB)
-                || getFieldType().equals(FieldType.STRING)) {
-            String s = getString();
+        } else if (this.getFieldType().equals(FieldType.INTEGER)
+                || this.getFieldType().equals(FieldType.REAL)
+                || this.getFieldType().equals(FieldType.DATE)) {
+            return this.getLong() != 0;
+        } else if (this.getFieldType().equals(FieldType.BINARY)
+                || this.getFieldType().equals(FieldType.BLOB)
+                || this.getFieldType().equals(FieldType.STRING)) {
+            String s = this.getString();
             return (s != null) && !s.isEmpty();
         }
         return false;
     }
 
     public boolean isNull() {
-        return getFieldType().equals(FieldType.NULL);
+        return this.getFieldType().equals(FieldType.NULL);
     }
 
     public boolean isUnsigned() {

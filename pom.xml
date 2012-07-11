@@ -179,6 +179,7 @@
 		        <configuration>
                     <excludes>
                         <exclude>**/DbTest_MySQL.java</exclude>
+                        <exclude>**/DbTest_H2.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
