@@ -33,8 +33,13 @@ public class LoggingManager {
     private final Logger logger;
     private String prefix, directory, format;
     private boolean debug = false, logging = false;
-    
-    public LoggingManager(String logger, String directory, String prefix, String format) {
+
+    public LoggingManager(String logger, String prefix, String format) {
+        this(logger, null, prefix, format);
+    }
+
+    public LoggingManager(String logger, String directory, String prefix,
+            String format) {
         this.logger = Logger.getLogger(logger);
         this.directory = directory;
         this.prefix = prefix;
@@ -44,25 +49,28 @@ public class LoggingManager {
     public static enum Type {
         error, debug
     }
-    
+
     public Logger getLogger() {
         return this.logger;
     }
-    
+
     public String getPrefix() {
         return this.prefix;
     }
-    
+
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
-    
+
     public String getDirectory() {
         return this.directory;
     }
-    
+
     public void setDirectory(String directory) {
         this.directory = directory;
+        if (directory == null || directory.isEmpty()) {
+            this.logging = false;
+        }
     }
 
     public boolean isDebug() {
@@ -78,19 +86,23 @@ public class LoggingManager {
     }
 
     public void setLogging(boolean logging) {
-        this.logging = logging;
+        if ((this.directory != null) && (!this.directory.isEmpty())) {
+            this.logging = logging;
+        } else {
+            this.logging = false;
+        }
     }
-    
+
     public String getFormat() {
         return this.format;
     }
-    
+
     public void setFormat(String format) {
         this.format = format;
     }
-    
+
     public void info(String line) {
-        this.logger.info(this.prefix + " " + line);    
+        this.logger.info(this.prefix + " " + line);
     }
 
     public void warning(String line) {
@@ -112,24 +124,27 @@ public class LoggingManager {
         warning(error);
         toFile(Type.error, error);
     }
-    
+
     public void advancedWarning(String line) {
-        warning(System.getProperty("line.separator") + 
-                "|-----------------------------------------------------------------------------|" + 
-                System.getProperty("line.separator") + 
-                "|---------------------------------- WARNING ----------------------------------|" + 
-                System.getProperty("line.separator") + 
-                "|-----------------------------------------------------------------------------|" + 
-                System.getProperty("line.separator") + 
-                "| " + line.toUpperCase() + System.getProperty("line.separator") + 
-                "|-----------------------------------------------------------------------------|");   
+        warning(System.getProperty("line.separator")
+                + "|-----------------------------------------------------------------------------|"
+                + System.getProperty("line.separator")
+                + "|---------------------------------- WARNING ----------------------------------|"
+                + System.getProperty("line.separator")
+                + "|-----------------------------------------------------------------------------|"
+                + System.getProperty("line.separator")
+                + "| "
+                + line.toUpperCase()
+                + System.getProperty("line.separator")
+                + "|-----------------------------------------------------------------------------|");
     }
 
     public void stackTrace(final Exception e, final Thread t) {
         stackTrace(e, t, null);
     }
-    
-    public void stackTrace(final Exception e, final Thread t, HashMap<Integer, String> extra) {
+
+    public void stackTrace(final Exception e, final Thread t,
+            HashMap<Integer, String> extra) {
         advancedWarning("Stacktrace Error");
         warning("Class name: " + t.getStackTrace()[1].getClassName());
         warning("Error message: " + e.getMessage());
@@ -140,7 +155,8 @@ public class LoggingManager {
         if (this.logging) {
             DateFormat LogFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
-            warning("Check log file: " + this.directory  + "error\\" + LogFormat.format(date) + "-error.log");
+            warning("Check log file: " + this.directory + "error\\"
+                    + LogFormat.format(date) + "-error.log");
         } else {
             warning("Enable logging in the config to get more information about the error.");
         }
@@ -171,22 +187,23 @@ public class LoggingManager {
     private void toFile(Type type, String line) {
         if (this.logging) {
             File data = new File(this.directory, "");
-            if (! data.exists()) {
+            if (!data.exists()) {
                 if (data.mkdir()) {
-                   debug("Created missing directory: " + this.directory);
+                    debug("Created missing directory: " + this.directory);
                 }
             }
             data = new File(this.directory + type.toString() + "/", "");
-            if (! data.exists()) {
+            if (!data.exists()) {
                 if (data.mkdir()) {
-                    debug("Created missing directory: " + this.directory + type.toString());
+                    debug("Created missing directory: " + this.directory
+                            + type.toString());
                 }
             }
             DateFormat logFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
-            data = new File(this.directory + type.toString() + "/" + logFormat.format(date) + "-" +
-                            type.toString() + ".log");
-            if (! data.exists()) {
+            data = new File(this.directory + type.toString() + "/"
+                    + logFormat.format(date) + "-" + type.toString() + ".log");
+            if (!data.exists()) {
                 try {
                     data.createNewFile();
                 } catch (IOException e) {
@@ -194,11 +211,14 @@ public class LoggingManager {
                 }
             }
             try {
-                DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                FileWriter writer = new FileWriter(this.directory + type.toString() + "/" + logFormat.format(date) + "-" +
-                                        type.toString() + ".log", true);
+                DateFormat stringFormat = new SimpleDateFormat(
+                        "yyyy/MM/dd HH:mm:ss");
+                FileWriter writer = new FileWriter(this.directory
+                        + type.toString() + "/" + logFormat.format(date) + "-"
+                        + type.toString() + ".log", true);
                 BufferedWriter buffer = new BufferedWriter(writer);
-                buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
+                buffer.write(stringFormat.format(date) + " - " + line
+                        + System.getProperty("line.separator"));
                 buffer.close();
                 writer.close();
             } catch (IOException e) {

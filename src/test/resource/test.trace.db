@@ -1,0 +1,2091 @@
+07-11 13:17:36 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Proba zdefiniowania drugiego klucza glownego
+Attempt to define a second primary key; SQL statement:
+CREATE TABLE PUBLIC.TYPETEST
+(ID INTEGER NOT NULL,
+BINT BIGINT,
+BIN BINARY(20),
+BLOB BLOB(256),
+BOOL BOOLEAN,
+CHAR CHAR(25),
+CLOB CLOB(100),
+DATE DATE,
+DEC DECIMAL(10,2),
+DOUBLE DOUBLE,
+FLOAT FLOAT,
+IDENT IDENTITY,
+INT INTEGER,
+LVBIN LONGVARBINARY,
+LVCHAR LONGVARCHAR,
+NUMERIC NUMERIC(25),
+REAL REAL,
+SINT SMALLINT,
+TIME TIME,
+TIMESTAMP TIMESTAMP,
+TINT TINYINT,
+VBIN VARBINARY,
+VCHAR VARCHAR(25),
+VCHARI VARCHAR_IGNORECASE(25),
+PRIMARY KEY (ID)) [90017-166]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.command.ddl.CreateTable.setPrimaryKeyColumns(CreateTable.java:240)
+	at org.h2.command.ddl.CreateTable.addConstraintCommand(CreateTable.java:82)
+	at org.h2.command.Parser.parseCreateTable(Parser.java:5192)
+	at org.h2.command.Parser.parseCreate(Parser.java:3806)
+	at org.h2.command.Parser.parsePrepared(Parser.java:324)
+	at org.h2.command.Parser.parse(Parser.java:279)
+	at org.h2.command.Parser.parse(Parser.java:251)
+	at org.h2.command.Parser.prepareCommand(Parser.java:217)
+	at org.h2.engine.Session.prepareLocal(Session.java:415)
+	at org.h2.engine.Session.prepareCommand(Session.java:364)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1111)
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:121)
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:110)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.gui.database.QueryUtil.executeQuery(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.rp.gui.util.CustomSwingWorker.construct(Unknown Source)
+	at com.rp.gui.util.SwingWorker$2.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+07-11 13:29:57 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (NULL, 4872503402739487492634, 'a67fc8', ,[*] TRUE, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') "; oczekiwano "), DEFAULT, NOT, EXISTS, SELECT, FROM"
+Syntax error in SQL statement "INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (NULL, 4872503402739487492634, 'a67fc8', ,[*] TRUE, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') "; expected "), DEFAULT, NOT, EXISTS, SELECT, FROM"; SQL statement:
+INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (null, 4872503402739487492634, 'a67fc8', , true, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') [42001-166]
+07-11 13:31:49 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (1, 4872503402739487492634, 'a67fc8', ,[*] TRUE, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') "; oczekiwano "), DEFAULT, NOT, EXISTS, SELECT, FROM"
+Syntax error in SQL statement "INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (1, 4872503402739487492634, 'a67fc8', ,[*] TRUE, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') "; expected "), DEFAULT, NOT, EXISTS, SELECT, FROM"; SQL statement:
+INSERT INTO PUBLIC.TYPETEST (ID, BINT, BIN, BLOB, BOOL, CHAR, CLOB, DATE, DEC, DOUBLE, FLOAT, VCHARI, INT, LVBIN, LVCHAR, NUMERIC, REAL, SINT, TIME, TIMESTAMP, TINT, VBIN, VCHAR) VALUES (1, 4872503402739487492634, 'a67fc8', , true, '8.88', '1996-01-09 18:45', '2012-07-11', 10.5, 1,244554456378811, 9,32548855223, '10,12', 123, '49aa66843380c377', 'Alice has a cat', 12, 1155.5066945, -16, '13:28:11', NOW(), -3, 'ab33c0f', 'asdfdgdh') [42001-166]
+07-11 13:32:26 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Wartosc numeryczna poza zakresem: "4872503402739487492634"
+Numeric value out of range: "4872503402739487492634"; SQL statement:
+INSERT INTO PUBLIC.TYPETEST (ID, BINT) VALUES (1, 4872503402739487492634) -- (1, 4872503402739487492634) [22003-166]
+07-11 13:33:13 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "ad43fe0"
+Hexadecimal string with odd number of characters: "ad43fe0"; SQL statement:
+UPDATE PUBLIC.TYPETEST SET BIN = 'ad43fe0' WHERE ID = 1 [90003-166]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.table.Column.convert(Column.java:143)
+	at org.h2.command.dml.Update.update(Update.java:119)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:73)
+	at org.h2.command.Command.executeUpdate(Command.java:226)
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:125)
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:110)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.gui.database.SQLUtil.runStatementsFromTextArea(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.rp.gui.util.CustomSwingWorker.construct(Unknown Source)
+	at com.rp.gui.util.SwingWorker$2.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+07-11 13:34:49 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "ad43fe0"
+Hexadecimal string with odd number of characters: "ad43fe0"; SQL statement:
+UPDATE PUBLIC.TYPETEST SET BIN = 'ad43fe0', BLOB = '3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a' WHERE ID = 1 [90003-166]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.table.Column.convert(Column.java:143)
+	at org.h2.command.dml.Update.update(Update.java:119)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:73)
+	at org.h2.command.Command.executeUpdate(Command.java:226)
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:125)
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:110)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.gui.database.SQLUtil.runStatementsFromTextArea(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.rp.gui.util.CustomSwingWorker.construct(Unknown Source)
+	at com.rp.gui.util.SwingWorker$2.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+07-11 13:37:49 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "ab468cde890f61acb"
+Hexadecimal string with odd number of characters: "ab468cde890f61acb"; SQL statement:
+UPDATE PUBLIC.TYPETEST SET VCHARI = '12,10', INT = 1778, LVBIN = 'ab468cde890f61acb' WHERE ID = 1 [90003-166]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.table.Column.convert(Column.java:143)
+	at org.h2.command.dml.Update.update(Update.java:119)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:73)
+	at org.h2.command.Command.executeUpdate(Command.java:226)
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:125)
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:110)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.gui.database.SQLUtil.runStatementsFromTextArea(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.rp.gui.util.CustomSwingWorker.construct(Unknown Source)
+	at com.rp.gui.util.SwingWorker$2.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+07-11 13:38:26 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "ab468cde890f61acb"
+Hexadecimal string with odd number of characters: "ab468cde890f61acb"; SQL statement:
+UPDATE PUBLIC.TYPETEST SET VCHARI = '12,10', INT = 1778, LVBIN = 'ab468cde890f61acb', LVCHAR = 'Alice has a cat', NUMERIC = 10.33, REAL = RAND() * 100 WHERE ID = 1 [90003-166]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.table.Column.convert(Column.java:143)
+	at org.h2.command.dml.Update.update(Update.java:119)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:73)
+	at org.h2.command.Command.executeUpdate(Command.java:226)
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:125)
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:110)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.sql.SQLManager.executeUpdate(Unknown Source)
+	at com.rp.gui.database.SQLUtil.runStatementsFromTextArea(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.rp.gui.util.CustomSwingWorker.construct(Unknown Source)
+	at com.rp.gui.util.SwingWorker$2.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "13:39:19.811"
+Hexadecimal string contains non-hex character: "13:39:19.811" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "62.654205"
+Hexadecimal string with odd number of characters: "62.654205" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "62.654205" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 62.654205
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "12,10"
+Hexadecimal string with odd number of characters: "12,10" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "12,10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 12,10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "10.12"
+Hexadecimal string with odd number of characters: "10.12" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10.12" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10.12
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "abc03f4d5ab8" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: abc03f4d5ab8
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ab468cde890f61acb0" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ab468cde890f61acb0
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "TRUE"
+Hexadecimal string contains non-hex character: "TRUE" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "TRUE" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: TRUE
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "8.88"
+Hexadecimal string contains non-hex character: "8.88" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "8.88" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 8.88
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "8.88"
+Data conversion error converting "8.88" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1996-01-09 18:17"
+Hexadecimal string contains non-hex character: "1996-01-09 18:17" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.value.ValueLobDb.getBytes(ValueLobDb.java:212)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1996-01-09 18:17" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.NumberFormatException: For input string: "09 18:17"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:48)
+	at java.lang.Integer.parseInt(Integer.java:458)
+	at java.lang.Integer.parseInt(Integer.java:499)
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:274)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1.9131966341711104"
+Hexadecimal string contains non-hex character: "1.9131966341711104" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1.9131966341711104" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1.9131966341711104
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "980.4769686486853"
+Hexadecimal string with odd number of characters: "980.4769686486853" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "980.4769686486853" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 980.4769686486853
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1778" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1778
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-16" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -16
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "2012-07-11"
+Hexadecimal string contains non-hex character: "2012-07-11" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "asdsfsgshs"
+Hexadecimal string contains non-hex character: "asdsfsgshs" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1003)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "asdsfsgshs" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: asdsfsgshs
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ad43fe0b" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ad43fe0b
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811"
+Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "487250340273948" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 487250340273948
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Wartosc numeryczna poza zakresem: "487250340273948"
+Numeric value out of range: "487250340273948" [22003-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "Alice has a cat"
+Hexadecimal string with odd number of characters: "Alice has a cat" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "Alice has a cat" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: Alice has a cat
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 13:56:34 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "13:39:19.811"
+Hexadecimal string contains non-hex character: "13:39:19.811" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "62.654205"
+Hexadecimal string with odd number of characters: "62.654205" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "62.654205" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 62.654205
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "12,10"
+Hexadecimal string with odd number of characters: "12,10" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "12,10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 12,10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "10.12"
+Hexadecimal string with odd number of characters: "10.12" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10.12" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10.12
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "abc03f4d5ab8" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: abc03f4d5ab8
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ab468cde890f61acb0" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ab468cde890f61acb0
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "TRUE"
+Hexadecimal string contains non-hex character: "TRUE" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "TRUE" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: TRUE
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "8.88"
+Hexadecimal string contains non-hex character: "8.88" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "8.88" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 8.88
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "8.88"
+Data conversion error converting "8.88" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1996-01-09 18:17"
+Hexadecimal string contains non-hex character: "1996-01-09 18:17" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.value.ValueLobDb.getBytes(ValueLobDb.java:212)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1996-01-09 18:17" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.NumberFormatException: For input string: "09 18:17"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:48)
+	at java.lang.Integer.parseInt(Integer.java:458)
+	at java.lang.Integer.parseInt(Integer.java:499)
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:274)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1.9131966341711104"
+Hexadecimal string contains non-hex character: "1.9131966341711104" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1.9131966341711104" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1.9131966341711104
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "980.4769686486853"
+Hexadecimal string with odd number of characters: "980.4769686486853" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "980.4769686486853" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 980.4769686486853
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1778" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1778
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-16" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -16
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "2012-07-11"
+Hexadecimal string contains non-hex character: "2012-07-11" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "asdsfsgshs"
+Hexadecimal string contains non-hex character: "asdsfsgshs" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1003)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "asdsfsgshs" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: asdsfsgshs
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ad43fe0b" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ad43fe0b
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811"
+Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "487250340273948" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 487250340273948
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Wartosc numeryczna poza zakresem: "487250340273948"
+Numeric value out of range: "487250340273948" [22003-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "Alice has a cat"
+Hexadecimal string with odd number of characters: "Alice has a cat" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "Alice has a cat" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: Alice has a cat
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 13:59:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "13:39:19.811"
+Hexadecimal string contains non-hex character: "13:39:19.811" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "13:39:19.811"
+Data conversion error converting "13:39:19.811" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "62.654205"
+Hexadecimal string with odd number of characters: "62.654205" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "62.654205" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 62.654205
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "12,10"
+Hexadecimal string with odd number of characters: "12,10" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "12,10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 12,10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "12,10"
+Data conversion error converting "12,10" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "10.12"
+Hexadecimal string with odd number of characters: "10.12" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10.12" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10.12
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "abc03f4d5ab8" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: abc03f4d5ab8
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "abc03f4d5ab8"
+Data conversion error converting "abc03f4d5ab8" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a"
+Data conversion error converting "3c3f7068700a247769647468203d20245f4745545b2777275d3b0a24686569676874203d20245f4745545b2768275d3b0a24696d616765203d20496d616765437265617465282477696474682c2024686569676874293b0a246272203d20697373657428245f4745545b276272275d29203f20245f4745545b276272275d203a20303b0a246267203d20697373657428245f4745545b276267275d29203f20245f4745545b276267275d203a20303b0a246262203d20697373657428245f4745545b276262275d29203f20245f4745545b276262275d203a20303b0a" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ab468cde890f61acb0" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ab468cde890f61acb0
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ab468cde890f61acb0"
+Data conversion error converting "ab468cde890f61acb0" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "TRUE"
+Hexadecimal string contains non-hex character: "TRUE" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "TRUE" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: TRUE
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "8.88"
+Hexadecimal string contains non-hex character: "8.88" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "8.88" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 8.88
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "8.88"
+Data conversion error converting "8.88" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1996-01-09 18:17"
+Hexadecimal string contains non-hex character: "1996-01-09 18:17" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.value.ValueLobDb.getBytes(ValueLobDb.java:212)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1996-01-09 18:17" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.ValueLobDb.convertTo(ValueLobDb.java:115)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.NumberFormatException: For input string: "09 18:17"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:48)
+	at java.lang.Integer.parseInt(Integer.java:458)
+	at java.lang.Integer.parseInt(Integer.java:499)
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:274)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 9 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "1996-01-09 18:17"
+Data conversion error converting "1996-01-09 18:17" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "1.9131966341711104"
+Hexadecimal string contains non-hex character: "1.9131966341711104" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1.9131966341711104" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1.9131966341711104
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "980.4769686486853"
+Hexadecimal string with odd number of characters: "980.4769686486853" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "980.4769686486853" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 980.4769686486853
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1778" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1778
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "-16" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: -16
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "10" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 10
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "1" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 1
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "2012-07-11"
+Hexadecimal string contains non-hex character: "2012-07-11" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1006)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 14:06:07 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11"
+Data conversion error converting "2012-07-11" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "asdsfsgshs"
+Hexadecimal string contains non-hex character: "asdsfsgshs" [90004-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1003)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "asdsfsgshs" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: asdsfsgshs
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "asdsfsgshs"
+Data conversion error converting "asdsfsgshs" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "ad43fe0b" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: ad43fe0b
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "ad43fe0b"
+Data conversion error converting "ad43fe0b" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811"
+Hexadecimal string with odd number of characters: "2012-07-11 13:39:19.811" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "2012-07-11 13:39:19.811"
+Data conversion error converting "2012-07-11 13:39:19.811" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "487250340273948" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: 487250340273948
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Wartosc numeryczna poza zakresem: "487250340273948"
+Numeric value out of range: "487250340273948" [22003-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string with odd number of characters: "Alice has a cat"
+Hexadecimal string with odd number of characters: "Alice has a cat" [90003-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:990)
+	at org.h2.value.Value.convertTo(Value.java:821)
+	at org.h2.value.Value.getBytes(Value.java:389)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:978)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:383)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getBinaryField(DataManager.java:353)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:156)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Cannot parse "DATE" constant "Alice has a cat" [22007-167]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:158)
+	at org.h2.value.ValueDate.parse(ValueDate.java:70)
+	at org.h2.value.Value.convertTo(Value.java:817)
+	at org.h2.value.Value.getDate(Value.java:377)
+	at org.h2.jdbc.JdbcResultSet.getDate(JdbcResultSet.java:355)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:379)
+	at com.craftfire.commons.DataManager.getField(DataManager.java:362)
+	at com.craftfire.commons.DataManager.getDateField(DataManager.java:289)
+	at com.craftfire.commons.DbTest_H2.runTest2(DbTest_H2.java:160)
+	at com.craftfire.commons.DbTest_H2.main(DbTest_H2.java:97)
+Caused by: java.lang.IllegalArgumentException: Alice has a cat
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:270)
+	at org.h2.value.ValueDate.parse(ValueDate.java:68)
+	... 8 more
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]
+07-11 14:06:08 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad konwersji danych "Alice has a cat"
+Data conversion error converting "Alice has a cat" [22018-167]

@@ -20,5 +20,5 @@
 package com.craftfire.commons.enums;
 
 public enum FieldType {
-    STRING, INTEGER, DATE, BLOB, BINARY, UNKNOWN
+    STRING, INTEGER, DATE, BLOB, BINARY, BOOLEAN, REAL, NULL, UNKNOWN
 }
