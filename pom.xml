@@ -67,7 +67,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.20</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -173,6 +172,27 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <!--  Test plugin -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7.1</version>
+		        <configuration>
+                    <excludes>
+                        <exclude>**/DbTest_MySQL.java</exclude>
+                        <exclude>**/DbTest_H2.java</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+      </plugin>
+            
         </plugins>
 
         <!-- Plugin management -->
