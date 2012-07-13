@@ -19,6 +19,13 @@
  */
 package com.craftfire.commons;
 
+import com.craftfire.commons.database.DataField;
+import com.craftfire.commons.database.DataList;
+import com.craftfire.commons.enums.DataType;
+import com.craftfire.commons.enums.FieldType;
+import com.craftfire.commons.managers.DataManager;
+import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,13 +35,6 @@ import java.sql.Blob;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import org.junit.Test;
-
-import com.craftfire.commons.database.DataField;
-import com.craftfire.commons.database.DataList;
-import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.enums.FieldType;
 
 public class DbTest_MySQL {
     static DataManager datamanager;
