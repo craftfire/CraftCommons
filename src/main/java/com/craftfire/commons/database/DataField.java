@@ -19,20 +19,16 @@
  */
 package com.craftfire.commons.database;
 
+import com.craftfire.commons.enums.FieldType;
+import com.craftfire.commons.managers.DataManager;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
-
-import com.craftfire.commons.DataManager;
-import com.craftfire.commons.enums.FieldType;
 
 public class DataField {
     private final String name, table /* , type */;
