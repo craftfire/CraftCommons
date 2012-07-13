@@ -86,6 +86,11 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.boxysystems</groupId>
+            <artifactId>jgoogleanalytics</artifactId>
+            <version>0.5</version>
+        </dependency>
     </dependencies>
 
     <!-- Build settings -->

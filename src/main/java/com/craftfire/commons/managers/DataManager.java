@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons;
+package com.craftfire.commons.managers;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Blob;
@@ -58,8 +58,7 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
-    private static LoggingManager logMgr = new LoggingManager(
-            "CraftFire.DataManager", "[DataManager]", "HH:mm:ss");
+    private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
     public DataManager(DataType type, String username, String password) {
         this.datatype = type;

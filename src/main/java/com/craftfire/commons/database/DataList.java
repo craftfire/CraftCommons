@@ -1,13 +1,13 @@
 package com.craftfire.commons.database;
 
+import com.craftfire.commons.enums.FieldType;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-
-import com.craftfire.commons.enums.FieldType;
 
 public class DataList extends ArrayList<DataField> {
     public DataField get(String fieldName) {
@@ -111,10 +111,7 @@ public class DataList extends ArrayList<DataField> {
 
     public boolean isNullField(String fieldName) {
         DataField f = get(fieldName);
-        if (f != null) {
-            return f.isNull();
-        }
-        return false;
+        return f != null && f.isNull();
     }
 
     public boolean fieldExist(String fieldName) {

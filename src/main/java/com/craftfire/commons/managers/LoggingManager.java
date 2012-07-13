@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons;
+package com.craftfire.commons.managers;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,19 +31,17 @@ import java.util.logging.Logger;
 
 public class LoggingManager {
     private final Logger logger;
-    private String prefix, directory, format;
+    private String prefix, directory, format = "HH:mm:ss";
     private boolean debug = false, logging = false;
 
-    public LoggingManager(String logger, String prefix, String format) {
-        this(logger, null, prefix, format);
+    public LoggingManager(String logger, String prefix) {
+        this(logger, null, prefix);
     }
 
-    public LoggingManager(String logger, String directory, String prefix,
-            String format) {
+    public LoggingManager(String logger,  String prefix, String directory) {
         this.logger = Logger.getLogger(logger);
         this.directory = directory;
         this.prefix = prefix;
-        this.format = format;
     }
 
     public static enum Type {
@@ -86,11 +84,7 @@ public class LoggingManager {
     }
 
     public void setLogging(boolean logging) {
-        if ((this.directory != null) && (!this.directory.isEmpty())) {
-            this.logging = logging;
-        } else {
-            this.logging = false;
-        }
+        this.logging = (this.directory != null) && (!this.directory.isEmpty()) && logging;
     }
 
     public String getFormat() {
