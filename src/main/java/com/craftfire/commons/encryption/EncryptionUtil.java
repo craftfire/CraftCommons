@@ -21,7 +21,7 @@ package com.craftfire.commons.encryption;
 
 public class EncryptionUtil {
     public static String pack(String hex) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < hex.length(); i += 2) {
             char c1 = hex.charAt(i);
             char c2 = hex.charAt(i + 1);
@@ -32,9 +32,9 @@ public class EncryptionUtil {
     }
 
     public static String bytesTohex(byte[] data)  {
-        StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < data.length; i++) {
-            int halfbyte = (data[i] >>> 4) & 0x0F;
+        StringBuilder buf = new StringBuilder();
+        for (byte aByte : data) {
+            int halfbyte = (aByte >>> 4) & 0x0F;
             int two_halfs = 0;
             do {
                 if ((0 <= halfbyte) && (halfbyte <= 9)) {
@@ -42,9 +42,9 @@ public class EncryptionUtil {
                 } else {
                     buf.append((char) ('a' + (halfbyte - 10)));
                 }
-                halfbyte = data[i] & 0x0F;
+                halfbyte = aByte & 0x0F;
             }
-            while(two_halfs++ < 1);
+            while (two_halfs++ < 1);
         }
         return buf.toString();
     }
@@ -62,9 +62,9 @@ public class EncryptionUtil {
 
     public static String hexToString(String str) {
         char[] chars = str.toCharArray();
-        StringBuffer hex = new StringBuffer();
-        for (int i = 0; i < chars.length; i++) {
-            hex.append(Integer.toHexString((int) chars[i]));
+        StringBuilder hex = new StringBuilder();
+        for (char aChar : chars) {
+            hex.append(Integer.toHexString((int) aChar));
         }
         return hex.toString();
     }

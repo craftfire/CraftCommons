@@ -118,7 +118,7 @@ public class Util {
     }
 
     public String removeChar(String s, char c) {
-        StringBuffer r = new StringBuffer(s.length());
+        StringBuilder r = new StringBuilder(s.length());
         r.setLength(s.length());
         int current = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -174,7 +174,7 @@ public class Util {
                             }
                         }
 
-                        String[] split = line.split("\\:");
+                        String[] split = line.split(":");
                         String finalNode = split[0].replaceAll("\\s+", "");
                         if (finalNode.startsWith("#")) {
                             continue;
