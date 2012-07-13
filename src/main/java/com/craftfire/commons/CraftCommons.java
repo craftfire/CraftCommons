@@ -26,12 +26,12 @@ import com.craftfire.commons.encryption.Whirlpool;
 import com.craftfire.commons.enums.Encryption;
 
 import java.awt.*;
-import java.io.*;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -284,17 +284,5 @@ public class CraftCommons {
         Util util = new Util();
         return util.removeChar(s, c);
     }
-    
-    public HashMap<String, Object> loadLocalYaml(String path) throws IOException {
-        return loadYaml(getClass().getClassLoader().getResourceAsStream(path));
-    }
 
-    public static HashMap<String, Object> loadYaml(File file) throws IOException {
-        return loadYaml(new FileInputStream(file));
-    }
-    
-    public static HashMap<String, Object> loadYaml(InputStream yamlStream) throws IOException {
-        Util util = new Util();
-        return util.loadYaml(yamlStream);
-    }
 }

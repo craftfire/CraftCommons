@@ -58,7 +58,8 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
-    private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]");
+    private static LoggingManager logMgr = new LoggingManager(
+            "CraftFire.DataManager", "[DataManager]", "HH:mm:ss");
 
     public DataManager(DataType type, String username, String password) {
         this.datatype = type;

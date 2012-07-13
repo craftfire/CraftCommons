@@ -31,17 +31,19 @@ import java.util.logging.Logger;
 
 public class LoggingManager {
     private final Logger logger;
-    private String prefix, directory, format = "HH:mm:ss";
+    private String prefix, directory, format;
     private boolean debug = false, logging = false;
 
-    public LoggingManager(String logger, String prefix) {
-        this(logger, null, prefix);
+    public LoggingManager(String logger, String prefix, String format) {
+        this(logger, null, prefix, format);
     }
 
-    public LoggingManager(String logger,  String prefix, String directory) {
+    public LoggingManager(String logger, String directory, String prefix,
+            String format) {
         this.logger = Logger.getLogger(logger);
         this.directory = directory;
         this.prefix = prefix;
+        this.format = format;
     }
 
     public static enum Type {
@@ -84,7 +86,11 @@ public class LoggingManager {
     }
 
     public void setLogging(boolean logging) {
-        this.logging = (this.directory != null) && (!this.directory.isEmpty()) && logging;
+        if ((this.directory != null) && (!this.directory.isEmpty())) {
+            this.logging = logging;
+        } else {
+            this.logging = false;
+        }
     }
 
     public String getFormat() {
