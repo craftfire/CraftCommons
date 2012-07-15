@@ -37,7 +37,7 @@ public class AnalyticsManager {
         this.version = version;
         this.id = id;
         this.tracker = new JGoogleAnalyticsTracker(title, version, id);
-        this.loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]", "HH:mm:ss");
+        this.loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
         LoggingAdapter loggingAdapter = new LoggingAdapter() {
             @Override
             public void logError(String s) {

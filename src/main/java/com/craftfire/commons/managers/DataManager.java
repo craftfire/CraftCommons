@@ -19,31 +19,18 @@
  */
 package com.craftfire.commons.managers;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.Results;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.io.ByteArrayInputStream;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
+import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepAlive, reconnect;
@@ -58,8 +45,7 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
-    private static LoggingManager logMgr = new LoggingManager(
-            "CraftFire.DataManager", "[DataManager]", "HH:mm:ss");
+    private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
     public DataManager(DataType type, String username, String password) {
         this.datatype = type;
