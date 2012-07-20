@@ -24,6 +24,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Util {
+    protected PhpSerializer serializer;
+
+    public Util() {
+        this.serializer = new PhpSerializer();
+    }
 
     //TODO: Rewrite this function. (PHP deserialize)
     public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
@@ -35,10 +40,10 @@ public class Util {
         while (array.size() > i) {
             if (array.get(i).equals("\"" + nummember + "\";i:") && nummember != null) {
                 String temp = array.get(i + 1);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
+                temp = this.removeChar(temp, '"');
+                temp = this.removeChar(temp, ':');
+                temp = this.removeChar(temp, 's');
+                temp = this.removeChar(temp, ';');
                 temp = temp.trim();
                 int tempnum = Integer.parseInt(temp) + 1;
                 if (lastvalue.equalsIgnoreCase(nummember)) {
@@ -63,10 +68,10 @@ public class Util {
                 }
             } else if (array.get(i).equals("\"" + activemembers + "\";s:") && activemembers != null) {
                 String temp = array.get(i + 2);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
+                temp = this.removeChar(temp, '"');
+                temp = this.removeChar(temp, ':');
+                temp = this.removeChar(temp, 's');
+                temp = this.removeChar(temp, ';');
                 temp = temp.trim();
                 int tempnum = Integer.parseInt(temp) + 1;
                 String templength = "" + tempnum;
@@ -100,10 +105,10 @@ public class Util {
         while (array.size() > i) {
             if (array.get(i).equals("\"" + value + "\";s:") && value != null) {
                 String temp = array.get(i + 2);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
+                temp = this.removeChar(temp, '"');
+                temp = this.removeChar(temp, ':');
+                temp = this.removeChar(temp, 's');
+                temp = this.removeChar(temp, ';');
                 temp = temp.trim();
                 return temp;
             }
@@ -118,8 +123,43 @@ public class Util {
         int current = 0;
         for (int i = 0; i < s.length(); i++) {
             char cur = s.charAt(i);
-            if (cur != c) r.setCharAt(current++, cur);
+            if (cur != c) {
+                r.setCharAt(current++, cur);
+            }
         }
         return r.toString();
+    }
+
+    /**
+     * Unserialize object serialized with php serialization.
+     * 
+     * @param serialized
+     *            - string to unserialize
+     * @return unserialized data - Integer, Double, String, Boolean,
+     *         Map<Object,Object> or PhpObject
+     */
+    public Object phpUnserialize(String serialized) {
+        SerializedPhpParser parser = new SerializedPhpParser(serialized);
+        return parser.parse();
+    }
+
+    /**
+     * Serialize object with php serialization.
+     * 
+     * @param value
+     *            - object to serialize
+     * @return object serialized to String.
+     */
+    public String phpSerialize(Object value) {
+        return this.serializer.serialize(value);
+    }
+
+    /**
+     * Returns default php serializer.
+     * 
+     * @return default php serializer.
+     */
+    public PhpSerializer getPhpSerializer() {
+        return this.serializer;
     }
 }
