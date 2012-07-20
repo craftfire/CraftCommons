@@ -77,7 +77,7 @@ public class PhpSerializer {
         if (s == null) {
             return "N;";
         }
-        return "s:" + s.length() + "\"" + s + "\";";
+        return "s:" + s.length() + ":\"" + s + "\";";
     }
     
     /**
@@ -87,18 +87,21 @@ public class PhpSerializer {
      *            - list to serialize
      * @return list serialized to string
      */
-    public String serialize(List<Object> list) {
+    public String serialize(List<?> list) {
         if (list == null) {
             return "N;";
         }
         String out = "a:" + list.size() + ":{";
         int index = 0;
-        Iterator<Object> I = list.iterator();
+        Iterator<?> I = list.iterator();
         while (I.hasNext()) {
             out += this.serialize(index++);
             out += this.serialize(I.next());
+            if (!out.endsWith(";")) {
+                out += ";";
+            }
         }
-        out += "};";
+        out += "}";
         return out;
     }
     
@@ -109,18 +112,18 @@ public class PhpSerializer {
      *            - map to serialize
      * @return map serialized to string
      */
-    public String serialize(Map<Object,Object> map) {
+    public String serialize(Map<?, ?> map) {
         if (map == null) {
             return "N;";
         }
         String out = "a:" + map.size() + ":{";
-        Iterator<Object> I = map.keySet().iterator();
+        Iterator<?> I = map.keySet().iterator();
         while (I.hasNext()) {
             Object key = I.next();
             out += this.serialize(key);
             out += this.serialize(map.get(key));
         }
-        out += "};";
+        out += "}";
         return out;
     }
     
@@ -132,6 +135,9 @@ public class PhpSerializer {
      * @return value serialized to string
      */
     public String serialize(SerializedPhpParser.PhpObject value) {
+        if (value == null) {
+            return "N;";
+        }
         String out = "O:" + value.name.length() + ":\"" + value.name + "\":";
         out += value.attributes.size() + ":{";
         Iterator<Object> I = value.attributes.keySet().iterator();
@@ -162,9 +168,9 @@ public class PhpSerializer {
         } else if (value instanceof Boolean) {
             return this.serialize(((Boolean) value).booleanValue());
         } else if (value instanceof List<?>) {
-            return this.serialize(value);
+            return this.serialize((List<?>) value);
         } else if (value instanceof Map<?,?>) {
-            return this.serialize(value);
+            return this.serialize((Map<?, ?>) value);
         } else if (value instanceof SerializedPhpParser.PhpObject) {
             return this.serialize((SerializedPhpParser.PhpObject) value);
         }
