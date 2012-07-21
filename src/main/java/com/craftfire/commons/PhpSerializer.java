@@ -36,9 +36,8 @@ public class PhpSerializer {
     /**
      * Serialize integer.
      * 
-     * @param i
-     *            - integer to serialize
-     * @return i serialized to string
+     * @param i     integer to serialize
+     * @return      serialized i
      */
     public String serialize(int i) {
         return "i:" + String.valueOf(i) + ";";
@@ -47,9 +46,8 @@ public class PhpSerializer {
     /**
      * Serialize double.
      * 
-     * @param d
-     *            - double to serialize
-     * @return d serialized to string
+     * @param d     double to serialize
+     * @return      serialized d
      */
     public String serialize(double d) {
         return "d:" + String.valueOf(d) + ";";
@@ -58,9 +56,8 @@ public class PhpSerializer {
     /**
      * Serialize boolean.
      * 
-     * @param b
-     *            - boolean to serialize
-     * @return b serialized to string
+     * @param b     boolean to serialize
+     * @return      serialized b
      */
     public String serialize(boolean b) {
         return "b:" + (b ? "1" : "0") + ";";
@@ -69,9 +66,8 @@ public class PhpSerializer {
     /**
      * Serialize string
      * 
-     * @param s
-     *            - string to serialize
-     * @return s serialized to string
+     * @param s     string to serialize
+     * @return      s serialized to string
      */
     public String serialize(String s) {
         if (s == null) {
@@ -83,9 +79,8 @@ public class PhpSerializer {
     /**
      * Serialize list
      * 
-     * @param list
-     *            - list to serialize
-     * @return list serialized to string
+     * @param list  list to serialize
+     * @return      list serialized to string
      */
     public String serialize(List<?> list) {
         if (list == null) {
@@ -108,9 +103,8 @@ public class PhpSerializer {
     /**
      * Serialize map
      * 
-     * @param map
-     *            - map to serialize
-     * @return map serialized to string
+     * @param map   map to serialize
+     * @return      map serialized to string
      */
     public String serialize(Map<?, ?> map) {
         if (map == null) {
@@ -130,9 +124,8 @@ public class PhpSerializer {
     /**
      * Serialize {@link SerializedPhpParser.PhpObject}
      * 
-     * @param value
-     *            - PhpObject to serialize
-     * @return value serialized to string
+     * @param value     PhpObject to serialize
+     * @return          serialized value
      */
     public String serialize(SerializedPhpParser.PhpObject value) {
         if (value == null) {
@@ -153,10 +146,9 @@ public class PhpSerializer {
     /**
      * Detect object type and serialize it.
      * 
-     * @param value
-     *            - object to serialize
-     * @return value serialized to string, or value.toString serialized to
-     *         string if unknown type.
+     * @param value     object to serialize
+     * @return          serialized value, or serialized value.toString
+     *                  if unknown type.
      */
     public String serialize(Object value) {
         if (value == null) {

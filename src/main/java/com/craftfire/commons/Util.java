@@ -133,10 +133,9 @@ public class Util {
     /**
      * Unserialize object serialized with php serialization.
      * 
-     * @param serialized
-     *            - string to unserialize
-     * @return unserialized data - Integer, Double, String, Boolean,
-     *         Map<Object,Object> or PhpObject
+     * @param serialized    string to unserialize
+     * @return              unserialized data - Integer, Double, String,
+     *                      Boolean, Map<Object,Object> or PhpObject
      */
     public Object phpUnserialize(String serialized) {
         SerializedPhpParser parser = new SerializedPhpParser(serialized);
@@ -146,9 +145,8 @@ public class Util {
     /**
      * Serialize object with php serialization.
      * 
-     * @param value
-     *            - object to serialize
-     * @return object serialized to String.
+     * @param value     object to serialize
+     * @return          object serialized to String.
      */
     public String phpSerialize(Object value) {
         return this.serializer.serialize(value);
@@ -157,7 +155,7 @@ public class Util {
     /**
      * Returns default php serializer.
      * 
-     * @return default php serializer.
+     * @return  default php serializer.
      */
     public PhpSerializer getPhpSerializer() {
         return this.serializer;
