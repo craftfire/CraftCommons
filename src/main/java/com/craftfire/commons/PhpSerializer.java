@@ -26,8 +26,7 @@ import java.util.Map;
 
 /**
  * PhpSerializer - util class to serialize java objects with php serialization
- * 
- * @author Wolf480
+ *
  * @see SerializedPhpParser
  * @see Util
  */
@@ -88,10 +87,10 @@ public class PhpSerializer {
         }
         String out = "a:" + list.size() + ":{";
         int index = 0;
-        Iterator<?> I = list.iterator();
-        while (I.hasNext()) {
+        Iterator<?> i = list.iterator();
+        while (i.hasNext()) {
             out += this.serialize(index++);
-            out += this.serialize(I.next());
+            out += this.serialize(i.next());
             if (!out.endsWith(";")) {
                 out += ";";
             }
@@ -111,9 +110,9 @@ public class PhpSerializer {
             return "N;";
         }
         String out = "a:" + map.size() + ":{";
-        Iterator<?> I = map.keySet().iterator();
-        while (I.hasNext()) {
-            Object key = I.next();
+        Iterator<?> i = map.keySet().iterator();
+        while (i.hasNext()) {
+            Object key = i.next();
             out += this.serialize(key);
             out += this.serialize(map.get(key));
         }
@@ -133,9 +132,9 @@ public class PhpSerializer {
         }
         String out = "O:" + value.name.length() + ":\"" + value.name + "\":";
         out += value.attributes.size() + ":{";
-        Iterator<Object> I = value.attributes.keySet().iterator();
-        while (I.hasNext()) {
-            Object key = I.next();
+        Iterator<Object> i = value.attributes.keySet().iterator();
+        while (i.hasNext()) {
+            Object key = i.next();
             out += this.serialize(key);
             out += this.serialize(value.attributes.get(key));
         }
