@@ -53,6 +53,7 @@ public class CacheManager {
     }
     
     public int getLastID(String group) {
+        group = group.toLowerCase();
         if (this.lastID.containsKey(group)) {
             return this.lastID.get(group);
         }
@@ -69,7 +70,15 @@ public class CacheManager {
     }
 
     public boolean contains(String group, int id) {
-        return containsGroup(group) && this.items.get(group).containsKey(id);
+        group = group.toLowerCase();
+        if (containsGroup(group) && this.items.get(group).containsKey(id)) {
+            if (getItem(group, id).getSecondsLeft() >= 1) {
+                return true;
+            } else {
+                this.items.get(group).remove(id);
+            }
+        }
+        return false;
     }
     
     public void put(int id, Object object) {
@@ -107,6 +116,14 @@ public class CacheManager {
         return null;
     }
 
+    public CacheItem getLastItem() {
+        return getLastItem(this.defaultGroup);
+    }
+
+    public CacheItem getLastItem(String group) {
+        return getItem(group, getLastID(group));
+    }
+
     public Object get(int id) {
         return getItem(this.defaultGroup, id);
     }
@@ -117,6 +134,14 @@ public class CacheManager {
         }
         return null;
     }
+    
+    public Object getLast() {
+        return getLast(this.defaultGroup);
+    }
+    
+    public Object getLast(String group) {
+        return get(group, getLastID());
+    }
 
     public void remove(int id) {
         remove(this.defaultGroup, id);
@@ -124,7 +149,17 @@ public class CacheManager {
 
     public void remove(String group, int id) {
         if (contains(group, id)) {
-            this.items.get(group).remove(id);
+            this.items.get(group.toLowerCase()).remove(id);
+        }
+    }
+    
+    public void clear(String group) {
+        group = group.toLowerCase();
+        if (containsGroup(group)) {
+            this.items.get(group).clear();
+        }
+        if (this.lastID.containsKey(group)) {
+            this.items.remove(group);
         }
     }
 
