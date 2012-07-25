@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 public class CacheManager {
     private HashMap<Integer, CacheItem> items = new HashMap<Integer, CacheItem>();
+    private int lastID = 0;
     private int seconds = 300;
     
     public void setCacheTime(int seconds) {
@@ -34,6 +35,10 @@ public class CacheManager {
     public int getCacheTime() {
         return this.seconds;
     }
+    
+    public int getLastID() {
+        return this.lastID;
+    }
 
     public boolean contains(int id) {
         return this.items.containsKey(id);
@@ -41,11 +46,25 @@ public class CacheManager {
     
     public void put(int id, Object object) {
         this.items.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
+        this.lastID = id;
+    }
+
+    public int put(Object object) {
+        this.lastID += 1;
+        this.items.put(this.lastID, new CacheItem(this.lastID, this.seconds, object.hashCode(), object));
+        return this.lastID;
     }
     
+    public CacheItem getItem(int id) {
+        if (contains(id)) {
+            return this.items.get(id);
+        }
+        return null;
+    }
+
     public Object get(int id) {
         if (contains(id)) {
-            this.items.get(id);
+            return this.items.get(id).getObject();
         }
         return null;
     }
