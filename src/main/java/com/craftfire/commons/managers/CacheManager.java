@@ -29,6 +29,7 @@ public class CacheManager {
     private HashMap<String, HashMap<Object, CacheItem>> items = new HashMap<String, HashMap<Object, CacheItem>>();
     private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
+    private boolean enabled = true;
     
     public void setCacheTime(int seconds) {
         this.seconds = seconds;
@@ -36,6 +37,14 @@ public class CacheManager {
     
     public int getCacheTime() {
         return this.seconds;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
     }
     
     public HashMap<String, HashMap<Object, CacheItem>> getCache() {
@@ -67,12 +76,12 @@ public class CacheManager {
     }
     
     public boolean containsGroup(String group) {
-        return this.items.containsKey(group);
+        return this.enabled && this.items.containsKey(group);
     }
 
     public boolean contains(String group, Object id) {
         group = group.toLowerCase();
-        if (containsGroup(group) && this.items.get(group).containsKey(id)) {
+        if (this.enabled && containsGroup(group) && this.items.get(group).containsKey(id)) {
             if (getItem(group, id).getSecondsLeft() >= 1) {
                 return true;
             } else {
@@ -97,14 +106,16 @@ public class CacheManager {
     }
 
     public void put(String group, Object id, Object object) {
-        if (!containsGroup(group)) {
-            this.items.put(group, new HashMap<Object, CacheItem>());
-        }
-        HashMap<Object, CacheItem> temp = this.items.get(group);
-        temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
-        this.items.put(group, temp);
-        if (id instanceof String && CraftCommons.isInteger((String) id)) {
-            this.lastID.put(group, (Integer) id); //TODO
+        if (this.enabled) {
+            if (!containsGroup(group)) {
+                this.items.put(group, new HashMap<Object, CacheItem>());
+            }
+            HashMap<Object, CacheItem> temp = this.items.get(group);
+            temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
+            this.items.put(group, temp);
+            if (id instanceof String && CraftCommons.isInteger((String) id)) {
+                this.lastID.put(group, (Integer) id); //TODO
+            }
         }
     }
 
