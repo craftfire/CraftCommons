@@ -20,10 +20,10 @@
 package com.craftfire.commons.classes;
 
 public class CacheItem {
-    private final int id, time, cacheTime, hash;
-    private final Object object;
+    private final int time, cacheTime, hash;
+    private final Object id, object;
     
-    public CacheItem(int id, int cacheTime, int hash, Object object) {
+    public CacheItem(Object id, int cacheTime, int hash, Object object) {
         this.id = id;
         this.time = (int) System.currentTimeMillis() / 1000;
         this.cacheTime = cacheTime;
@@ -31,7 +31,7 @@ public class CacheItem {
         this.object = object;
     }
     
-    public int getID() {
+    public Object getID() {
         return this.id;
     }
     

@@ -19,15 +19,17 @@
  */
 package com.craftfire.commons.managers;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.CacheItem;
 
 import java.util.HashMap;
 
 public class CacheManager {
     protected final String defaultGroup = "default";
-    private HashMap<String, HashMap<Integer, CacheItem>> items = new HashMap<String, HashMap<Integer, CacheItem>>();
-    private HashMap<String, Integer> lastID = new HashMap<String, Integer>();
+    private HashMap<String, HashMap<Object, CacheItem>> items = new HashMap<String, HashMap<Object, CacheItem>>();
+    private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
+    private boolean enabled = true;
     
     public void setCacheTime(int seconds) {
         this.seconds = seconds;
@@ -36,12 +38,20 @@ public class CacheManager {
     public int getCacheTime() {
         return this.seconds;
     }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
     
-    public HashMap<String, HashMap<Integer, CacheItem>> getCache() {
+    public HashMap<String, HashMap<Object, CacheItem>> getCache() {
         return this.items;
     }
     
-    public HashMap<Integer, CacheItem> getCache(String group) {
+    public HashMap<Object, CacheItem> getCache(String group) {
         if (this.containsGroup(group)) {
             return this.items.get(group);
         }
@@ -61,17 +71,17 @@ public class CacheManager {
         return 0;
     }
 
-    public boolean contains(int id) {
+    public boolean contains(Object id) {
         return contains(this.defaultGroup, id);
     }
     
     public boolean containsGroup(String group) {
-        return this.items.containsKey(group);
+        return this.enabled && this.items.containsKey(group);
     }
 
-    public boolean contains(String group, int id) {
+    public boolean contains(String group, Object id) {
         group = group.toLowerCase();
-        if (containsGroup(group) && this.items.get(group).containsKey(id)) {
+        if (this.enabled && containsGroup(group) && this.items.get(group).containsKey(id)) {
             if (getItem(group, id).getSecondsLeft() >= 1) {
                 return true;
             } else {
@@ -81,7 +91,7 @@ public class CacheManager {
         return false;
     }
     
-    public void put(int id, Object object) {
+    public void put(Object id, Object object) {
         put(this.defaultGroup, id, object);
     }
 
@@ -95,21 +105,25 @@ public class CacheManager {
         return id;
     }
 
-    public void put(String group, int id, Object object) {
-        if (!containsGroup(group)) {
-            this.items.put(group, new HashMap<Integer, CacheItem>());
+    public void put(String group, Object id, Object object) {
+        if (this.enabled) {
+            if (!containsGroup(group)) {
+                this.items.put(group, new HashMap<Object, CacheItem>());
+            }
+            HashMap<Object, CacheItem> temp = this.items.get(group);
+            temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
+            this.items.put(group, temp);
+            if (id instanceof String && CraftCommons.isInteger((String) id)) {
+                this.lastID.put(group, (Integer) id); //TODO
+            }
         }
-        HashMap<Integer, CacheItem> temp = this.items.get(group);
-        temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
-        this.items.put(group, temp);
-        this.lastID.put(group, id);
     }
 
-    public CacheItem getItem(int id) {
+    public CacheItem getItem(Object id) {
         return getItem(this.defaultGroup, id);
     }
     
-    public CacheItem getItem(String group, int id) {
+    public CacheItem getItem(String group, Object id) {
         if (contains(group, id)) {
             return this.items.get(group).get(id);
         }
@@ -124,11 +138,11 @@ public class CacheManager {
         return getItem(group, getLastID(group));
     }
 
-    public Object get(int id) {
+    public Object get(Object id) {
         return getItem(this.defaultGroup, id);
     }
 
-    public Object get(String group, int id) {
+    public Object get(String group, Object id) {
         if (contains(group, id)) {
             return this.items.get(group).get(id).getObject();
         }
@@ -143,11 +157,11 @@ public class CacheManager {
         return get(group, getLastID());
     }
 
-    public void remove(int id) {
+    public void remove(Object id) {
         remove(this.defaultGroup, id);
     }
 
-    public void remove(String group, int id) {
+    public void remove(String group, Object id) {
         if (contains(group, id)) {
             this.items.get(group.toLowerCase()).remove(id);
         }
