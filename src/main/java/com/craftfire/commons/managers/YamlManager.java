@@ -71,6 +71,10 @@ public class YamlManager {
         return null;
     }
 
+    public HashMap<String, Object> getNodes() {
+        return this.yaml;
+    }
+
     private void load(InputStream yamlStream) throws IOException {
         this.yaml = new HashMap<String, Object>();
         if (yamlStream != null) {
