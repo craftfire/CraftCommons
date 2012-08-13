@@ -19,6 +19,8 @@
  */
 package com.craftfire.commons.encryption;
 
+import java.io.UnsupportedEncodingException;
+
 public class EncryptionUtil {
     public static String pack(String hex) {
         StringBuilder buf = new StringBuilder();
@@ -64,8 +66,24 @@ public class EncryptionUtil {
         char[] chars = str.toCharArray();
         StringBuilder hex = new StringBuilder();
         for (char aChar : chars) {
-            hex.append(Integer.toHexString((int) aChar));
+            hex.append(Integer.toHexString(aChar));
         }
         return hex.toString();
+    }
+
+    public static String utf8ToString(byte[] utf8) {
+        try {
+            return new String(utf8, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("This system doesn't support UTF-8!", e);
+        }
+    }
+
+    public static byte[] stringToUtf8(String string) {
+        try {
+            return string.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("This system doesn't support UTF-8!", e);
+        }
     }
 }

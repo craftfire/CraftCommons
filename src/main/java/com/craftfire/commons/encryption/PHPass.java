@@ -22,6 +22,7 @@ package com.craftfire.commons.encryption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
 
 public class PHPass {
@@ -40,6 +41,11 @@ public class PHPass {
         int i, value;
         String output = "";
         i = 0;
+        if (src.length < count) {
+            byte[] t = new byte[count];
+            System.arraycopy(src, 0, t, 0, src.length);
+            Arrays.fill(t, src.length, count - 1, (byte) 0);
+        }
         do {
             value = src[i]  + (src[i] < 0 ? 256 : 0);
             ++i;
@@ -88,39 +94,40 @@ public class PHPass {
             e.printStackTrace();
             return output;
         }
-        byte[] hash = md.digest((salt + password).getBytes());
+        byte[] pass = EncryptionUtil.stringToUtf8(password);
+        byte[] hash = md.digest(EncryptionUtil.stringToUtf8(salt + password));
         do {
-            byte[] t = new byte[hash.length + password.length()];
+            byte[] t = new byte[hash.length + pass.length];
             System.arraycopy(hash, 0, t, 0, hash.length);
-            System.arraycopy(password.getBytes(), 0, t, hash.length,
-            		password.length());
+            System.arraycopy(pass, 0, t, hash.length, pass.length);
             hash = md.digest(t);
         } while (--count > 0);
         output = setting.substring(0, 12);
         output += this.encode64(hash, 16);
         return output;
     }
-    private String gensalt_private(String input) {
+
+    private String gensalt_private(byte[] input) {
         String output = "$P$";
-        output += itoa64.charAt(Math.min(iteration_count_log2 + 5, 30));
-        output += encode64(input.getBytes(), 6);
+        output += itoa64.charAt(Math.min(this.iteration_count_log2 + 5, 30));
+        output += this.encode64(input, 6);
         return output;
     }
     public String crypt(String password, String setting) {
-        return crypt_private(password, setting);
+        return this.crypt_private(password, setting);
     }
     public String gensalt(String input) {
-        return gensalt_private(input);
+        return this.gensalt_private(EncryptionUtil.stringToUtf8(input));
     }
     public String gensalt(byte[] input) {
-        return gensalt_private(new String(input));
+        return this.gensalt_private(input);
     }
     public String gensalt() {
         byte random[] = new byte[6];
-        random_gen.nextBytes(random);
-        return gensalt(random);
+        this.random_gen.nextBytes(random);
+        return this.gensalt(random);
     }
     public Random getRandomGen() {
-        return random_gen;
+        return this.random_gen;
     }
 }
