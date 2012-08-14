@@ -19,18 +19,31 @@
  */
 package com.craftfire.commons.managers;
 
+import java.io.ByteArrayInputStream;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.Results;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
-
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import java.io.ByteArrayInputStream;
-import java.sql.*;
-import java.util.*;
-import java.util.Date;
-import java.util.Map.Entry;
 
 public class DataManager {
     private boolean keepAlive, reconnect;
@@ -204,13 +217,11 @@ public class DataManager {
     }
 
     public int getLastID(String field, String table, String where) {
-        Object val = this.getField(FieldType.INTEGER, "SELECT `" + field + "` "
-                + "FROM `" + this.getPrefix() + table + "` " + "WHERE " + where
-                + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
-        if (val != null) {
-            return (Integer) val;
-        }
-        return 0;
+        return this.getField(
+                FieldType.INTEGER,
+                "SELECT `" + field + "` " + "FROM `" + this.getPrefix() + table
+                        + "` " + "WHERE " + where + " " + "ORDER BY `" + field
+                        + "` DESC LIMIT 1").getInt();
     }
 
     public int getCount(String table, String where) {
