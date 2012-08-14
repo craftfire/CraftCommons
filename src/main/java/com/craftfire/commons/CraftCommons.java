@@ -19,13 +19,8 @@
  */
 package com.craftfire.commons;
 
-import com.craftfire.commons.encryption.BCrypt;
-import com.craftfire.commons.encryption.EncryptionUtil;
-import com.craftfire.commons.encryption.PHPass;
-import com.craftfire.commons.encryption.Whirlpool;
-import com.craftfire.commons.enums.Encryption;
-
-import java.awt.*;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -35,7 +30,14 @@ import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.craftfire.commons.encryption.BCrypt;
+import com.craftfire.commons.encryption.EncryptionUtil;
+import com.craftfire.commons.encryption.PHPass;
+import com.craftfire.commons.encryption.Whirlpool;
+import com.craftfire.commons.enums.Encryption;
+
 public class CraftCommons {
+    private static Util util = new Util();
     /**
      * Checks if the string is an email.
      *
@@ -263,26 +265,27 @@ public class CraftCommons {
         char[] chars = str.toCharArray();
         StringBuffer hex = new StringBuffer();
         for (int i = 0; i < chars.length; i++){
-            hex.append(Integer.toHexString((int)chars[i]));
+            hex.append(Integer.toHexString(chars[i]));
         }
         return hex.toString();
     }
 
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
                                     String newusername, String newuserid, String extrausername, String lastvalue) {
-        Util util = new Util();
         return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
                                extrausername, lastvalue);
     }
 
     public static String forumCacheValue(String cache, String value) {
-        Util util = new Util();
         return util.forumCacheValue(cache, value);
     }
 
     public static String removeChar(String s, char c) {
-        Util util = new Util();
         return util.removeChar(s, c);
+    }
+
+    public static Util getUtil() {
+        return util;
     }
 
 }
