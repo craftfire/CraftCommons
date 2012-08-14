@@ -20,7 +20,7 @@
 package com.craftfire.commons;
 
 import com.craftfire.commons.database.DataField;
-import com.craftfire.commons.database.DataList;
+import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.enums.FieldType;
 import com.craftfire.commons.managers.DataManager;
@@ -61,7 +61,7 @@ public class DbTest_H2 {
         datamanager.setPrefix("");
         System.out.println(seperate + seperate);
         System.out.println("TESTING getResults");
-        DataList data = datamanager.getResults(
+        DataRow data = datamanager.getResults(
                 "SELECT * FROM `typetest` LIMIT 1").getFirstResult();
         Iterator<DataField> I = data.iterator();
         while (I.hasNext()) {
@@ -186,7 +186,7 @@ public class DbTest_H2 {
         printResult("getStringField", s);
     }
 
-    public static void runTest3(DataList data, String fieldName) {
+    public static void runTest3(DataRow data, String fieldName) {
         BigInteger bint = data.getBigIntField(fieldName);
         printResult("getBigIntField", bint);
         byte[] bytes = data.getBinaryField(fieldName);
