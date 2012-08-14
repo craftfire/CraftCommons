@@ -28,16 +28,16 @@ import java.util.List;
 public class Results {
     private final String query;
     private final int rows;
-    private List<DataList> array;
+    private List<DataRow> array;
 
     public Results(String query, ResultSet rs) throws SQLException {
         this.query = query;
-        this.array = new ArrayList<DataList>();
+        this.array = new ArrayList<DataRow>();
 
         ResultSetMetaData metaData = rs.getMetaData();
         this.rows = metaData.getColumnCount();
         while (rs.next()) {
-            DataList data = new DataList();
+            DataRow data = new DataRow();
             for (int i = 1; i <= this.rows; i++) {
                 data.add(new DataField(i, rs));
             }
@@ -53,11 +53,11 @@ public class Results {
         return this.query;
     }
 
-    public List<DataList> getArray() {
+    public List<DataRow> getArray() {
         return this.array;
     }
 
-    public DataList getFirstResult() {
+    public DataRow getFirstResult() {
         if (this.array.size() > 0) {
             return this.array.get(0);
         } else {
@@ -65,7 +65,7 @@ public class Results {
         }
     }
 
-    public DataList getLastResult() {
+    public DataRow getLastResult() {
         if (this.array.size() > 0) {
             return this.array.get(this.array.size() - 1);
         } else {

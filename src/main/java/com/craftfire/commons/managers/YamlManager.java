@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class YamlManager {
+    //TODO: Make it possible to save to a file
     private HashMap<String, Object> yaml = new HashMap<String, Object>();
     
     public YamlManager(File file) throws IOException {
