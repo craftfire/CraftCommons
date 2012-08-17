@@ -675,8 +675,9 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            query += " `" + pairs.getKey() + "` =  '" + pairs.getValue() + "'"
-                    + suffix;
+            query += " `" + pairs.getKey() + "` =  '"
+                    + String.valueOf(pairs.getValue()).replaceAll("'", "''")
+                    + "'" + suffix;
             i++;
         }
         return query;
