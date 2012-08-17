@@ -210,31 +210,41 @@ public class DataManager {
     }
 
     public int getLastID(String field, String table) {
-        return this.getField(
-                FieldType.INTEGER,
-                "SELECT `" + field + "` FROM `" + this.getPrefix() + table
-                        + "` ORDER BY `" + field + "` DESC LIMIT 1").getInt();
+        DataField f = this.getField(FieldType.INTEGER, "SELECT `" + field
+                + "` FROM `" + this.getPrefix() + table + "` ORDER BY `"
+                + field + "` DESC LIMIT 1");
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public int getLastID(String field, String table, String where) {
-        return this.getField(
-                FieldType.INTEGER,
-                "SELECT `" + field + "` " + "FROM `" + this.getPrefix() + table
-                        + "` " + "WHERE " + where + " " + "ORDER BY `" + field
-                        + "` DESC LIMIT 1").getInt();
+        DataField f = this.getField(FieldType.INTEGER, "SELECT `" + field
+                + "` " + "FROM `" + this.getPrefix() + table + "` " + "WHERE "
+                + where + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public int getCount(String table, String where) {
-        return this.getField(
-                FieldType.INTEGER,
-                "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` WHERE "
-                        + where + " LIMIT 1").getInt();
+        DataField f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+                + this.getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public int getCount(String table) {
-        return this.getField(FieldType.INTEGER,
-                "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` LIMIT 1")
-                .getInt();
+        DataField f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+                + this.getPrefix() + table + "` LIMIT 1");
+        if (f != null) {
+            return f.getInt();
+        }
+        return 0;
     }
 
     public void increaseField(String table, String field, String where) {
