@@ -28,6 +28,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -675,9 +676,17 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            query += " `" + pairs.getKey() + "` =  '"
-                    + String.valueOf(pairs.getValue()).replaceAll("'", "''")
-                    + "'" + suffix;
+            Object val = pairs.getValue();
+            String valstr = null;
+            if (val instanceof Date) {
+                val = new Timestamp(((Date) val).getTime());
+            }
+            if (val == null) {
+                valstr = "NULL";
+            } else {
+                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
+            }
+            query += " `" + pairs.getKey() + "` =  " + valstr + suffix;
             i++;
         }
         return query;
