@@ -701,8 +701,18 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
+            Object val = pairs.getValue();
+            String valstr = null;
+            if (val instanceof Date) {
+                val = new Timestamp(((Date) val).getTime());
+            }
+            if (val == null) {
+                valstr = "''";
+            } else {
+                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
+            }
             fields += " `" + pairs.getKey() + "`" + suffix;
-            values += " '" + pairs.getValue() + "'" + suffix;
+            values += valstr + suffix;
             i++;
         }
         query = "(" + fields + ") VALUES (" + values + ")";
