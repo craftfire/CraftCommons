@@ -28,6 +28,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,45 +205,70 @@ public class DataManager {
     }
 
     public boolean exist(String table, String field, Object value) {
-        return this.getField(FieldType.STRING, "SELECT `" + field + "` " + "FROM `"
-                + this.getPrefix() + table + "` " + "WHERE `" + field + "` = '"
-                + value + "' " + "LIMIT 1") != null;
+        try {
+            return this.getField(FieldType.STRING, "SELECT `" + field + "` "
+                    + "FROM `" + this.getPrefix() + table + "` " + "WHERE `"
+                    + field + "` = '" + value + "' " + "LIMIT 1") != null;
+        } catch (SQLException e) {
+        }
+        return false;
     }
 
     public int getLastID(String field, String table) {
-        DataField f = this.getField(FieldType.INTEGER, "SELECT `" + field
-                + "` FROM `" + this.getPrefix() + table + "` ORDER BY `"
-                + field + "` DESC LIMIT 1");
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, "SELECT `" + field
+                    + "` FROM `" + this.getPrefix() + table + "` ORDER BY `"
+                    + field + "` DESC LIMIT 1");
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public int getLastID(String field, String table, String where) {
-        DataField f = this.getField(FieldType.INTEGER, "SELECT `" + field
-                + "` " + "FROM `" + this.getPrefix() + table + "` " + "WHERE "
-                + where + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, "SELECT `" + field + "` "
+                    + "FROM `" + this.getPrefix() + table + "` " + "WHERE "
+                    + where + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public int getCount(String table, String where) {
-        DataField f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
-                + this.getPrefix() + table + "` WHERE " + where + " LIMIT 1");
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+                    + this.getPrefix() + table + "` WHERE " + where
+                    + " LIMIT 1");
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public int getCount(String table) {
-        DataField f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
-                + this.getPrefix() + table + "` LIMIT 1");
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+                    + this.getPrefix() + table + "` LIMIT 1");
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -253,124 +279,195 @@ public class DataManager {
     }
 
     public String getStringField(String query) {
-        DataField f = this.getField(FieldType.STRING, query);
-        if (f != null) {
-            return f.getString();
+        DataField f;
+        try {
+            f = this.getField(FieldType.STRING, query);
+            if (f != null) {
+                return f.getString();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public String getStringField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.STRING, table, field, where);
-        if (f != null) {
-            return f.getString();
+        DataField f;
+        try {
+            f = this.getField(FieldType.STRING, table, field, where);
+            if (f != null) {
+                return f.getString();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public int getIntegerField(String query) {
-        DataField f = this.getField(FieldType.INTEGER, query);
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, query);
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public int getIntegerField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.INTEGER, table, field, where);
-        if (f != null) {
-            return f.getInt();
+        DataField f;
+        try {
+            f = this.getField(FieldType.INTEGER, table, field, where);
+            if (f != null) {
+                return f.getInt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public Date getDateField(String query) {
-        DataField f = this.getField(FieldType.DATE, query);
-        if (f != null) {
-            return f.getDate();
+        DataField f;
+        try {
+            f = this.getField(FieldType.DATE, query);
+            if (f != null) {
+                return f.getDate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public Date getDateField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.DATE, table, field, where);
-        if (f != null) {
-            return f.getDate();
+        DataField f;
+        try {
+            f = this.getField(FieldType.DATE, table, field, where);
+            if (f != null) {
+                return f.getDate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public Blob getBlobField(String query) {
-        DataField f = this.getField(FieldType.BLOB, query);
-        if (f != null) {
-            return f.getBlob();
+        DataField f;
+        try {
+            f = this.getField(FieldType.BLOB, query);
+            if (f != null) {
+                return f.getBlob();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public Blob getBlobField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.BLOB, table, field, where);
-        if (f != null) {
-            return f.getBlob();
+        DataField f;
+        try {
+            f = this.getField(FieldType.BLOB, table, field, where);
+            if (f != null) {
+                return f.getBlob();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public boolean getBooleanField(String query) {
-        DataField f = this.getField(FieldType.BOOLEAN, query);
-        if (f != null) {
-            return f.getBool();
+        DataField f;
+        try {
+            f = this.getField(FieldType.BOOLEAN, query);
+            if (f != null) {
+                return f.getBool();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
     public boolean getBooleanField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.BOOLEAN, table, field, where);
-        if (f != null) {
-            return f.getBool();
+        DataField f;
+        try {
+            f = this.getField(FieldType.BOOLEAN, table, field, where);
+            if (f != null) {
+                return f.getBool();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
     public double getDoubleField(String query) {
-        DataField f = this.getField(FieldType.REAL, query);
-        if (f != null) {
-            return f.getDouble();
+        DataField f;
+        try {
+            f = this.getField(FieldType.REAL, query);
+            if (f != null) {
+                return f.getDouble();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
     public double getDoubleField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.REAL, table, field, where);
-        if (f != null) {
-            return f.getDouble();
+        DataField f;
+        try {
+            f = this.getField(FieldType.REAL, table, field, where);
+            if (f != null) {
+                return f.getDouble();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
 
-    public String String(String query) {
-        DataField f = this.getField(FieldType.BINARY, query);
-        if (f != null) {
-            return f.getString();
+    public String String(String query) { // WTF is this for?
+        DataField f;
+        try {
+            f = this.getField(FieldType.BINARY, query);
+            if (f != null) {
+                return f.getString();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public String getBinaryField(String table, String field, String where) {
-        DataField f = this.getField(FieldType.BINARY, table, field, where);
-        if (f != null) {
-            return f.getString();
+        DataField f;
+        try {
+            f = this.getField(FieldType.BINARY, table, field, where);
+            if (f != null) {
+                return f.getString();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public DataField getField(FieldType fieldType, String table, String field,
-            String where) {
+            String where) throws SQLException {
         return this.getField(fieldType, "SELECT `" + field + "` FROM `"
                 + this.getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
-    public DataField getField(FieldType field, String query) {
+    public DataField getField(FieldType field, String query)
+            throws SQLException {
         try {
             this.connect();
             this.stmt = this.con.createStatement();
@@ -402,8 +499,7 @@ public class DataManager {
                 return new DataField(field, this.rs.getMetaData()
                         .getColumnDisplaySize(1), value);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } finally {
             this.close();
         }
         return null;
@@ -675,8 +771,17 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            query += " `" + pairs.getKey() + "` =  '" + pairs.getValue() + "'"
-                    + suffix;
+            Object val = pairs.getValue();
+            String valstr = null;
+            if (val instanceof Date) {
+                val = new Timestamp(((Date) val).getTime());
+            }
+            if (val == null) {
+                valstr = "NULL";
+            } else {
+                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
+            }
+            query += " `" + pairs.getKey() + "` =  " + valstr + suffix;
             i++;
         }
         return query;
@@ -691,8 +796,18 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
+            Object val = pairs.getValue();
+            String valstr = null;
+            if (val instanceof Date) {
+                val = new Timestamp(((Date) val).getTime());
+            }
+            if (val == null) {
+                valstr = "''";
+            } else {
+                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
+            }
             fields += " `" + pairs.getKey() + "`" + suffix;
-            values += " '" + pairs.getValue() + "'" + suffix;
+            values += valstr + suffix;
             i++;
         }
         query = "(" + fields + ") VALUES (" + values + ")";
