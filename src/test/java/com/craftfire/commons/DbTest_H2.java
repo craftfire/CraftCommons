@@ -19,22 +19,24 @@
  */
 package com.craftfire.commons;
 
-import com.craftfire.commons.database.DataField;
-import com.craftfire.commons.database.DataRow;
-import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.enums.FieldType;
-import com.craftfire.commons.managers.DataManager;
-import org.junit.Test;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import org.junit.Test;
+
+import com.craftfire.commons.database.DataField;
+import com.craftfire.commons.database.DataRow;
+import com.craftfire.commons.enums.DataType;
+import com.craftfire.commons.enums.FieldType;
+import com.craftfire.commons.managers.DataManager;
 
 public class DbTest_H2 {
     static DataManager datamanager;
@@ -89,7 +91,13 @@ public class DbTest_H2 {
                 .getArray("SELECT * FROM `typetest` LIMIT 1");
         for (Object o : labels.keySet().toArray()) {
             String s = (String) o;
-            field = datamanager.getField(FieldType.UNKNOWN, "typetest", s, "1");
+            try {
+                field = datamanager.getField(FieldType.UNKNOWN, "typetest", s,
+                        "1");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                field = null;
+            }
             System.out.println(seperate);
             System.out.println(field.getFieldName() + " from "
                     + field.getTable());
@@ -345,5 +353,4 @@ public class DbTest_H2 {
         String x = field.getString();
         printResult("asString", x);
     }
-
 }

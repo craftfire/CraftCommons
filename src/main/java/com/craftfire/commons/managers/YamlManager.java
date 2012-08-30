@@ -19,15 +19,15 @@
  */
 package com.craftfire.commons.managers;
 
-import com.craftfire.commons.CraftCommons;
-
 import java.io.*;
 import java.util.HashMap;
+
+import com.craftfire.commons.CraftCommons;
 
 public class YamlManager {
     //TODO: Make it possible to save to a file
     private HashMap<String, Object> yaml = new HashMap<String, Object>();
-    
+
     public YamlManager(File file) throws IOException {
         this.load(new FileInputStream(file));
     }
@@ -35,7 +35,7 @@ public class YamlManager {
     public YamlManager(String path) throws IOException {
         this.load(getClass().getClassLoader().getResourceAsStream(path));
     }
-    
+
     public boolean exist(String node) {
         return this.yaml.containsKey(node.toLowerCase());
     }

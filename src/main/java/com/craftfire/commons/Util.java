@@ -132,7 +132,7 @@ public class Util {
 
     /**
      * Unserialize object serialized with php serialization.
-     * 
+     *
      * @param serialized    string to unserialize
      * @return              unserialized data - Integer, Double, String,
      *                      Boolean, Map<Object,Object> or PhpObject
@@ -144,7 +144,7 @@ public class Util {
 
     /**
      * Serialize object with php serialization.
-     * 
+     *
      * @param value     object to serialize
      * @return          object serialized to String.
      */
@@ -154,7 +154,7 @@ public class Util {
 
     /**
      * Returns default php serializer.
-     * 
+     *
      * @return  default php serializer.
      */
     public PhpSerializer getPhpSerializer() {

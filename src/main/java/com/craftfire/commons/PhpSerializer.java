@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.craftfire.commons;
 
 import java.util.Iterator;
@@ -31,40 +30,39 @@ import java.util.Map;
  * @see Util
  */
 public class PhpSerializer {
-    
     /**
      * Serialize integer.
-     * 
+     *
      * @param i     integer to serialize
      * @return      serialized i
      */
     public String serialize(int i) {
         return "i:" + String.valueOf(i) + ";";
     }
-    
+
     /**
      * Serialize double.
-     * 
+     *
      * @param d     double to serialize
      * @return      serialized d
      */
     public String serialize(double d) {
         return "d:" + String.valueOf(d) + ";";
     }
-    
+
     /**
      * Serialize boolean.
-     * 
+     *
      * @param b     boolean to serialize
      * @return      serialized b
      */
     public String serialize(boolean b) {
         return "b:" + (b ? "1" : "0") + ";";
     }
-    
+
     /**
      * Serialize string
-     * 
+     *
      * @param s     string to serialize
      * @return      s serialized to string
      */
@@ -74,10 +72,10 @@ public class PhpSerializer {
         }
         return "s:" + s.length() + ":\"" + s + "\";";
     }
-    
+
     /**
      * Serialize list
-     * 
+     *
      * @param list  list to serialize
      * @return      list serialized to string
      */
@@ -98,10 +96,10 @@ public class PhpSerializer {
         out += "}";
         return out;
     }
-    
+
     /**
      * Serialize map
-     * 
+     *
      * @param map   map to serialize
      * @return      map serialized to string
      */
@@ -119,10 +117,10 @@ public class PhpSerializer {
         out += "}";
         return out;
     }
-    
+
     /**
      * Serialize {@link SerializedPhpParser.PhpObject}
-     * 
+     *
      * @param value     PhpObject to serialize
      * @return          serialized value
      */
@@ -141,10 +139,10 @@ public class PhpSerializer {
         out += "};";
         return out;
     }
-    
+
     /**
      * Detect object type and serialize it.
-     * 
+     *
      * @param value     object to serialize
      * @return          serialized value, or serialized value.toString
      *                  if unknown type.
@@ -167,5 +165,4 @@ public class PhpSerializer {
         }
         return this.serialize(value.toString());
     }
-
 }

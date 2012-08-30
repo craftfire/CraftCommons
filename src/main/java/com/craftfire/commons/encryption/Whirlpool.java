@@ -304,6 +304,7 @@ public class Whirlpool {
             carry >>>= 8;
             value >>>= 8;
         }
+
         // process data in chunks of 8 bits:
         while (sourceBits > 8) { // at least source[sourcePos] and source[sourcePos+1] contain data.
             // take a byte from the source:
@@ -327,6 +328,7 @@ public class Whirlpool {
             sourceBits -= 8;
             sourcePos++;
         }
+
         // now 0 <= sourceBits <= 8;
         // furthermore, all data (if any is left) is in source[sourcePos].
         if (sourceBits > 0) {

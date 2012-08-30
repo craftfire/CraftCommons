@@ -19,12 +19,12 @@
  */
 package com.craftfire.commons.managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
 import com.boxysystems.jgoogleanalytics.LoggingAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AnalyticsManager {
     protected final JGoogleAnalyticsTracker tracker;

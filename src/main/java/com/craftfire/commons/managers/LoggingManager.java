@@ -37,7 +37,7 @@ public class LoggingManager {
     public LoggingManager(String logger, String prefix) {
         this.logger = Logger.getLogger(logger);
         this.prefix = prefix;
-}
+    }
 
     public static enum Type {
         error, debug
@@ -215,5 +215,4 @@ public class LoggingManager {
             }
         }
     }
-
 }
