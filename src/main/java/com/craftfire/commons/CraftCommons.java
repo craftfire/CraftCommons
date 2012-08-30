@@ -143,9 +143,11 @@ public class CraftCommons {
     public static String encrypt(Encryption encryption, Object object) {
         return encrypt(encryption, object, null);
     }
+
     public static String encrypt(Encryption encryption, Object object, String salt) {
         return encrypt(encryption, object, salt, 0);
     }
+
     public static String encrypt(Encryption encryption, Object object, String salt, int iteration_count) {
         try {
             String string = (String) object;
@@ -200,7 +202,7 @@ public class CraftCommons {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static Encryption unixHashIdentify(String hash){
         if (hash.startsWith("$1$") || hash.startsWith("$md5$")) {
             return Encryption.MD5;
@@ -287,5 +289,4 @@ public class CraftCommons {
     public static Util getUtil() {
         return util;
     }
-
 }

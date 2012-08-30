@@ -19,10 +19,10 @@
  */
 package com.craftfire.commons.managers;
 
+import java.util.HashMap;
+
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.CacheItem;
-
-import java.util.HashMap;
 
 public class CacheManager {
     protected final String defaultGroup = "default";
@@ -30,11 +30,11 @@ public class CacheManager {
     private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
     private boolean enabled = true;
-    
+
     public void setCacheTime(int seconds) {
         this.seconds = seconds;
     }
-    
+
     public int getCacheTime() {
         return this.seconds;
     }
@@ -46,22 +46,22 @@ public class CacheManager {
     public boolean isEnabled() {
         return this.enabled;
     }
-    
+
     public HashMap<String, HashMap<Object, CacheItem>> getCache() {
         return this.items;
     }
-    
+
     public HashMap<Object, CacheItem> getCache(String group) {
         if (this.containsGroup(group)) {
             return this.items.get(group);
         }
         return null;
     }
-    
+
     public int getLastID() {
         return getLastID(this.defaultGroup);
     }
-    
+
     public int getLastID(String group) {
         group = group.toLowerCase();
         if (this.lastID.containsKey(group)) {
@@ -74,7 +74,7 @@ public class CacheManager {
     public boolean contains(Object id) {
         return contains(this.defaultGroup, id);
     }
-    
+
     public boolean containsGroup(String group) {
         return this.enabled && this.items.containsKey(group);
     }
@@ -90,7 +90,7 @@ public class CacheManager {
         }
         return false;
     }
-    
+
     public void put(Object id, Object object) {
         put(this.defaultGroup, id, object);
     }
@@ -122,7 +122,7 @@ public class CacheManager {
     public CacheItem getItem(Object id) {
         return getItem(this.defaultGroup, id);
     }
-    
+
     public CacheItem getItem(String group, Object id) {
         if (contains(group, id)) {
             return this.items.get(group).get(id);
@@ -148,11 +148,11 @@ public class CacheManager {
         }
         return null;
     }
-    
+
     public Object getLast() {
         return getLast(this.defaultGroup);
     }
-    
+
     public Object getLast(String group) {
         return get(group, getLastID());
     }
@@ -166,7 +166,7 @@ public class CacheManager {
             this.items.get(group.toLowerCase()).remove(id);
         }
     }
-    
+
     public void clear(String group) {
         group = group.toLowerCase();
         if (containsGroup(group)) {
@@ -181,5 +181,4 @@ public class CacheManager {
         this.items.clear();
         this.lastID.clear();
     }
-
 }

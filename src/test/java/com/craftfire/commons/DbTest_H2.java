@@ -353,5 +353,4 @@ public class DbTest_H2 {
         String x = field.getString();
         printResult("asString", x);
     }
-
 }

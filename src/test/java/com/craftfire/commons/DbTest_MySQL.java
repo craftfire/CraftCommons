@@ -378,5 +378,4 @@ public class DbTest_MySQL {
         String x = field.getString();
         printResult("asString", x);
     }
-
 }

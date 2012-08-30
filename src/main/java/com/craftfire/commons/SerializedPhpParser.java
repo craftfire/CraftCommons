@@ -17,30 +17,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*
- Copyright (c) 2007 Zsolt Szász <zsolt at lorecraft dot com>
-
- Permission is hereby granted, free of charge, to any person obtaining
- a copy of this software and associated documentation files (the
- "Software"), to deal in the Software without restriction, including
- without limitation the rights to use, copy, modify, merge, publish,
- distribute, sublicense, and/or sell copies of the Software, and to
- permit persons to whom the Software is furnished to do so, subject to
- the following conditions:
-
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Copyright (c) 2007 Zsolt Szász <zsolt at lorecraft dot com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package com.craftfire.commons;
 
 import java.util.HashMap;
@@ -56,24 +54,20 @@ import java.util.regex.Pattern;
  * {@link SerializedPhpParser.PhpObject} instances.
  * <p>
  * Example of use:
- * 
+ *
  * <pre>
  *      String input = "O:8:"TypeName":1:{s:3:"foo";s:3:"bar";}";
  *      SerializedPhpParser serializedPhpParser = new SerializedPhpParser(input);
  *      Object result = serializedPhpParser.parse();
  * </pre>
- * 
+ *
  * The <code>result</code> object will be a <code>PhpObject</code> with the name
  * "TypeName" and the attribute "foo" = "bar".
  */
 public class SerializedPhpParser {
-
     private final String input;
-
     private int index;
-
     private boolean assumeUTF8 = true;
-
     private Pattern acceptedAttributeNameRegex = null;
 
     public SerializedPhpParser(String input) {
@@ -166,7 +160,7 @@ public class SerializedPhpParser {
 
     /**
      * Assumes strings are utf8 encoded
-     * 
+     *
      * @return
      */
     private String parseString() {
