@@ -29,19 +29,30 @@ public class CacheItem {
         this.cacheTime = cacheTime;
         this.object = object;
     }
-    
+
+    /**
+     * Returns the ID of the cache item.
+     *
+     * @return ID of the cache item
+     */
     public Object getID() {
         return this.id;
     }
-    
-    public int getHash() {
-        return this.object.hashCode();
-    }
-    
+
+    /**
+     * Returns the UNIX time when the cache was created.
+     *
+     * @return The time in UNIX of when the cache was created
+     */
     public int getTimeAdded() {
         return this.time;
     }
-    
+
+    /**
+     * Returns the amount of seconds left on the cache.
+     *
+     * @return Seconds left
+     */
     public int getSecondsLeft() {
         return (int) ((System.currentTimeMillis() / 1000) - this.time - this.cacheTime);
     }

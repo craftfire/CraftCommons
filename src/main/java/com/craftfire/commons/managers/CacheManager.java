@@ -114,7 +114,8 @@ public class CacheManager {
             temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
             this.items.put(group, temp);
             if (id instanceof String && CraftCommons.isInteger((String) id)) {
-                this.lastID.put(group, (Integer) id); //TODO
+                //TODO
+                this.lastID.put(group, (Integer) id);
             }
         }
     }

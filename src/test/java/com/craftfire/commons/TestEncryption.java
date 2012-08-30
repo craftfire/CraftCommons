@@ -1,11 +1,10 @@
 package com.craftfire.commons;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
+import com.craftfire.commons.enums.Encryption;
 import org.junit.Test;
 
-import com.craftfire.commons.enums.Encryption;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class TestEncryption {
     @Test

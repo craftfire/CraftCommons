@@ -209,7 +209,7 @@ public class DataField {
             return FieldType.NULL;
         default:
             DataManager.getLogManager().warning(
-                    "Unknown sql type: " + sqltype + " Field data:"
+                    "Unknown SQL type: " + sqltype + " Field data:"
                             + data.toString());
             return FieldType.UNKNOWN;
         }

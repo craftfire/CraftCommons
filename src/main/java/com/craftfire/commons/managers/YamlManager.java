@@ -88,7 +88,7 @@ public class YamlManager {
                 while  ((line = buffer.readLine()) != null) {
                     int blank = 0;
                     if (line.length() > 0 && line.charAt(line.length() - 1) == ':') {
-                        for (int i=0; i < line.length(); i++) {
+                        for (int i = 0; i < line.length(); i++) {
                             if (Character.isWhitespace(line.charAt(i))) {
                                 blank++;
                             }
@@ -127,9 +127,9 @@ public class YamlManager {
                         if (finalNode.startsWith("#")) {
                             continue;
                         }
-                        if (! isNode && blank > lastBlank) {
+                        if (!isNode && blank > lastBlank) {
                             node += finalNode + ".";
-                        } else if (! isNode && blank < lastBlank) {
+                        } else if (!isNode && blank < lastBlank) {
                             String[] spl = node.split("\\.");
                             node = node.replace("." + spl[spl.length - 1], "");
                         }
@@ -146,7 +146,7 @@ public class YamlManager {
                         }
                         String value = "";
                         char last = 0;
-                        for (int i=0; i < temp.length(); i++) {
+                        for (int i = 0; i < temp.length(); i++) {
                             if (Character.isWhitespace(temp.charAt(i)) && Character.isWhitespace(last)) {
                                 continue;
                             }
