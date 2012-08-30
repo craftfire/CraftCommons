@@ -23,7 +23,7 @@ public class CacheItem {
     private final int time, cacheTime;
     private final Object id, object;
     
-    public CacheItem(Object id, int cacheTime, int hash, Object object) {
+    public CacheItem(Object id, int cacheTime, Object object) {
         this.id = id;
         this.time = (int) System.currentTimeMillis() / 1000;
         this.cacheTime = cacheTime;

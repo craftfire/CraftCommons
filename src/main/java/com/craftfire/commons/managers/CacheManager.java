@@ -19,10 +19,10 @@
  */
 package com.craftfire.commons.managers;
 
-import java.util.HashMap;
-
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.CacheItem;
+
+import java.util.HashMap;
 
 public class CacheManager {
     protected final String defaultGroup = "default";
@@ -111,7 +111,7 @@ public class CacheManager {
                 this.items.put(group, new HashMap<Object, CacheItem>());
             }
             HashMap<Object, CacheItem> temp = this.items.get(group);
-            temp.put(id, new CacheItem(id, this.seconds, object.hashCode(), object));
+            temp.put(id, new CacheItem(id, this.seconds, object));
             this.items.put(group, temp);
             if (id instanceof String && CraftCommons.isInteger((String) id)) {
                 //TODO
