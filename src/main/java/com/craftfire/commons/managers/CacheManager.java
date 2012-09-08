@@ -19,10 +19,11 @@
  */
 package com.craftfire.commons.managers;
 
+import java.util.HashMap;
+
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.CacheItem;
-
-import java.util.HashMap;
+import com.craftfire.commons.classes.MetadatableCacheItem;
 
 public class CacheManager {
     protected final String defaultGroup = "default";
@@ -82,7 +83,7 @@ public class CacheManager {
     public boolean contains(String group, Object id) {
         group = group.toLowerCase();
         if (this.enabled && containsGroup(group) && this.items.get(group).containsKey(id)) {
-            if (getItem(group, id).getSecondsLeft() >= 1) {
+            if (this.items.get(group).get(id).getSecondsLeft() >= 1) {
                 return true;
             } else {
                 this.items.get(group).remove(id);
@@ -107,6 +108,7 @@ public class CacheManager {
 
     public void put(String group, Object id, Object object) {
         if (this.enabled) {
+            group = group.toLowerCase();
             if (!containsGroup(group)) {
                 this.items.put(group, new HashMap<Object, CacheItem>());
             }
@@ -114,10 +116,39 @@ public class CacheManager {
             temp.put(id, new CacheItem(id, this.seconds, object));
             this.items.put(group, temp);
             if (id instanceof String && CraftCommons.isInteger((String) id)) {
-                //TODO
-                this.lastID.put(group, (Integer) id);
+                this.lastID.put(group, Integer.parseInt((String) id));
             }
         }
+    }
+
+    public void putMetadatable(Object id, Object object) {
+        putMetadatable(this.defaultGroup, id, object);
+    }
+
+    public int putMetadatable(Object object) {
+        return putMetadatable(this.defaultGroup, object);
+    }
+
+    public int putMetadatable(String group, Object object) {
+        int id = getLastID(group) + 1;
+        putMetadatable(group, id, object);
+        return id;
+    }
+
+    public void putMetadatable(String group, Object id, Object object) {
+        if (this.enabled) {
+            group = group.toLowerCase();
+            if (!containsGroup(group)) {
+                this.items.put(group, new HashMap<Object, CacheItem>());
+            }
+            HashMap<Object, CacheItem> temp = this.items.get(group);
+            temp.put(id, new MetadatableCacheItem(id, this.seconds, object));
+            this.items.put(group, temp);
+            if (id instanceof String && CraftCommons.isInteger((String) id)) {
+                this.lastID.put(group, Integer.parseInt((String) id));
+            }
+        }
+
     }
 
     public CacheItem getItem(Object id) {
@@ -125,8 +156,24 @@ public class CacheManager {
     }
 
     public CacheItem getItem(String group, Object id) {
+        group = group.toLowerCase();
         if (contains(group, id)) {
             return this.items.get(group).get(id);
+        }
+        return null;
+    }
+
+    public MetadatableCacheItem getMetadatableItem(Object id) {
+        return getMetadatableItem(this.defaultGroup, id);
+    }
+
+    public MetadatableCacheItem getMetadatableItem(String group, Object id) {
+        group = group.toLowerCase();
+        if (contains(group, id)) {
+            CacheItem item = this.items.get(group).get(id);
+            if (item instanceof MetadatableCacheItem) {
+                return (MetadatableCacheItem) item;
+            }
         }
         return null;
     }
@@ -140,10 +187,11 @@ public class CacheManager {
     }
 
     public Object get(Object id) {
-        return getItem(this.defaultGroup, id);
+        return get(this.defaultGroup, id);
     }
 
     public Object get(String group, Object id) {
+        group = group.toLowerCase();
         if (contains(group, id)) {
             return this.items.get(group).get(id).getObject();
         }
