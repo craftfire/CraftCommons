@@ -52,7 +52,7 @@ public class DbTest_MySQL {
     static int[] asucceed = new int[4];
     static int[] acount = new int[4];
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         String user = ask("MySQL user", "root");
         String password = ask("MySQL password", "AuthAPI");
         datamanager = new DataManager(DataType.MYSQL, user, password);

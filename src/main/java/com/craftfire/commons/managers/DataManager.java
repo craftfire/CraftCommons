@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -594,7 +595,7 @@ public class DataManager {
         }
     }
 
-    public Results getResults(String query) {
+    public Results getResults(String query) throws SQLException {
         try {
             this.connect();
             this.stmt = this.con.createStatement();
@@ -603,13 +604,12 @@ public class DataManager {
             Results results = new Results(query, this.rs);
             this.close();
             return results;
-        } catch (SQLException e) {
+        } finally {
             this.close();
-            e.printStackTrace();
         }
-        return null;
     }
 
+    @Deprecated
     public HashMap<String, Object> getArray(String query) {
         try {
             this.connect();
@@ -633,6 +633,7 @@ public class DataManager {
         return null;
     }
 
+    @Deprecated
     public List<HashMap<String, Object>> getArrayList(String query) {
         try {
             this.connect();
