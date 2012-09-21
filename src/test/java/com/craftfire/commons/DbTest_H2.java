@@ -52,7 +52,7 @@ public class DbTest_H2 {
     static int[] asucceed = new int[4];
     static int[] acount = new int[4];
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         String user = "sa";
         String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
