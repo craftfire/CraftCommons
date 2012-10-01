@@ -130,6 +130,7 @@ public class CraftCommons {
         return num;
     }
 
+    @Deprecated
     public static boolean inVersionRange(String lastversion, String compare) {
         if (lastversion.equalsIgnoreCase(compare)) {
             return true;
@@ -218,10 +219,12 @@ public class CraftCommons {
         return null;
     }
 
+    @Deprecated
     public static String normalisedVersion(String version) {
         return normalisedVersion(version, ".", 4);
     }
 
+    @Deprecated
     public static String normalisedVersion(String version, String sep, int maxWidth) {
         String[] split = Pattern.compile(sep, Pattern.LITERAL).split(version);
         StringBuilder sb = new StringBuilder();
