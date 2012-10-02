@@ -128,19 +128,18 @@ public class LoggingManager {
                 + "|-----------------------------------------------------------------------------|");
     }
 
-    public void stackTrace(final Exception e, final Thread t) {
-        stackTrace(e, t, null);
+    public void stackTrace(final Exception e) {
+        stackTrace(e, null);
     }
 
-    public void stackTrace(final Exception e, final Thread t,
-            HashMap<Integer, String> extra) {
+    public void stackTrace(final Exception e, HashMap<Integer, String> extra) {
         advancedWarning("Stacktrace Error");
-        warning("Class name: " + t.getStackTrace()[1].getClassName());
+        warning("Class name: " + e.getStackTrace()[1].getClassName());
         warning("Error message: " + e.getMessage());
         warning("Error cause: " + e.getCause());
-        warning("File name: " + t.getStackTrace()[1].getFileName());
-        warning("Function name: " + t.getStackTrace()[1].getMethodName());
-        warning("Error line: " + t.getStackTrace()[1].getLineNumber());
+        warning("File name: " + e.getStackTrace()[1].getFileName());
+        warning("Function name: " + e.getStackTrace()[1].getMethodName());
+        warning("Error line: " + e.getStackTrace()[1].getLineNumber());
         if (this.logging) {
             DateFormat LogFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
@@ -151,12 +150,12 @@ public class LoggingManager {
         }
 
         logError("--------------------------- STACKTRACE ERROR ---------------------------");
-        logError("Class name: " + t.getStackTrace()[1].getClassName());
+        logError("Class name: " + e.getStackTrace()[1].getClassName());
         logError("Error message: " + e.getMessage());
         logError("Error cause: " + e.getCause());
-        logError("File name: " + t.getStackTrace()[1].getFileName());
-        logError("Function name: " + t.getStackTrace()[1].getMethodName());
-        logError("Error line: " + t.getStackTrace()[1].getLineNumber());
+        logError("File name: " + e.getStackTrace()[1].getFileName());
+        logError("Function name: " + e.getStackTrace()[1].getMethodName());
+        logError("Error line: " + e.getStackTrace()[1].getLineNumber());
         if (extra != null) {
             for (int id : extra.keySet()) {
                 logError(extra.get(id));
@@ -196,7 +195,7 @@ public class LoggingManager {
                 try {
                     data.createNewFile();
                 } catch (IOException e) {
-                    stackTrace(e, Thread.currentThread());
+                    stackTrace(e);
                 }
             }
             try {
@@ -211,7 +210,7 @@ public class LoggingManager {
                 buffer.close();
                 writer.close();
             } catch (IOException e) {
-                stackTrace(e, Thread.currentThread());
+                stackTrace(e);
             }
         }
     }
