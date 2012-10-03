@@ -99,4 +99,12 @@ public class VersionRange {
     public boolean inVersionRange(Version version) {
         return (this.min.compareTo(version) <= 0) && (this.max.compareTo(version) >= 0);
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "[" + this.getMin() + " - " + this.getMax() + "]";
+    }
 }
