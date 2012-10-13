@@ -434,7 +434,7 @@ public class DataManager {
         return 0;
     }
 
-    public String String(String query) { // WTF is this for?
+    public String getStringField(String query) {
         DataField f;
         try {
             f = this.getField(FieldType.BINARY, query);
