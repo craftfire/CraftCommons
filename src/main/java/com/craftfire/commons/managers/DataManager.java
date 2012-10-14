@@ -551,7 +551,7 @@ public class DataManager {
         }
     }
 
-    public void updateField(String table, String field, String value, String where) throws SQLException {
+    public void updateField(String table, String field, Object value, String where) throws SQLException {
         executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
     }
 
