@@ -61,6 +61,11 @@ public class DataManager {
     private ResultSet rs = null;
     private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
+    public DataManager(String username, String password) {
+        this.datatype = DataType.MYSQL;
+        new DataManager(DataType.MYSQL, username, password);
+    }
+
     public DataManager(DataType type, String username, String password) {
         this.datatype = type;
         this.username = username;
@@ -195,8 +200,11 @@ public class DataManager {
         switch (this.datatype) {
         case MYSQL:
             this.url = "jdbc:mysql://" + this.host + "/" + this.database
-                    + "?zeroDateTimeBehavior=convertToNull"
-                    + "&jdbcCompliantTruncation=false";
+                     + "?zeroDateTimeBehavior=convertToNull"
+                     + "&jdbcCompliantTruncation=false"
+                     + "&autoReconnect=true"
+                     + "&characterEncoding=UTF-8"
+                     + "&characterSetResults=UTF-8";
             break;
         case H2:
             this.url = "jdbc:h2:" + this.directory + this.database;
@@ -210,8 +218,8 @@ public class DataManager {
                     + "FROM `" + this.getPrefix() + table + "` " + "WHERE `"
                     + field + "` = '" + value + "' " + "LIMIT 1") != null;
         } catch (SQLException e) {
+            return false;
         }
-        return false;
     }
 
     public int getLastID(String field, String table) {
