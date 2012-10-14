@@ -29,6 +29,8 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
 import com.craftfire.commons.encryption.BCrypt;
 import com.craftfire.commons.encryption.EncryptionUtil;
@@ -161,6 +163,10 @@ public class CraftCommons {
                 md = MessageDigest.getInstance("SHA-256");
             } else if (encryption.equals(Encryption.SHA512)) {
                 md = MessageDigest.getInstance("SHA-512");
+            } else if (encryption.equals(Encryption.CRC32)) {
+                Checksum checksum = new CRC32();
+                checksum.update(string.getBytes(), 0, string.getBytes().length);
+                return Long.toString(checksum.getValue());
             } else if (encryption.equals(Encryption.WHIRLPOOL)) {
                 Whirlpool w = new Whirlpool();
                 byte[] digest = new byte[Whirlpool.DIGESTBYTES];
