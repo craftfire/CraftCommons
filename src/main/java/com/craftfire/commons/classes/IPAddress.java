@@ -22,7 +22,12 @@ public abstract class IPAddress {
     }
 
     public static IPAddress valueOf(String address) {
-        // TODO
+        if (IPv4Address.parseIP(address) != null) {
+            return new IPv4Address(address);
+        }
+        if (IPv6Address.parseIP(address) != null) {
+            return new IPv6Address(address);
+        }
         return null;
     }
 }
