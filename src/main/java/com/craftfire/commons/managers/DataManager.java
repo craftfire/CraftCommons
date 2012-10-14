@@ -281,9 +281,9 @@ public class DataManager {
         return 0;
     }
 
-    public void increaseField(String table, String field, String where) {
-        this.executeQueryVoid("UPDATE `" + this.getPrefix() + table + "` SET `" + field
-                + "` =" + " " + field + " + 1 WHERE " + where);
+    public void increaseField(String table, String field, String where) throws SQLException {
+        this.executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field
+                          + "` = " + field + " + 1 WHERE " + where);
     }
 
     public String getStringField(String query) {
@@ -551,27 +551,18 @@ public class DataManager {
         }
     }
 
-    public void updateFields(HashMap<String, Object> data, String table,
-            String where) throws SQLException {
-        String update = this.updateFieldsString(data);
-        String query = "UPDATE `" + this.getPrefix() + table + "`" + update
-                + " WHERE " + where;
-        this.connect();
-        this.pStmt = this.con.prepareStatement(query);
-        this.log(query);
-        this.pStmt.executeUpdate();
-        this.close();
+    public void updateField(String table, String field, String value, String where) throws SQLException {
+        executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
     }
 
-    public void insertFields(HashMap<String, Object> data, String table)
-            throws SQLException {
+    public void updateFields(HashMap<String, Object> data, String table, String where) throws SQLException {
+        String update = this.updateFieldsString(data);
+        executeQuery("UPDATE `" + this.getPrefix() + table + "`" + update + " WHERE " + where);
+    }
+
+    public void insertFields(HashMap<String, Object> data, String table) throws SQLException {
         String insert = this.insertFieldString(data);
-        String query = "INSERT INTO `" + this.getPrefix() + table + "` " + insert;
-        this.connect();
-        this.pStmt = this.con.prepareStatement(query);
-        this.log(query);
-        this.pStmt.executeUpdate();
-        this.close();
+        executeQuery("INSERT INTO `" + this.getPrefix() + table + "` " + insert);
     }
 
     public TableModel resultSetToTableModel(String query) {
