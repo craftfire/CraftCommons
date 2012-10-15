@@ -21,4 +21,19 @@ public class IPv4MaskRange implements IPRange {
         return ((address.toIPv4().getInt() ^ this.data.getInt()) & this.mask.getInt()) == 0;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        String mask = Integer.toString(this.mask.getInt(), 2);
+        String data = Integer.toString(this.data.getInt(), 2);
+        for (int i = 0; i < 32; ++i) {
+            if (mask.charAt(i) == '0') {
+                builder.append("*");
+            } else {
+                builder.append(data.charAt(i));
+            }
+        }
+        builder.append("b");
+        return builder.toString();
+    }
 }
