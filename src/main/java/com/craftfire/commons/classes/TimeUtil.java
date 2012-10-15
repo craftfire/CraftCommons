@@ -27,10 +27,10 @@ public class TimeUtil {
     private final int amount;
 
     enum TimeUnit {
-        SECOND(new String[]{"seconds", "sec", "secs", "s"}, 20, 1),
-        MINUTE(new String[]{"minutes", "min", "mins", "m"}, 1200, 60),
-        HOUR(new String[]{"hours", "hr", "hrs", "h"}, 72000, 3600),
-        DAY(new String[]{"days", "d"}, 1728000, 86400);
+        SECOND(new String[]{"seconds", "sec", "secs", "s"}, 1, 20),
+        MINUTE(new String[]{"minutes", "min", "mins", "m"}, 60, 1200),
+        HOUR(new String[]{"hours", "hr", "hrs", "h"}, 3600, 72000),
+        DAY(new String[]{"days", "d"}, 86400, 1728000);
 
         private String[] aliases;
         private int seconds;
@@ -71,14 +71,19 @@ public class TimeUtil {
         }
     }
 
-    public TimeUtil(TimeUnit unit, int amount) {
-        this.unit = unit;
-        this.amount = amount;
+    public TimeUtil(int seconds) {
+        this.unit = TimeUnit.SECOND;
+        this.amount = seconds;
     }
 
-    public TimeUtil(String unit, int amount) {
-        this.unit = TimeUnit.getUnit(unit.toLowerCase());
+    public TimeUtil(int amount, TimeUnit unit) {
         this.amount = amount;
+        this.unit = unit;
+    }
+
+    public TimeUtil(int amount, String unit) {
+        this.amount = amount;
+        this.unit = TimeUnit.getUnit(unit.toLowerCase());
     }
 
     public TimeUnit getUnit() {
@@ -99,7 +104,10 @@ public class TimeUtil {
 
     @Override
     public String toString() {
-        if (getAmount() > 1) {
+        if (getUnit().equals(TimeUnit.SECOND) && getAmount() > 60) {
+            /*TODO: Create a seconds to string converter*/
+            return null;
+        } else if (getAmount() > 1) {
             return getAmount() + " " + getUnit().getPlural();
         } else {
             return getAmount() + " " + getUnit().getName();
