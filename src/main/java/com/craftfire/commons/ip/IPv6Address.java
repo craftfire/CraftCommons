@@ -88,6 +88,9 @@ public class IPv6Address extends IPAddress {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj instanceof IPv6Address) {
             return Arrays.equals(this.data, ((IPv6Address) obj).getAddress());
         }

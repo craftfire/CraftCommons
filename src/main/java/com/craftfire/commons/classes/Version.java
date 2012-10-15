@@ -134,6 +134,25 @@ public class Version {
     public boolean inVersionRange(VersionRange range) {
         return range.inVersionRange(this);
     }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof Version) {
+            return ((Version) obj).getString(this.separator).equalsIgnoreCase(this.version);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getString(".").hashCode();
+    }
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
