@@ -46,7 +46,11 @@ public class TimeUtil {
         }
 
         public String getName() {
-            return this.name();
+            return this.name().toLowerCase();
+        }
+
+        public String getPlural() {
+            return getAliases().get(0).toLowerCase();
         }
 
         public int getSeconds() {
@@ -91,5 +95,14 @@ public class TimeUtil {
 
     public int getSeconds() {
         return getUnit().getSeconds() * getAmount();
+    }
+
+    @Override
+    public String toString() {
+        if (getAmount() > 1) {
+            return getAmount() + " " + getUnit().getPlural();
+        } else {
+            return getAmount() + " " + getUnit().getName();
+        }
     }
 }
