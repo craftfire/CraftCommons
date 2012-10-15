@@ -69,7 +69,7 @@ public class Version {
             return null;
         }
         StringBuilder builder = new StringBuilder(array[0]);
-        for (int i = 0; i < array.length; ++i) {
+        for (int i = 1; i < array.length; ++i) {
             builder.append(separator).append(array[i]);
         }
         return builder.toString();
