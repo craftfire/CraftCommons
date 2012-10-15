@@ -1,4 +1,6 @@
-package com.craftfire.commons.classes;
+package com.craftfire.commons.ip;
+
+import com.craftfire.commons.classes.VersionRange;
 
 public class IPv4IntervalRange implements IPRange {
     private final IPv4Address min, max;

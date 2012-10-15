@@ -1,4 +1,4 @@
-package com.craftfire.commons.classes;
+package com.craftfire.commons.ip;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;

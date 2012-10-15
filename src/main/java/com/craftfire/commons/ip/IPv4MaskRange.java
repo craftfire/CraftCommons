@@ -1,4 +1,4 @@
-package com.craftfire.commons.classes;
+package com.craftfire.commons.ip;
 
 public class IPv4MaskRange implements IPRange {
     private final IPv4Address data, mask;
