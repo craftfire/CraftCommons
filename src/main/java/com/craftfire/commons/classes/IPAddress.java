@@ -3,6 +3,7 @@ package com.craftfire.commons.classes;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
 public abstract class IPAddress {
@@ -11,6 +12,14 @@ public abstract class IPAddress {
     public abstract boolean isIPv6();
 
     public abstract boolean isInRange();
+
+    public abstract InetAddress getInetAddress();
+
+    public abstract IPv4Address toIPv4();
+
+    public abstract IPv6Address toIPv6();
+
+    abstract byte[] getBytes();
 
     public static IPAddress valueOf(InetAddress address) {
         if (address instanceof Inet4Address) {
@@ -22,11 +31,9 @@ public abstract class IPAddress {
     }
 
     public static IPAddress valueOf(String address) {
-        if (IPv4Address.parseIP(address) != null) {
-            return new IPv4Address(address);
-        }
-        if (IPv6Address.parseIP(address) != null) {
-            return new IPv6Address(address);
+        try {
+            return valueOf(InetAddress.getByName(address));
+        } catch (UnknownHostException ignore) {
         }
         return null;
     }
