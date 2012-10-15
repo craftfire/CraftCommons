@@ -41,12 +41,6 @@ public class IPv4Address extends IPAddress {
     }
 
     @Override
-    public boolean isInRange() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public Inet4Address getInetAddress() {
         try {
             InetAddress address = InetAddress.getByAddress(this.data);
@@ -90,6 +84,10 @@ public class IPv4Address extends IPAddress {
 
     public byte[] getAddress() {
         return this.data.clone();
+    }
+
+    public int getInt() {
+        return (this.data[0] << 24) | (this.data[1] << 16) | (this.data[2] << 8) | this.data[3];
     }
 
     @Override

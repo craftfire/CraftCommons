@@ -42,12 +42,6 @@ public class IPv6Address extends IPAddress {
     }
 
     @Override
-    public boolean isInRange() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
-    @Override
     public InetAddress getInetAddress() {
         try {
             return InetAddress.getByName(toString());

@@ -5,13 +5,10 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-
 public abstract class IPAddress {
     public abstract boolean isIPv4();
 
     public abstract boolean isIPv6();
-
-    public abstract boolean isInRange();
 
     public abstract InetAddress getInetAddress();
 
@@ -20,6 +17,10 @@ public abstract class IPAddress {
     public abstract IPv6Address toIPv6();
 
     abstract byte[] getBytes();
+
+    public boolean isInRange(IPRange range) {
+        return range.isInRange(this);
+    }
 
     public static IPAddress valueOf(InetAddress address) {
         if (address instanceof Inet4Address) {
