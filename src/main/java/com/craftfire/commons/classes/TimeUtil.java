@@ -76,6 +76,13 @@ public class TimeUtil {
         this.amount = seconds;
     }
 
+    public TimeUtil(String timeString) {
+        String[] split = timeString.split(" ");
+        int amount = Integer.parseInt(split[0]);
+        String unit = split[1].toLowerCase();
+        new TimeUtil(amount, unit);
+    }
+
     public TimeUtil(int amount, TimeUnit unit) {
         this.amount = amount;
         this.unit = unit;
