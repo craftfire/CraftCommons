@@ -162,8 +162,7 @@ public class DataField {
         } else if (data instanceof Boolean) {
             return FieldType.BOOLEAN;
         }
-        DataManager.getLogManager().warning(
-                "Unknown data type: " + data.toString());
+        //TODO: DataManager.getLogManager().warning("Unknown data type: " + data.toString());
         return FieldType.UNKNOWN;
     }
 
@@ -208,9 +207,7 @@ public class DataField {
         case Types.NULL:
             return FieldType.NULL;
         default:
-            DataManager.getLogManager().warning(
-                    "Unknown SQL type: " + sqltype + " Field data:"
-                            + data.toString());
+            //TODO: DataManager.getLogManager().warning("Unknown SQL type: " + sqltype + " Field data:" + data.toString());
             return FieldType.UNKNOWN;
         }
     }
