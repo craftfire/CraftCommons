@@ -106,7 +106,7 @@ public class LoggingManager {
 
     public void debug(String line) {
         if (isDebug()) {
-            this.logger.log(debugLevel, this.prefix + line);
+            this.logger.log(debugLevel, this.prefix + " " + line);
             toFile(Type.debug, line);
         }
     }
