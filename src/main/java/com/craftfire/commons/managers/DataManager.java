@@ -21,23 +21,10 @@ package com.craftfire.commons.managers;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -743,6 +730,13 @@ public class DataManager {
                 if (getClassLoader() != null) {
                     getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
                     Class.forName("org.h2.Driver", true, getClassLoader());
+
+                    getLogging().debug("Checking DriverManager drivers.");
+                    Enumeration driverList = DriverManager.getDrivers();
+                    while (driverList.hasMoreElements()) {
+                        Driver driverClass = (Driver) driverList.nextElement();
+                        getLogging().debug("Found driver: " + driverClass.getClass().getName());
+                    }
                 } else {
                     getLogging().debug("Loading H2 driver.");
                     Class.forName("org.h2.Driver");
