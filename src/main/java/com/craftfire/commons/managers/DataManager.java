@@ -681,6 +681,20 @@ public class DataManager {
         this.queriesCount++;
     }
 
+    private void outputDrivers() {
+        if (getLogging().isDebug()) {
+            getLogging().debug("Checking DriverManager drivers.");
+            Enumeration driverList = DriverManager.getDrivers();
+            int count = 0;
+            while (driverList.hasMoreElements()) {
+                Driver driverClass = (Driver) driverList.nextElement();
+                getLogging().debug("Found driver #" + count + ": " + driverClass.getClass().getName());
+                count++;
+            }
+            getLogging().debug("Found " + count + " drivers in DriverManager.");
+        }
+    }
+
     public boolean isConnected() {
         try {
             if (this.con != null) {
@@ -724,6 +738,7 @@ public class DataManager {
                         getLogging().debug("Loading MySQL driver.");
                         Class.forName("com.mysql.jdbc.Driver");
                     }
+                    outputDrivers();
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
                 case H2:
@@ -734,19 +749,9 @@ public class DataManager {
                         getLogging().debug("Loading H2 driver.");
                         Class.forName("org.h2.Driver");
                     }
+                    outputDrivers();
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
-            }
-            if (getLogging().isDebug()) {
-                getLogging().debug("Checking DriverManager drivers.");
-                Enumeration driverList = DriverManager.getDrivers();
-                int count = 0;
-                while (driverList.hasMoreElements()) {
-                    Driver driverClass = (Driver) driverList.nextElement();
-                    getLogging().debug("Found driver #" + count + ": " + driverClass.getClass().getName());
-                    count++;
-                }
-                getLogging().debug("Found " + count + " drivers in DriverManager.");
             }
         } catch (ClassNotFoundException e) {
             getLogging().stackTrace(e);
