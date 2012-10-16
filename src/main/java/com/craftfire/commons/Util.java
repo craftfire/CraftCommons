@@ -30,6 +30,15 @@ public class Util {
         this.serializer = new PhpSerializer();
     }
 
+    public boolean hasClass(String classString) {
+        try {
+            Class.forName(classString);
+        } catch (ClassNotFoundException ignore) {
+            return false;
+        }
+        return true;
+    }
+
     //TODO: Rewrite this function. (PHP deserialize)
     public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
         StringTokenizer st = new StringTokenizer(cache, ":");
