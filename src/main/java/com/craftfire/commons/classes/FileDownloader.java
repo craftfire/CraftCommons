@@ -23,6 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -105,11 +106,18 @@ public class FileDownloader {
         for (String url : this.urls) {
             try {
                 chosen = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) chosen.openConnection();
+                connection.setConnectTimeout(3);
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
+                connection.connect();
+                if (connection.getResponseCode() == 200) {
+                    break;
+                }
             } catch (MalformedURLException ignored) {
                 chosen = null;
-            }
-            if (chosen != null) {
-                break;
+            } catch (IOException e) {
+                chosen = null;
             }
         }
         this.url = chosen;
