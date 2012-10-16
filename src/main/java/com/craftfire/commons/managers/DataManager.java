@@ -229,7 +229,7 @@ public class DataManager {
                      + "&characterSetResults=UTF-8";
             break;
         case H2:
-            this.url = "jdbc:h2:" + this.directory + this.database;
+            this.url = "jdbc:h2:" + this.directory + this.database + ";AUTO_RECONNECT=TRUE";
             break;
         }
     }
