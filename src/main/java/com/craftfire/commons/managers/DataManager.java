@@ -744,7 +744,10 @@ public class DataManager {
                 case H2:
                     if (getClassLoader() != null) {
                         getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
-                        DriverManager.registerDriver((Driver) Class.forName("org.h2.Driver", true, getClassLoader()).newInstance());
+                        Driver driver = (Driver) Class.forName("org.h2.Driver", true, getClassLoader()).newInstance();
+                        getLogging().debug("Loaded H2 driver: " + driver.toString() + " - " +
+                                           driver.getMinorVersion() + " - " + driver.getMajorVersion());
+                        DriverManager.registerDriver(driver);
                     } else {
                         getLogging().debug("Loading H2 driver.");
                         Class.forName("org.h2.Driver");
@@ -758,9 +761,11 @@ public class DataManager {
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            getLogging().error("Could not register driver.");
+            getLogging().stackTrace(e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            getLogging().error("Could not register driver.");
+            getLogging().stackTrace(e);
         }
     }
 
