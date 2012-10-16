@@ -27,12 +27,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoggingManager {
     private final Logger logger;
     private String prefix, directory, format = "HH:mm:ss";
     private boolean debug = false, logging = false;
+    Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};
 
     public LoggingManager(String logger, String prefix) {
         this.logger = Logger.getLogger(logger);
@@ -104,13 +106,13 @@ public class LoggingManager {
 
     public void debug(String line) {
         if (isDebug()) {
-            this.logger.info("[DEBUG] " + this.prefix + line);
+            this.logger.log(debugLevel, this.prefix + line);
             toFile(Type.debug, line);
         }
     }
 
     public void error(String error) {
-        warning(error);
+        severe(error);
         toFile(Type.error, error);
     }
 
