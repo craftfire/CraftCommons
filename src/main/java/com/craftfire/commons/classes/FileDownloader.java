@@ -105,6 +105,7 @@ public class FileDownloader {
         URL chosen = null;
         for (String url : this.urls) {
             try {
+                System.out.println("Debug URL: " + url);
                 chosen = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) chosen.openConnection();
                 connection.setConnectTimeout(3);
@@ -116,10 +117,13 @@ public class FileDownloader {
                 }
             } catch (MalformedURLException ignored) {
                 chosen = null;
-            } catch (IOException e) {
+                ignored.printStackTrace();
+            } catch (IOException ignored) {
                 chosen = null;
+                ignored.printStackTrace();
             }
         }
+        System.out.println("Finished for loop: ");
         this.url = chosen;
     }
 }
