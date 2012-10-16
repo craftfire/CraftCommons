@@ -86,6 +86,10 @@ public class DataManager {
         return this.loggingManager;
     }
 
+    public void setLoggingManager(LoggingManager loggingManager) {
+        this.loggingManager = loggingManager;
+    }
+
     public ClassLoader getClassLoader() {
         return this.classLoader;
     }
