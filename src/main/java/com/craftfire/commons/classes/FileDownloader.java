@@ -105,8 +105,11 @@ public class FileDownloader {
         for (String url : this.urls) {
             try {
                 chosen = new URL(url);
-                break;
             } catch (MalformedURLException ignored) {
+                chosen = null;
+            }
+            if (chosen != null) {
+                break;
             }
         }
         this.url = chosen;
