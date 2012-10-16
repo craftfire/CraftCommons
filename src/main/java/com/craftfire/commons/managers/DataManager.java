@@ -728,9 +728,8 @@ public class DataManager {
                     break;
                 case H2:
                     if (getClassLoader() != null) {
-                        //getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
-                        //Class.forName("org.h2.Driver", true, getClassLoader());
-                        Class.forName("org.h2.Driver").newInstance();
+                        getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
+                        Class.forName("org.h2.Driver", true, getClassLoader()).newInstance();
                     } else {
                         getLogging().debug("Loading H2 driver.");
                         Class.forName("org.h2.Driver");
