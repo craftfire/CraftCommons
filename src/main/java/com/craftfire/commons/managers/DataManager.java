@@ -241,7 +241,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -256,7 +256,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -271,7 +271,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -285,7 +285,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -303,7 +303,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -316,7 +316,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -329,7 +329,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -342,7 +342,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -355,7 +355,7 @@ public class DataManager {
                 return f.getDate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -368,7 +368,7 @@ public class DataManager {
                 return f.getDate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -381,7 +381,7 @@ public class DataManager {
                 return f.getBlob();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -394,7 +394,7 @@ public class DataManager {
                 return f.getBlob();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -407,7 +407,7 @@ public class DataManager {
                 return f.getBool();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return false;
     }
@@ -420,7 +420,7 @@ public class DataManager {
                 return f.getBool();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return false;
     }
@@ -433,7 +433,7 @@ public class DataManager {
                 return f.getDouble();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -446,7 +446,7 @@ public class DataManager {
                 return f.getDouble();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return 0;
     }
@@ -459,7 +459,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -472,7 +472,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -538,7 +538,7 @@ public class DataManager {
             this.log(query);
             this.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
     }
 
@@ -556,7 +556,7 @@ public class DataManager {
             this.pStmt.executeUpdate();
             this.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
     }
 
@@ -597,7 +597,7 @@ public class DataManager {
             this.close();
             return new DefaultTableModel(rows, columnNames);
         } catch (Exception e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
             this.close();
             return null;
         }
@@ -636,7 +636,7 @@ public class DataManager {
             return data;
         } catch (SQLException e) {
             this.close();
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -662,7 +662,7 @@ public class DataManager {
             return list;
         } catch (SQLException e) {
             this.close();
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return null;
     }
@@ -687,7 +687,7 @@ public class DataManager {
                 return !this.con.isClosed();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return false;
     }
@@ -702,7 +702,7 @@ public class DataManager {
             this.close();
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
         return false;
     }
@@ -718,25 +718,29 @@ public class DataManager {
             switch (this.datatype) {
             case MYSQL:
                 if (getClassLoader() != null) {
-                    Class.forName("com.mysql.jdbc.Driver", true, getClassLoader());
+                    getLogManager().debug("Loading custom class loader for MySQL driver: " + getClassLoader().toString());
+                    Class.forName("com.mysql.jdbc.Driver", false, getClassLoader());
                 } else {
+                    getLogManager().debug("Loading MySQL driver.");
                     Class.forName("com.mysql.jdbc.Driver");
                 }
                 this.con = DriverManager.getConnection(this.url, this.username, this.password);
                 break;
             case H2:
                 if (getClassLoader() != null) {
-                    Class.forName("org.h2.Driver", true, getClassLoader());
+                    getLogManager().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
+                    Class.forName("org.h2.Driver", false, getClassLoader());
                 } else {
+                    getLogManager().debug("Loading H2 driver.");
                     Class.forName("org.h2.Driver");
                 }
                 this.con = DriverManager.getConnection(this.url, this.username, this.password);
                 break;
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
     }
 
@@ -766,7 +770,7 @@ public class DataManager {
                 this.connect();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            getLogManager().stackTrace(e);
         }
     }
 
