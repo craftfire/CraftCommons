@@ -20,6 +20,7 @@
 package com.craftfire.commons.managers;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -63,8 +64,7 @@ public class DataManager {
     private LoggingManager loggingManager = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
     public DataManager(String username, String password) {
-        this.datatype = DataType.MYSQL;
-        new DataManager(DataType.MYSQL, username, password);
+        this(DataType.MYSQL, username, password);
     }
 
     public DataManager(DataType type, String username, String password) {
@@ -166,6 +166,15 @@ public class DataManager {
     }
 
     public void setDirectory(String directory) {
+        File file = new File(directory);
+        if (!file.exists()) {
+            getLogging().debug(directory + " does not exist, attempting to create it.");
+            if (file.mkdir()) {
+                getLogging().debug("Successfully created directory: " + directory);
+            } else {
+                getLogging().error("Could not create directory: " + directory);
+            }
+        }
         this.directory = directory;
     }
 
