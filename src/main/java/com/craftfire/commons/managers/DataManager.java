@@ -59,6 +59,7 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
+    private ClassLoader classLoader = null;
     private static LoggingManager logMgr = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
     public DataManager(String username, String password) {
@@ -83,6 +84,14 @@ public class DataManager {
 
     public static LoggingManager getLogManager() {
         return DataManager.logMgr;
+    }
+
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
     public boolean isKeepAlive() {
@@ -708,14 +717,20 @@ public class DataManager {
         try {
             switch (this.datatype) {
             case MYSQL:
-                Class.forName("com.mysql.jdbc.Driver");
-                this.con = DriverManager.getConnection(this.url, this.username,
-                        this.password);
+                if (getClassLoader() != null) {
+                    Class.forName("com.mysql.jdbc.Driver", true, getClassLoader());
+                } else {
+                    Class.forName("com.mysql.jdbc.Driver");
+                }
+                this.con = DriverManager.getConnection(this.url, this.username, this.password);
                 break;
             case H2:
-                Class.forName("org.h2.Driver");
-                this.con = DriverManager.getConnection(this.url, this.username,
-                        this.password);
+                if (getClassLoader() != null) {
+                    Class.forName("org.h2.Driver", true, getClassLoader());
+                } else {
+                    Class.forName("org.h2.Driver");
+                }
+                this.con = DriverManager.getConnection(this.url, this.username, this.password);
                 break;
             }
         } catch (ClassNotFoundException e) {

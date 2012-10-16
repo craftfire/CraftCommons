@@ -87,22 +87,22 @@ public class FileDownloader {
         long start = System.currentTimeMillis();
         if (hasMirror()) {
             BufferedInputStream in = null;
-            FileOutputStream fout = null;
+            FileOutputStream out = null;
             try {
                 in = new BufferedInputStream(getURL().openStream());
-                fout = new FileOutputStream(getOuputFile());
+                out = new FileOutputStream(getOuputFile());
 
                 byte data[] = new byte[1024];
                 int count;
                 while ((count = in.read(data, 0, 1024)) != -1) {
-                    fout.write(data, 0, count);
+                    out.write(data, 0, count);
                 }
             } finally {
                 if (in != null) {
                     in.close();
                 }
-                if (fout != null) {
-                    fout.close();
+                if (out != null) {
+                    out.close();
                 }
                 this.successful = true;
             }
