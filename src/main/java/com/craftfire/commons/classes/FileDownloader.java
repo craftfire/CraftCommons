@@ -108,7 +108,7 @@ public class FileDownloader {
                 System.out.println("Debug URL: " + url);
                 chosen = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) chosen.openConnection();
-                connection.setConnectTimeout(3);
+                connection.setConnectTimeout(3000);
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
                 connection.connect();
