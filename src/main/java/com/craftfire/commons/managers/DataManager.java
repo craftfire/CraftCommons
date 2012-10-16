@@ -169,7 +169,7 @@ public class DataManager {
         File file = new File(directory);
         if (!file.exists()) {
             getLogging().debug(directory + " does not exist, attempting to create it.");
-            if (file.mkdir()) {
+            if (file.mkdirs()) {
                 getLogging().debug("Successfully created directory: " + directory);
             } else {
                 getLogging().error("Could not create directory: " + directory);
