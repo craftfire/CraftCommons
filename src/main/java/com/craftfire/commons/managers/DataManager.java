@@ -688,7 +688,7 @@ public class DataManager {
             int count = 0;
             while (driverList.hasMoreElements()) {
                 Driver driverClass = (Driver) driverList.nextElement();
-                getLogging().debug("Found driver #" + count + ": " + driverClass.getClass().getName());
+                getLogging().debug("Found driver #" + (count + 1) + ": " + driverClass.getClass().getName());
                 count++;
             }
             getLogging().debug("Found " + count + " drivers in DriverManager.");
@@ -744,7 +744,7 @@ public class DataManager {
                 case H2:
                     if (getClassLoader() != null) {
                         getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
-                        Class.forName("org.h2.Driver", true, getClassLoader()).newInstance();
+                        DriverManager.registerDriver((Driver) Class.forName("org.h2.Driver", true, getClassLoader()).newInstance());
                     } else {
                         getLogging().debug("Loading H2 driver.");
                         Class.forName("org.h2.Driver");
