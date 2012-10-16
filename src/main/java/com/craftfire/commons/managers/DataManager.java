@@ -732,7 +732,7 @@ public class DataManager {
             case MYSQL:
                 if (getClassLoader() != null) {
                     getLogging().debug("Loading custom class loader for MySQL driver: " + getClassLoader().toString());
-                    Class.forName("com.mysql.jdbc.Driver", false, getClassLoader());
+                    Class.forName("com.mysql.jdbc.Driver", true, getClassLoader());
                 } else {
                     getLogging().debug("Loading MySQL driver.");
                     Class.forName("com.mysql.jdbc.Driver");
@@ -742,7 +742,7 @@ public class DataManager {
             case H2:
                 if (getClassLoader() != null) {
                     getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
-                    Class.forName("org.h2.Driver", false, getClassLoader());
+                    Class.forName("org.h2.Driver", true, getClassLoader());
                 } else {
                     getLogging().debug("Loading H2 driver.");
                     Class.forName("org.h2.Driver");

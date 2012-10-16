@@ -114,16 +114,11 @@ public class LoggingManager {
         toFile(Type.error, error);
     }
 
-    public void advancedWarning(String line) {
+    public void advancedWarning() {
         warning(System.getProperty("line.separator")
                 + "|-----------------------------------------------------------------------------|"
                 + System.getProperty("line.separator")
                 + "|---------------------------------- WARNING ----------------------------------|"
-                + System.getProperty("line.separator")
-                + "|-----------------------------------------------------------------------------|"
-                + System.getProperty("line.separator")
-                + "| "
-                + line.toUpperCase()
                 + System.getProperty("line.separator")
                 + "|-----------------------------------------------------------------------------|");
     }
@@ -133,7 +128,7 @@ public class LoggingManager {
     }
 
     public void stackTrace(final Exception e, HashMap<Integer, String> extra) {
-        advancedWarning("Stacktrace Error");
+        advancedWarning();
         warning("Class name: " + e.getStackTrace()[1].getClassName());
         warning("Error message: " + e.getMessage());
         warning("Error cause: " + e.getCause());
