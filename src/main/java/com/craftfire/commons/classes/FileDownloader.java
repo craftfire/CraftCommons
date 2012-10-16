@@ -71,7 +71,7 @@ public class FileDownloader {
         return getURL() != null;
     }
 
-    public boolean successfulDownload() {
+    public boolean wasSuccessful() {
         return this.successful;
     }
 
