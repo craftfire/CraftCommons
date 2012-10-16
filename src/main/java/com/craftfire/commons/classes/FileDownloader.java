@@ -35,6 +35,7 @@ public class FileDownloader {
     private URL url = null;
     private File ouputFile;
     private boolean successful = false;
+    private float elapsedSeconds = 0;
 
     public FileDownloader(Set<String> urls, File outputFile) {
         this.urls = urls;
@@ -74,7 +75,16 @@ public class FileDownloader {
         return this.successful;
     }
 
+    public float getElapsedSeconds() {
+        return this.elapsedSeconds;
+    }
+
+    public long getFileSize() {
+        return getOuputFile().length();
+    }
+
     public void download() throws IOException {
+        long start = System.currentTimeMillis();
         if (hasMirror()) {
             BufferedInputStream in = null;
             FileOutputStream fout = null;
@@ -99,13 +109,13 @@ public class FileDownloader {
         } else {
             //TODO: logging, throw exception?
         }
+        this.elapsedSeconds = (System.currentTimeMillis() - start) / 1000F;
     }
 
     private void setURL() {
         URL chosen = null;
         for (String url : this.urls) {
             try {
-                System.out.println("Debug URL: " + url);
                 chosen = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) chosen.openConnection();
                 connection.setConnectTimeout(3000);
@@ -117,13 +127,10 @@ public class FileDownloader {
                 }
             } catch (MalformedURLException ignored) {
                 chosen = null;
-                ignored.printStackTrace();
             } catch (IOException ignored) {
                 chosen = null;
-                ignored.printStackTrace();
             }
         }
-        System.out.println("Finished for loop: ");
         this.url = chosen;
     }
 }
