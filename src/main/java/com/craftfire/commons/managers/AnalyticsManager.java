@@ -43,7 +43,7 @@ public class AnalyticsManager {
         return this.version;
     }
 
-    public String setVersion(String version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
