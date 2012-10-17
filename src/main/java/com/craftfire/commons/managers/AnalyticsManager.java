@@ -19,66 +19,39 @@
  */
 package com.craftfire.commons.managers;
 
-import com.boxysystems.jgoogleanalytics.FocusPoint;
-import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
-import com.boxysystems.jgoogleanalytics.LoggingAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnalyticsManager {
-    protected final JGoogleAnalyticsTracker tracker;
-    private String title, version, id;
-    private List<FocusPoint> points = new ArrayList<FocusPoint>();
-    private LoggingManager loggingManager;
+    private String name, version;
+    private LoggingManager loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
 
-    public AnalyticsManager(String title, String version, String id) {
-        this.title = title;
+    public AnalyticsManager(String name, String version) {
+        this.name = name;
         this.version = version;
-        this.id = id;
-        this.tracker = new JGoogleAnalyticsTracker(title, version, id);
-        this.loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
-        LoggingAdapter loggingAdapter = new LoggingAdapter() {
-            @Override
-            public void logError(String s) {
-                loggingManager.error(s);
-            }
-
-            @Override
-            public void logMessage(String s) {
-                loggingManager.debug(s);
-            }
-        };
-        this.tracker.setLoggingAdapter(loggingAdapter);
     }
 
-    public LoggingManager getLoggingManager() {
-        return this.loggingManager;
+    public String getName() {
+       return this.name;
     }
 
-    public String getTitle() {
-        return this.title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getVersion() {
         return this.version;
     }
 
-    public String getID() {
-        return this.id;
+    public String setVersion(String version) {
+        this.version = version;
     }
 
-    public void addPoint(String name) {
-        this.points.add(new FocusPoint(name));
+    public LoggingManager getLogging() {
+        return this.loggingManager;
     }
 
-    public List<FocusPoint> getPoints() {
-        return this.points;
-    }
-
-    public void start() {
-        for (FocusPoint focusPoint : this.points) {
-            this.tracker.trackAsynchronously(focusPoint);
-        }
+    public void setLoggingManager(LoggingManager loggingManager) {
+        this.loggingManager = loggingManager;
     }
 }
