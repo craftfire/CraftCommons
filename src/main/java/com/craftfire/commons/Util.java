@@ -19,8 +19,6 @@
  */
 package com.craftfire.commons;
 
-import org.h2.engine.UndoLogRecord;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
