@@ -19,6 +19,12 @@
  */
 package com.craftfire.commons;
 
+import org.h2.engine.UndoLogRecord;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -28,6 +34,32 @@ public class Util {
 
     public Util() {
         this.serializer = new PhpSerializer();
+    }
+
+    public static boolean isURLOnline(URL url) {
+        try {
+            HttpURLConnection connection =  (HttpURLConnection)  url.openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
+            connection.connect();
+            return connection.getResponseCode() == 200;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public static boolean isURLOnline(String urlString) {
+        URL url = isValidURL(urlString);
+        return url != null && isURLOnline(url);
+    }
+
+    public static URL isValidURL(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
 
     public boolean hasClass(String classString) {
