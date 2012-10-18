@@ -41,7 +41,8 @@ public class AnalyticsManager {
             //TODO: Make it submit.
             return true;
         }
-        setError(getURL().toString() + " did not return HTTP Status 200, maybe it's offline?.");
+        setError(getURL().toString() + " did not return HTTP Status 200, status returned was: " +
+                 Util.getResponseCode(getURL()) + ".");
         getLogging().error(getError());
         return false;
     }
