@@ -23,7 +23,11 @@ import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.AnalyticsData;
 import com.craftfire.commons.exceptions.AnalyticsException;
 
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 public class AnalyticsManager {
     private URL url;
@@ -35,14 +39,39 @@ public class AnalyticsManager {
         this.data = new AnalyticsData(name, version);
     }
 
-    public void submit() throws AnalyticsException {
+    public void submit() throws AnalyticsException, IOException {
         if (Util.isURLOnline(getURL())) {
-            //TODO: Make it submit.
+            String data = getParameters();
+            HttpURLConnection connection = (HttpURLConnection) getURL().openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
+            connection.setUseCaches(false);
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream ());
+            wr.writeBytes(data);
+            wr.flush();
+            wr.close();
+            connection.disconnect();
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
                        Util.getResponseCode(getURL()) + ".";
         getLogging().error(error);
         throw new AnalyticsException(this, error);
+    }
+
+    public String getParameters() {
+        return getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
+               + getData().getVersion().getKeyUTF8() + "=" + getData().getVersion().getValueUTF8() + "&"
+               + getData().getOSName().getKeyUTF8() + "=" + getData().getOSName().getValueUTF8() + "&"
+               + getData().getOSVersion().getKeyUTF8() + "=" + getData().getOSVersion().getValueUTF8() + "&"
+               + getData().getOSArch().getKeyUTF8() + "=" + getData().getOSArch().getValueUTF8() + "&"
+               + getData().getMaxMemory().getKeyUTF8() + "=" + getData().getMaxMemory().getValueUTF8() + "&"
+               + getData().getTotalMemory().getKeyUTF8() + "=" + getData().getTotalMemory().getValueUTF8() + "&"
+               + getData().getJavaVersion().getKeyUTF8() + "=" + getData().getJavaVersion().getValueUTF8();
     }
 
     public LoggingManager getLogging() {

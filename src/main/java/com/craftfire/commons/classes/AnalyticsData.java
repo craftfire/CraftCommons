@@ -23,66 +23,66 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnalyticsData {
-    private String name, version;
-    private Map<String, String> customData = new HashMap<String, String>();
+    private AnalyticsItem name, version;
+    private Map<String, AnalyticsItem> customData = new HashMap<String, AnalyticsItem>();
 
     public AnalyticsData(String name, String version) {
-        this.name = name;
-        this.version = version;
+        this.name = new AnalyticsItem("project_name", name);
+        this.version = new AnalyticsItem("project_version",version);
     }
 
-    public String getName() {
+    public AnalyticsItem getName() {
         return this.name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        getName().setValue(name);
     }
 
-    public String getVersion() {
+    public AnalyticsItem getVersion() {
         return this.version;
     }
 
     public void setVersion(String version) {
-        this.version = version;
+        getVersion().setValue(version);
     }
 
     public void add(String key, String value) {
-        this.customData.put(key, value);
+        this.customData.put(key.toLowerCase(), new AnalyticsItem(key.toLowerCase(), value));
     }
 
-    public Map<String, String> getCustomData() {
+    public Map<String, AnalyticsItem> getCustomData() {
         return this.customData;
     }
 
-    public String getCustom(String key) {
-        if (getCustomData().containsKey(key)) {
-            return getCustomData().get(key);
+    public AnalyticsItem getCustom(String key) {
+        if (getCustomData().containsKey(key.toLowerCase())) {
+            return getCustomData().get(key.toLowerCase());
         }
         return null;
     }
 
-    public String getOSName() {
-        return System.getProperty("os.name");
+    public AnalyticsItem getOSName() {
+        return new AnalyticsItem("os_name", System.getProperty("os.name"));
     }
 
-    public String getOSVersion() {
-        return System.getProperty("os.version");
+    public AnalyticsItem getOSVersion() {
+        return new AnalyticsItem("os_version", System.getProperty("os.version"));
     }
 
-    public String getOSArchitecture() {
-        return System.getProperty("os.arch");
+    public AnalyticsItem getOSArch() {
+        return new AnalyticsItem("os_arch", System.getProperty("os.arch"));
     }
 
-    public long getTotalMemory() {
-        return Runtime.getRuntime().totalMemory();
+    public AnalyticsItem getTotalMemory() {
+        return new AnalyticsItem("ram_total", Long.toString(Runtime.getRuntime().totalMemory()));
     }
 
-    public long getMaxMemory() {
-        return Runtime.getRuntime().maxMemory();
+    public AnalyticsItem getMaxMemory() {
+        return new AnalyticsItem("ram_max", Long.toString(Runtime.getRuntime().maxMemory()));
     }
 
-    public String getJavaVersion() {
-        return System.getProperty("java.version");
+    public AnalyticsItem getJavaVersion() {
+        return new AnalyticsItem("java_version", System.getProperty("java.version"));
     }
 }
