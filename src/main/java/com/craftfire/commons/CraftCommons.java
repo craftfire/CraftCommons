@@ -21,6 +21,7 @@ package com.craftfire.commons;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -37,9 +38,31 @@ import com.craftfire.commons.encryption.EncryptionUtil;
 import com.craftfire.commons.encryption.PHPass;
 import com.craftfire.commons.encryption.Whirlpool;
 import com.craftfire.commons.enums.Encryption;
+import com.craftfire.commons.exceptions.AnalyticsException;
+import com.craftfire.commons.managers.AnalyticsManager;
 
 public class CraftCommons {
     private static Util util = new Util();
+
+    private CraftCommons() {
+        try {
+            new AnalyticsManager("http://stats.craftfire.com/", "CraftCommons", "1.0.0").submit();
+        } catch (MalformedURLException ignore) {
+        } catch (IOException e) {
+            //TODO: logging
+        } catch (AnalyticsException e) {
+            //TODO: logging
+        }
+    }
+
+    public static String getName() {
+        return "CraftCommons";
+    }
+
+    public static String getVersion() {
+        return "1.0.0";
+    }
+
     /**
      * Checks if the string is an email.
      *

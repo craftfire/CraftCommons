@@ -25,10 +25,7 @@ import com.craftfire.commons.classes.AnalyticsItem;
 import com.craftfire.commons.exceptions.AnalyticsException;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.net.*;
 
 public class AnalyticsManager {
     private URL url;
@@ -37,6 +34,11 @@ public class AnalyticsManager {
 
     public AnalyticsManager(URL url, String name, String version) {
         this.url = url;
+        this.data = new AnalyticsData(name, version);
+    }
+
+    public AnalyticsManager(String url, String name, String version) throws MalformedURLException {
+        this.url = new URL(url);
         this.data = new AnalyticsData(name, version);
     }
 
