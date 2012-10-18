@@ -19,16 +19,48 @@
  */
 package com.craftfire.commons.managers;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.craftfire.commons.classes.AnalyticsData;
+
+import java.net.URL;
 
 public class AnalyticsManager {
+    private URL url;
     private String name, version;
+    private AnalyticsData data = new AnalyticsData();
     private LoggingManager loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
 
-    public AnalyticsManager(String name, String version) {
+    public AnalyticsManager(URL url, String name, String version) {
+        this.url = url;
         this.name = name;
         this.version = version;
+    }
+
+    public void submit() {
+        //TODO: Submit data to URL
+    }
+
+    public LoggingManager getLogging() {
+        return this.loggingManager;
+    }
+
+    public void setLoggingManager(LoggingManager loggingManager) {
+        this.loggingManager = loggingManager;
+    }
+
+    public AnalyticsData getData() {
+        return this.data;
+    }
+
+    public void addData(String key, String value) {
+        getData().add(key, value);
+    }
+
+    public URL getURL() {
+        return this.url;
+    }
+
+    public void setURL(URL url) {
+        this.url = url;
     }
 
     public String getName() {
@@ -45,13 +77,5 @@ public class AnalyticsManager {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public LoggingManager getLogging() {
-        return this.loggingManager;
-    }
-
-    public void setLoggingManager(LoggingManager loggingManager) {
-        this.loggingManager = loggingManager;
     }
 }
