@@ -21,6 +21,7 @@ package com.craftfire.commons.managers;
 
 import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.AnalyticsData;
+import com.craftfire.commons.classes.AnalyticsItem;
 import com.craftfire.commons.exceptions.AnalyticsException;
 
 import java.io.*;
@@ -64,14 +65,18 @@ public class AnalyticsManager {
     }
 
     public String getParameters() {
-        return getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
-               + getData().getVersion().getKeyUTF8() + "=" + getData().getVersion().getValueUTF8() + "&"
-               + getData().getOSName().getKeyUTF8() + "=" + getData().getOSName().getValueUTF8() + "&"
-               + getData().getOSVersion().getKeyUTF8() + "=" + getData().getOSVersion().getValueUTF8() + "&"
-               + getData().getOSArch().getKeyUTF8() + "=" + getData().getOSArch().getValueUTF8() + "&"
-               + getData().getMaxMemory().getKeyUTF8() + "=" + getData().getMaxMemory().getValueUTF8() + "&"
-               + getData().getTotalMemory().getKeyUTF8() + "=" + getData().getTotalMemory().getValueUTF8() + "&"
-               + getData().getJavaVersion().getKeyUTF8() + "=" + getData().getJavaVersion().getValueUTF8();
+        String data = getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
+                    + getData().getVersion().getKeyUTF8() + "=" + getData().getVersion().getValueUTF8() + "&"
+                    + getData().getOSName().getKeyUTF8() + "=" + getData().getOSName().getValueUTF8() + "&"
+                    + getData().getOSVersion().getKeyUTF8() + "=" + getData().getOSVersion().getValueUTF8() + "&"
+                    + getData().getOSArch().getKeyUTF8() + "=" + getData().getOSArch().getValueUTF8() + "&"
+                    + getData().getMaxMemory().getKeyUTF8() + "=" + getData().getMaxMemory().getValueUTF8() + "&"
+                    + getData().getTotalMemory().getKeyUTF8() + "=" + getData().getTotalMemory().getValueUTF8() + "&"
+                    + getData().getJavaVersion().getKeyUTF8() + "=" + getData().getJavaVersion().getValueUTF8() + "&";
+        for (AnalyticsItem item : getData().getCustomData().values()) {
+            data += item.getKeyUTF8() + "=" + item.getValueUTF8() + "&";
+        }
+        return data.substring(0, data.length() - 1);
     }
 
     public LoggingManager getLogging() {
