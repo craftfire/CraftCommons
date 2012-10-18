@@ -55,6 +55,13 @@ public class AnalyticsData {
         return this.customData;
     }
 
+    public String getCustom(String key) {
+        if (getCustomData().containsKey(key)) {
+            return getCustomData().get(key);
+        }
+        return null;
+    }
+
     public String getOSName() {
         return System.getProperty("os.name");
     }
