@@ -19,13 +19,14 @@
  */
 package com.craftfire.commons.managers;
 
+import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.AnalyticsData;
 
 import java.net.URL;
 
 public class AnalyticsManager {
     private URL url;
-    private String name, version;
+    private String name, version, error = "No errors found.";
     private AnalyticsData data = new AnalyticsData();
     private LoggingManager loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
 
@@ -35,8 +36,14 @@ public class AnalyticsManager {
         this.version = version;
     }
 
-    public void submit() {
-        //TODO: Submit data to URL
+    public boolean submit() {
+        if (Util.isURLOnline(getURL())) {
+            //TODO: Make it submit.
+            return true;
+        }
+        setError(getURL().toString() + " did not return HTTP Status 200, maybe it's offline?.");
+        getLogging().error(getError());
+        return false;
     }
 
     public LoggingManager getLogging() {
@@ -77,5 +84,13 @@ public class AnalyticsManager {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getError() {
+        return this.error;
+    }
+
+    protected void setError(String error) {
+        this.error = error;
     }
 }
