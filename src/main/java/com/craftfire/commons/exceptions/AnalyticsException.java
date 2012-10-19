@@ -19,6 +19,7 @@
  */
 package com.craftfire.commons.exceptions;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.AnalyticsData;
 import com.craftfire.commons.managers.AnalyticsManager;
@@ -40,6 +41,6 @@ public class AnalyticsException extends Exception {
     }
 
     public int getResponseCode() {
-        return Util.getResponseCode(getManager().getURL());
+        return CraftCommons.getResponseCode(getManager().getURL());
     }
 }

@@ -34,45 +34,6 @@ public class Util {
         this.serializer = new PhpSerializer();
     }
 
-    public static int getResponseCode(URL url) {
-        try {
-            HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
-            connection.setConnectTimeout(3000);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
-            connection.connect();
-            return connection.getResponseCode();
-        } catch (IOException e) {
-            return 0;
-        }
-    }
-
-    public static boolean isURLOnline(URL url) {
-        return getResponseCode(url) == 200;
-    }
-
-    public static boolean isURLOnline(String urlString) {
-        URL url = isValidURL(urlString);
-        return url != null && isURLOnline(url);
-    }
-
-    public static URL isValidURL(String urlString) {
-        try {
-            return new URL(urlString);
-        } catch (MalformedURLException e) {
-            return null;
-        }
-    }
-
-    public boolean hasClass(String classString) {
-        try {
-            Class.forName(classString);
-        } catch (ClassNotFoundException ignore) {
-            return false;
-        }
-        return true;
-    }
-
     //TODO: Rewrite this function. (PHP deserialize)
     public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
         StringTokenizer st = new StringTokenizer(cache, ":");
@@ -176,9 +137,9 @@ public class Util {
     /**
      * Unserialize object serialized with php serialization.
      *
-     * @param serialized    string to unserialize
-     * @return              unserialized data - Integer, Double, String,
-     *                      Boolean, Map<Object,Object> or PhpObject
+     * @param  serialized  string to unserialize
+     * @return             unserialized data - Integer, Double, String,
+     *                     Boolean, Map<Object,Object> or PhpObject
      */
     public Object phpUnserialize(String serialized) {
         SerializedPhpParser parser = new SerializedPhpParser(serialized);
@@ -188,8 +149,8 @@ public class Util {
     /**
      * Serialize object with php serialization.
      *
-     * @param value     object to serialize
-     * @return          object serialized to String.
+     * @param  value  object to serialize
+     * @return        object serialized to String.
      */
     public String phpSerialize(Object value) {
         return this.serializer.serialize(value);
@@ -198,7 +159,7 @@ public class Util {
     /**
      * Returns default php serializer.
      *
-     * @return  default php serializer.
+     * @return default php serializer.
      */
     public PhpSerializer getPhpSerializer() {
         return this.serializer;

@@ -19,6 +19,7 @@
  */
 package com.craftfire.commons.managers;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.AnalyticsData;
 import com.craftfire.commons.classes.AnalyticsItem;
@@ -43,7 +44,7 @@ public class AnalyticsManager {
     }
 
     public void submit() throws AnalyticsException, IOException {
-        if (Util.isURLOnline(getURL())) {
+        if (CraftCommons.isURLOnline(getURL())) {
             String data = getParameters();
             HttpURLConnection connection = (HttpURLConnection) getURL().openConnection();
             connection.setDoOutput(true);
@@ -61,7 +62,7 @@ public class AnalyticsManager {
             connection.disconnect();
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
-                       Util.getResponseCode(getURL()) + ".";
+                       CraftCommons.getResponseCode(getURL()) + ".";
         getLogging().error(error);
         throw new AnalyticsException(this, error);
     }

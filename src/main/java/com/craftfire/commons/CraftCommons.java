@@ -24,6 +24,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -153,6 +154,45 @@ public class CraftCommons {
             num += ((Integer.parseInt(ipArray[i]) % 256 * Math.pow(256, power)));
         }
         return num;
+    }
+
+    public static int getResponseCode(URL url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
+            connection.connect();
+            return connection.getResponseCode();
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static boolean isURLOnline(URL url) {
+        return getResponseCode(url) == 200;
+    }
+
+    public static boolean isURLOnline(String urlString) {
+        URL url = isValidURL(urlString);
+        return url != null && isURLOnline(url);
+    }
+
+    public static URL isValidURL(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+
+    public static boolean hasClass(String classString) {
+        try {
+            Class.forName(classString);
+        } catch (ClassNotFoundException ignore) {
+            return false;
+        }
+        return true;
     }
 
     @Deprecated
