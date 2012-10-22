@@ -39,6 +39,20 @@ public class TranslationManager {
         BING
     }
 
+    public enum TranslationLanguage {
+        ENGLISH("en");
+
+        private String code;
+
+        TranslationLanguage(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return this.code;
+        }
+    }
+
     public TranslationManager(String apiKey, String clientKey) {
         this(TranslationService.BING, apiKey, clientKey);
     }
@@ -53,7 +67,7 @@ public class TranslationManager {
         this.clientKey = clientKey;
         if (service.equals(TranslationService.BING)) {
             if (apiKey != null && clientKey != null) {
-                this.accessToken = generateAccessToken();
+                this.accessToken = generateAccessToken(TranslationService.BING);
                 if (this.accessToken == null) {
                     getLogger().error("Could not get access token for Bing translator.");
                 } else {
@@ -107,7 +121,7 @@ public class TranslationManager {
         return this.accessToken;
     }
 
-    private String generateAccessToken() {
+    private String generateAccessToken(TranslationService service) {
         URL postURL;
         try {
             postURL = new URL("https://datamarket.accesscontrol.windows.net/v2/OAuth2-13");
