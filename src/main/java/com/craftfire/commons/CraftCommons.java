@@ -156,9 +156,17 @@ public class CraftCommons {
         return num;
     }
 
+    public static int getResponseCode(String urlString) {
+        try {
+            return getResponseCode(new URL(urlString));
+        } catch (MalformedURLException e) {
+            return 0;
+        }
+    }
+
     public static int getResponseCode(URL url) {
         try {
-            HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(3000);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
