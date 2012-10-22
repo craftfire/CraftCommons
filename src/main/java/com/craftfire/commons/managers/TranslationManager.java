@@ -53,6 +53,8 @@ public class TranslationManager {
         }
     }
 
+    //Get Client Id and Client Secret from https://datamarket.azure.com/developer/applications/
+    //Refer obtaining AccessToken (http://msdn.microsoft.com/en-us/library/hh454950.aspx)
     public TranslationManager(String apiKey, String clientKey) {
         this(TranslationService.BING, apiKey, clientKey);
     }
@@ -129,43 +131,39 @@ public class TranslationManager {
             getLogger().stackTrace(e);
             return null;
         }
-        if (CraftCommons.isURLOnline(postURL)) {
-            try {
-                String data = "grant_type=client_credentials&client_id=" + getClientKey()
-                            + "&client_secret=" + getAPIKey()
-                            + "&scope=http://api.microsofttranslator.com";
-                HttpURLConnection connection = (HttpURLConnection) postURL.openConnection();
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                connection.setInstanceFollowRedirects(false);
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                connection.setRequestProperty("charset", "utf-8");
-                connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
-                connection.setUseCaches(false);
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(data);
-                Scanner s;
-                if (connection.getResponseCode() != 200) {
-                    s = new Scanner(connection.getErrorStream());
-                    getLogger().error("Got error when trying to get access token for translation: " + s);
-                } else {
-                    s = new Scanner(connection.getInputStream());
-                    getLogger().debug("Got response when trying to catch access token for translation: " + s) ;
-                }
-                s.useDelimiter("\\Z");
-                wr.flush();
-                wr.close();
-                connection.disconnect();
-                return s.next();
-            } catch (ProtocolException e) {
-                getLogger().stackTrace(e);
-            } catch (IOException e) {
-                getLogger().stackTrace(e);
+        try {
+            String data = "grant_type=client_credentials&client_id=" + getClientKey()
+                        + "&client_secret=" + getAPIKey()
+                        + "&scope=http://api.microsofttranslator.com";
+            HttpURLConnection connection = (HttpURLConnection) postURL.openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
+            connection.setUseCaches(false);
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(data);
+            Scanner s;
+            if (connection.getResponseCode() != 200) {
+                s = new Scanner(connection.getErrorStream());
+                getLogger().error("Got error when trying to get access token for translation: " + s);
+            } else {
+                s = new Scanner(connection.getInputStream());
+                getLogger().debug("Got response when trying to catch access token for translation: " + s) ;
             }
+            s.useDelimiter("\\Z");
+            wr.flush();
+            wr.close();
+            connection.disconnect();
+            return s.next();
+        } catch (ProtocolException e) {
+            getLogger().stackTrace(e);
+        } catch (IOException e) {
+            getLogger().stackTrace(e);
         }
-        getLogger().error(postURL.toString() + " did not return HTTP Status 200, status returned was: " +
-                          CraftCommons.getResponseCode(postURL) + ".");
         return null;
     }
 }
