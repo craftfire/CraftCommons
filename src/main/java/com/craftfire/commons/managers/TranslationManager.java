@@ -23,10 +23,7 @@ import com.craftfire.commons.CraftCommons;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.net.*;
 import java.util.Scanner;
 
 public class TranslationManager {
@@ -135,8 +132,8 @@ public class TranslationManager {
             return null;
         }
         try {
-            String data = "grant_type=client_credentials&client_id=" + getClientKey()
-                        + "&client_secret=" + getAPIKey()
+            String data = "grant_type=client_credentials&client_id=" + URLEncoder.encode(getClientKey(), "UTF-8")
+                        + "&client_secret=" + URLEncoder.encode(getAPIKey(), "UTF-8")
                         + "&scope=http://api.microsofttranslator.com";
             HttpURLConnection connection = (HttpURLConnection) postURL.openConnection();
             connection.setDoOutput(true);
@@ -150,6 +147,7 @@ public class TranslationManager {
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(data);
             getLogger().debug("Got reponse code '" + connection.getResponseCode() + "' for URL '" + postURL.toString() + "'");
+            getLogger().debug("Parameters: " + data);
             Scanner s;
             if (connection.getResponseCode() != 200) {
                 s = new Scanner(connection.getErrorStream());
