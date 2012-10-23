@@ -59,11 +59,24 @@ public class TranslationManager {
         this(TranslationService.BING, apiKey, clientKey);
     }
 
+    public TranslationManager(String apiKey, String clientKey, LoggingManager loggingManager) {
+        this(TranslationService.BING, apiKey, clientKey, loggingManager);
+    }
+
     public TranslationManager(TranslationService service, String apiKey) {
         this(service, apiKey, null);
     }
 
     public TranslationManager(TranslationService service, String apiKey, String clientKey) {
+        this(service, apiKey, clientKey, null);
+    }
+
+    public TranslationManager(TranslationService service, String apiKey, String clientKey, LoggingManager loggingManager) {
+        if (loggingManager == null) {
+            this.loggingManager = new LoggingManager("CraftFire.TranslationManager", "[TranslationManager]");
+        } else {
+            this.loggingManager = loggingManager;
+        }
         this.service = service;
         this.apiKey = apiKey;
         this.clientKey = clientKey;
@@ -78,7 +91,7 @@ public class TranslationManager {
                 }
             } else {
                 getLogger().error("APIKey and/or ClientKey has not been set: APIKey=" + apiKey +
-                                  " & ClientKEY=" + clientKey);
+                        " & ClientKEY=" + clientKey);
             }
         }
     }
@@ -146,10 +159,12 @@ public class TranslationManager {
             connection.setUseCaches(false);
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(data);
+            getLogger().debug("Got reponse code '" + connection.getResponseCode() + "' for URL '" + postURL.toString() + "'");
             Scanner s;
             if (connection.getResponseCode() != 200) {
                 s = new Scanner(connection.getErrorStream());
                 getLogger().error("Got error when trying to get access token for translation: " + s);
+                return null;
             } else {
                 s = new Scanner(connection.getInputStream());
                 getLogger().debug("Got response when trying to catch access token for translation: " + s) ;
