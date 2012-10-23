@@ -59,27 +59,17 @@ public class TranslationManager {
         this(TranslationService.BING, apiKey, clientKey);
     }
 
-    public TranslationManager(String apiKey, String clientKey, LoggingManager loggingManager) {
-        this(TranslationService.BING, apiKey, clientKey, loggingManager);
-    }
-
     public TranslationManager(TranslationService service, String apiKey) {
         this(service, apiKey, null);
     }
 
     public TranslationManager(TranslationService service, String apiKey, String clientKey) {
-        this(service, apiKey, clientKey, null);
-    }
-
-    public TranslationManager(TranslationService service, String apiKey, String clientKey, LoggingManager loggingManager) {
-        if (loggingManager == null) {
-            this.loggingManager = new LoggingManager("CraftFire.TranslationManager", "[TranslationManager]");
-        } else {
-            this.loggingManager = loggingManager;
-        }
         this.service = service;
         this.apiKey = apiKey;
         this.clientKey = clientKey;
+    }
+
+    public void init() {
         if (service.equals(TranslationService.BING)) {
             if (apiKey != null && clientKey != null) {
                 this.accessToken = generateAccessToken(TranslationService.BING);
@@ -91,7 +81,7 @@ public class TranslationManager {
                 }
             } else {
                 getLogger().error("APIKey and/or ClientKey has not been set: APIKey=" + apiKey +
-                        " & ClientKEY=" + clientKey);
+                                  " & ClientKEY=" + clientKey);
             }
         }
     }
