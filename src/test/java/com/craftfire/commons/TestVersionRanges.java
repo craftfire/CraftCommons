@@ -19,8 +19,12 @@
  */
 package com.craftfire.commons;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -101,4 +105,21 @@ public class TestVersionRanges {
         System.out.print("Checking took " + delta + "ns (" + (delta / 1000000) + "ms)");
     }
 
+    @Test
+    public void testEqualsAndHash() {
+        Version v1 = new Version("1.3.11.2");
+        Version v2 = new Version("1:3:11:2", ":");
+        Version v3 = new Version("1.3.11");
+        assertTrue(v1.equals(v1));
+        assertTrue(v1.equals(v2));
+        assertTrue(v2.equals(v1));
+        assertFalse(v1.equals(v3));
+        assertFalse(v2.equals(v3));
+        assertFalse(v3.equals(v1));
+        assertFalse(v3.equals(v2));
+        Map<Version, String> map = new HashMap<Version, String>();
+        map.put(v1, "alice");
+        map.put(v3, "bob");
+        assertEquals("alice", map.get(v2));
+    }
 }

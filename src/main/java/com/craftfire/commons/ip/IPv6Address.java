@@ -1,0 +1,123 @@
+/*
+ * This file is part of CraftCommons.
+ *
+ * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * CraftCommons is licensed under the GNU Lesser General Public License.
+ *
+ * CraftCommons is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CraftCommons is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.craftfire.commons.ip;
+
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+
+public class IPv6Address extends IPAddress {
+    private final short[] data;
+    
+    public IPv6Address(Inet6Address address) {
+        ByteBuffer buffer = ByteBuffer.wrap(address.getAddress());
+        this.data = buffer.asShortBuffer().array();
+    }
+
+    public IPv6Address(short... address) {
+        if (address.length != 8) {
+            throw new IllegalArgumentException("IPv6 Address must have 8 parts!");
+        }
+        this.data = address.clone();
+    }
+
+    public IPv6Address(int... address) {
+        if (address.length != 8) {
+            throw new IllegalArgumentException("IPv6 Address must have 8 parts!");
+        }
+        this.data = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        for (int i = 0; i < 8; ++i) {
+            this.data[i] = (short) address[i];
+        }
+    }
+
+    @Override
+    public boolean isIPv4() {
+        return false;
+    }
+
+    @Override
+    public boolean isIPv6() {
+        return true;
+    }
+
+    @Override
+    public InetAddress getInetAddress() {
+        try {
+            return InetAddress.getByName(toString());
+        } catch (UnknownHostException ignore) {
+        }
+        return null;
+    }
+
+    @Override
+    public IPv4Address toIPv4() {
+        if (this.data[0] == 0x2002 || this.data[0] == 0xfe80) {
+            ByteBuffer buffer = ByteBuffer.allocate(4);
+            buffer.putShort(this.data[6]).putShort(this.data[7]);
+            return new IPv4Address(buffer.array());
+        }
+        return null;
+    }
+
+    @Override
+    public IPv6Address toIPv6() {
+        return this;
+    }
+
+    @Override
+    public byte[] getBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(16);
+        buffer.asShortBuffer().put(this.data);
+        return buffer.array();
+    }
+
+    public short[] getAddress() {
+        return this.data.clone();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 8; ++i) {
+            builder.append(Integer.toHexString(this.data[i]));
+            builder.append(":");
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof IPv6Address) {
+            return Arrays.equals(this.data, ((IPv6Address) obj).getAddress());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(this.data);
+    }
+}
