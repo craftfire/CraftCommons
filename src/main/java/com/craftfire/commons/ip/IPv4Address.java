@@ -25,13 +25,28 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+/**
+ * A class that represents an IPv4 address.
+ */
 public class IPv4Address extends IPAddress {
     private final byte[] data;
 
+    /**
+     * Creates an IPv4Address object for given Inet4Address.
+     * 
+     * @param address  the Inet4Address
+     * @see            IPAddress#valueOf(InetAddress)
+     */
     public IPv4Address(Inet4Address address) {
         this.data = address.getAddress();
     }
 
+    /**
+     * Creates an IPv4Address object form given byte representation.
+     * 
+     * @param  address                   byte representation of the IPv4 address, <b>must be 4 byte long</b>
+     * @throws IllegalArgumentException  if the number of bytes is different than 4
+     */
     public IPv4Address(byte... address) {
         if (address.length != 4) {
             throw new IllegalArgumentException("IPv4 Address must have 4 parts!");
@@ -39,6 +54,12 @@ public class IPv4Address extends IPAddress {
         this.data = address.clone();
     }
 
+    /**
+     * Creates an IPv4Address object from four integers corresponding to four parts of IPv4 address (usually seperated by dots).
+     * 
+     * @param  address                   integer parts of the IPv4 address, <b>must be exactly 4 elements</b>
+     * @throws IllegalArgumentException  if the number of ints is different than 4
+     */
     public IPv4Address(int... address) {
         if (address.length != 4) {
             throw new IllegalArgumentException("IPv4 Address must have 4 parts!");
@@ -49,16 +70,25 @@ public class IPv4Address extends IPAddress {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#isIPv4()
+     */
     @Override
     public boolean isIPv4() {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#isIPv6()
+     */
     @Override
     public boolean isIPv6() {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#getInetAddress()
+     */
     @Override
     public Inet4Address getInetAddress() {
         try {
@@ -71,11 +101,17 @@ public class IPv4Address extends IPAddress {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#toIPv4()
+     */
     @Override
     public IPv4Address toIPv4() {
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#toIPv6()
+     */
     @Override
     public IPv6Address toIPv6() {
         ByteBuffer buffer = ByteBuffer.allocate(16);
@@ -96,19 +132,37 @@ public class IPv4Address extends IPAddress {
         return new IPv6Address(buffer.asShortBuffer().array());
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#getBytes()
+     */
     @Override
     public byte[] getBytes() {
         return getAddress();
     }
 
+    /**
+     * Returns four bytes, one for each part of IPv4 address (usually separated by dots).
+     * <p>
+     * In this case it returns the same value as {@link #getBytes()}
+     * 
+     * @return  four bytes, one for each part of IPv4 address
+     */
     public byte[] getAddress() {
         return this.data.clone();
     }
 
+    /**
+     * Returns the value of this address in single integer, which contains four bytes of the address.
+     * 
+     * @return  single integer representation of this address
+     */
     public int getInt() {
         return (this.data[0] << 24) | (this.data[1] << 16) | (this.data[2] << 8) | this.data[3];
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -119,6 +173,9 @@ public class IPv4Address extends IPAddress {
         return builder.toString();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -130,6 +187,9 @@ public class IPv4Address extends IPAddress {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.data);

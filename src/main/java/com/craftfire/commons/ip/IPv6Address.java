@@ -25,14 +25,43 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+/**
+ * A class that represents an IPv6 address.
+ */
 public class IPv6Address extends IPAddress {
     private final short[] data;
     
+    /**
+     * Creates an IPv6Address object for given Inet6Address.
+     * 
+     * @param address  the Inet6Address
+     * @see            IPAddress#valueOf(InetAddress)
+     */
     public IPv6Address(Inet6Address address) {
         ByteBuffer buffer = ByteBuffer.wrap(address.getAddress());
         this.data = buffer.asShortBuffer().array();
     }
 
+    /**
+     * Creates an IPv4Address object form given byte representation.
+     * 
+     * @param  bytes                     byte representation of the IPv6 address, <b>must be 16 byte long</b>
+     * @throws IllegalArgumentException  if the number of bytes is different than 16
+     */
+    public IPv6Address(byte[] bytes) {
+        if (bytes.length != 16) {
+            throw new IllegalArgumentException("IPv6 Address must be 16 byte long!");
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        this.data = buffer.asShortBuffer().array();
+    }
+
+    /**
+     * Creates an IPv4Address object from four integers corresponding to four parts of IPv6 address (usually separated by colons).
+     * 
+     * @param  address                   short integer parts of the IPv6 address, <b>must be exactly 8 elements</b>
+     * @throws IllegalArgumentException  if the number of shorts is different than 8
+     */
     public IPv6Address(short... address) {
         if (address.length != 8) {
             throw new IllegalArgumentException("IPv6 Address must have 8 parts!");
@@ -40,6 +69,12 @@ public class IPv6Address extends IPAddress {
         this.data = address.clone();
     }
 
+    /**
+     * Creates an IPv4Address object from four integers corresponding to four parts of IPv6 address (usually separated by colons).
+     * 
+     * @param  address                   integer parts of the IPv6 address, <b>must be exactly 8 elements</b>
+     * @throws IllegalArgumentException  if the number of ints is different than 8
+     */
     public IPv6Address(int... address) {
         if (address.length != 8) {
             throw new IllegalArgumentException("IPv6 Address must have 8 parts!");
@@ -50,16 +85,25 @@ public class IPv6Address extends IPAddress {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#isIPv4()
+     */
     @Override
     public boolean isIPv4() {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#isIPv6()
+     */
     @Override
     public boolean isIPv6() {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#getInetAddress()
+     */
     @Override
     public InetAddress getInetAddress() {
         try {
@@ -69,6 +113,9 @@ public class IPv6Address extends IPAddress {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#toIPv4()
+     */
     @Override
     public IPv4Address toIPv4() {
         if (this.data[0] == 0x2002 || this.data[0] == 0xfe80) {
@@ -79,11 +126,17 @@ public class IPv6Address extends IPAddress {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#toIPv6()
+     */
     @Override
     public IPv6Address toIPv6() {
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.ip.IPAddress#getBytes()
+     */
     @Override
     public byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(16);
@@ -91,10 +144,18 @@ public class IPv6Address extends IPAddress {
         return buffer.array();
     }
 
+    /**
+     * Returns four shorts, one for each part of IPv6 address (usually separated by colons).
+     * 
+     * @return  four shorts, one for each part of IPv6 address
+     */
     public short[] getAddress() {
         return this.data.clone();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -105,6 +166,9 @@ public class IPv6Address extends IPAddress {
         return builder.toString();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -116,6 +180,9 @@ public class IPv6Address extends IPAddress {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.data);

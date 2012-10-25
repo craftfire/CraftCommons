@@ -19,22 +19,46 @@
  */
 package com.craftfire.commons.ip;
 
+/**
+ * An IPRange implementation for IPv6 masks.
+ * 
+ * @see IPv4MaskRange
+ */
 public class IPv6MaskRange implements IPRange {
     private final IPv6Address data, mask;
 
+    /**
+     * Creates an IPv6MaskRange object with given {@link data} and {@link mask}.
+     * 
+     * @param data  an address that is compared to a checked address with given bitmask
+     * @param mask  a bitmask - binary 0 means that the bit can be any, 1 means that the bit in a checked address must equal to corrseponding bit in {@link data}
+     */
     public IPv6MaskRange(IPv6Address data, IPv6Address mask) {
         this.data = data;
         this.mask = mask;
     }
 
+    /**
+     * Returns the address that is compared to a checked address with the bitmask.
+     * 
+     * @return the address
+     */
     public IPv6Address getData() {
         return this.data;
     }
 
+    /**
+     * Returns the bitmask that is used to compare the data with a checked address.
+     * 
+     * @return the bitmask
+     */
     public IPv6Address getMask() {
         return this.mask;
     }
 
+    /**
+     * Returns true, if the given IP address is an IPv4 address and matches the bitmask.
+     */
     @Override
     public boolean isInRange(IPAddress address) {
         if (!address.isIPv6()) {
@@ -51,6 +75,9 @@ public class IPv6MaskRange implements IPRange {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -59,11 +86,12 @@ public class IPv6MaskRange implements IPRange {
             String data = Integer.toString(this.data.getAddress()[i], 2);
             for (int j = 0; j < 16; ++j) {
                 if (mask.charAt(j) == '0') {
-                    builder.append("*");
+                    builder.append("x");
                 } else {
                     builder.append(data.charAt(j));
                 }
             }
+            builder.append(" ");
         }
         builder.append("b");
         return builder.toString();
