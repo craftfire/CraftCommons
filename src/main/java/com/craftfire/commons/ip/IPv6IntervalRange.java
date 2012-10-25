@@ -40,7 +40,9 @@ public class IPv6IntervalRange implements IPRange {
 
     @Override
     public boolean isInRange(IPAddress address) {
-        // TODO: Check if address is IPv6 and decide what to do if it's not.
+        if (!address.isIPv6()) {
+            return false;
+        }
         return new VersionRange(getMin().toString(), getMax().toString(), ":").inVersionRange(new Version(address.toIPv6().toString(), ":"));
     }
 

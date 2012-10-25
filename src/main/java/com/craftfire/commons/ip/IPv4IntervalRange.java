@@ -39,7 +39,9 @@ public class IPv4IntervalRange implements IPRange {
 
     @Override
     public boolean isInRange(IPAddress address) {
-        // TODO: Check if address is IPv4 and decide what to do if it's not.
+        if (!address.isIPv4()) {
+            return false;
+        }
         return new VersionRange(this.min.toString(), this.max.toString()).inVersionRange(address.toIPv4().toString());
     }
 

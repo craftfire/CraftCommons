@@ -37,7 +37,9 @@ public class IPv4MaskRange implements IPRange {
 
     @Override
     public boolean isInRange(IPAddress address) {
-        // TODO: Check if address is IPv4 and decide what to do if it's not.
+        if (!address.isIPv4()) {
+            return false;
+        }
         return ((address.toIPv4().getInt() ^ this.data.getInt()) & this.mask.getInt()) == 0;
     }
 

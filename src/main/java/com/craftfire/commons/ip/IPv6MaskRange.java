@@ -37,7 +37,9 @@ public class IPv6MaskRange implements IPRange {
 
     @Override
     public boolean isInRange(IPAddress address) {
-        // TODO: Check if address is IPv6 and decide what to do if it's not.
+        if (!address.isIPv6()) {
+            return false;
+        }
         short[] addr = address.toIPv6().getAddress();
         short[] data = getData().getAddress();
         short[] mask = getMask().getAddress();
