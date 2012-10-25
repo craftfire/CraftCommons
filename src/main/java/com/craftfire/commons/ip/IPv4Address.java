@@ -125,11 +125,12 @@ public class IPv4Address extends IPAddress {
         } else {
             buffer.putShort((short) 0x2002);
         }
-        short[] zeros = new short[5];
-        Arrays.fill(zeros, (short) 0);
-        buffer.asShortBuffer().put(zeros);
+        buffer.position(12);
         buffer.put(this.data);
-        return new IPv6Address(buffer.asShortBuffer().array());
+        short[] shorts = new short[8];
+        buffer.flip();
+        buffer.asShortBuffer().get(shorts, 0, 8);
+        return new IPv6Address(shorts);
     }
 
     /* (non-Javadoc)
@@ -157,7 +158,7 @@ public class IPv4Address extends IPAddress {
      * @return  single integer representation of this address
      */
     public int getInt() {
-        return (this.data[0] << 24) | (this.data[1] << 16) | (this.data[2] << 8) | this.data[3];
+        return (byteToUint(this.data[0]) << 24) | (byteToUint(this.data[1]) << 16) | (byteToUint(this.data[2]) << 8) | byteToUint(this.data[3]);
     }
 
     /* (non-Javadoc)
@@ -167,8 +168,10 @@ public class IPv4Address extends IPAddress {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 4; ++i) {
-            builder.append(this.data[i]);
-            builder.append(".");
+            builder.append(this.data[i] + ((this.data[i] < 0) ? 256 : 0));
+            if (i < 3) {
+                builder.append(".");
+            }
         }
         return builder.toString();
     }
@@ -193,5 +196,9 @@ public class IPv4Address extends IPAddress {
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.data);
+    }
+
+    private static int byteToUint(byte b) {
+        return b + ((b < 0) ? 256 : 0);
     }
 }

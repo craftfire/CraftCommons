@@ -39,7 +39,8 @@ public class IPv6Address extends IPAddress {
      */
     public IPv6Address(Inet6Address address) {
         ByteBuffer buffer = ByteBuffer.wrap(address.getAddress());
-        this.data = buffer.asShortBuffer().array();
+        this.data = new short[8];
+        buffer.asShortBuffer().get(this.data);
     }
 
     /**
@@ -118,7 +119,7 @@ public class IPv6Address extends IPAddress {
      */
     @Override
     public IPv4Address toIPv4() {
-        if (this.data[0] == 0x2002 || this.data[0] == 0xfe80) {
+        if (this.data[0] == (short) 0x2002 || this.data[0] == (short) 0xfe80) {
             ByteBuffer buffer = ByteBuffer.allocate(4);
             buffer.putShort(this.data[6]).putShort(this.data[7]);
             return new IPv4Address(buffer.array());
@@ -160,8 +161,10 @@ public class IPv6Address extends IPAddress {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 8; ++i) {
-            builder.append(Integer.toHexString(this.data[i]));
-            builder.append(":");
+            builder.append(Integer.toHexString((char) this.data[i]));
+            if (i < 7) {
+                builder.append(":");
+            }
         }
         return builder.toString();
     }
