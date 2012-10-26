@@ -72,7 +72,7 @@ public class IPv4MaskRange implements IPRange {
         if (!address.isIPv4()) {
             return false;
         }
-        return ((address.toIPv4().getInt() ^ this.data.getInt()) & this.mask.getInt()) == 0;
+        return ((address.toIPv4().getInt() ^ getData().getInt()) & getMask().getInt()) == 0;
     }
 
     /* (non-Javadoc)
@@ -81,13 +81,13 @@ public class IPv4MaskRange implements IPRange {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        String mask = Integer.toBinaryString(this.mask.getInt());
-        String data = Integer.toBinaryString(this.data.getInt());
+        String maskStr = Integer.toBinaryString(getMask().getInt());
+        String dataStr = Integer.toBinaryString(getData().getInt());
         for (int i = 0; i < 32; ++i) {
-            if (mask.charAt(i) == '0') {
+            if (maskStr.charAt(i) == '0') {
                 builder.append("x");
             } else {
-                builder.append(data.charAt(i));
+                builder.append(dataStr.charAt(i));
             }
             if (i % 8 == 7) {
                 builder.append(" ");

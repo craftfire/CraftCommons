@@ -21,10 +21,25 @@ package com.craftfire.commons.managers;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.sql.*;
-import java.util.*;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -36,7 +51,7 @@ import com.craftfire.commons.enums.FieldType;
 
 public class DataManager {
     private boolean keepAlive, reconnect;
-    private String host, username, password, database, prefix, query,
+    private String host, username, password, database, prefix, lastQuery,
             directory;
     private String url = null;
     private Map<Long, String> queries = new HashMap<Long, String>();
@@ -194,7 +209,7 @@ public class DataManager {
     }
 
     public String getLastQuery() {
-        return this.query;
+        return this.lastQuery;
     }
 
     public DataType getDataType() {
@@ -564,21 +579,22 @@ public class DataManager {
         executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
     }
 
-    public void updateFields(HashMap<String, Object> data, String table, String where) throws SQLException {
+    public void updateFields(Map<String, Object> data, String table, String where) throws SQLException {
         String update = this.updateFieldsString(data);
         executeQuery("UPDATE `" + this.getPrefix() + table + "`" + update + " WHERE " + where);
     }
 
-    public void insertFields(HashMap<String, Object> data, String table) throws SQLException {
+    public void insertFields(Map<String, Object> data, String table) throws SQLException {
         String insert = this.insertFieldString(data);
         executeQuery("INSERT INTO `" + this.getPrefix() + table + "` " + insert);
     }
 
+    @Deprecated
     public TableModel resultSetToTableModel(String query) {
         try {
             this.connect();
-            Statement stmt = this.con.createStatement();
-            this.rs = stmt.executeQuery(query);
+            this.stmt = this.con.createStatement();
+            this.rs = this.stmt.executeQuery(query);
             this.log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
@@ -676,7 +692,7 @@ public class DataManager {
     }
 
     private void log(String query) {
-        this.query = query;
+        this.lastQuery = query;
         this.queries.put(System.currentTimeMillis(), query);
         this.queriesCount++;
     }
@@ -805,7 +821,7 @@ public class DataManager {
         this.connect();
     }
 
-    private String updateFieldsString(HashMap<String, Object> data) {
+    private String updateFieldsString(Map<String, Object> data) {
         String query = " SET", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
@@ -830,7 +846,7 @@ public class DataManager {
         return query;
     }
 
-    private String insertFieldString(HashMap<String, Object> data) {
+    private String insertFieldString(Map<String, Object> data) {
         String fields = "", values = "", query = "", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();

@@ -26,18 +26,17 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class PHPass {
-    static String itoa64 =
-            "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    int iteration_count_log2;
-    SecureRandom random_gen;
+    private static String itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private int iterationCountLog2;
+    private SecureRandom randomGen;
 
-    public PHPass(int iteration_count_log2) {
-        if (iteration_count_log2 < 4 || iteration_count_log2 > 31) {
-            iteration_count_log2 = 8;
+    public PHPass(int iterationCountLog2) {
+        if (iterationCountLog2 < 4 || iterationCountLog2 > 31) {
+            this.iterationCountLog2 = 8;
+        } else {
+            this.iterationCountLog2 = iterationCountLog2;
         }
-
-        this.iteration_count_log2 = iteration_count_log2;
-        this.random_gen = new SecureRandom();
+        this.randomGen = new SecureRandom();
     }
 
     private String encode64(byte[] src, int count) {
@@ -75,7 +74,7 @@ public class PHPass {
         return output;
     }
 
-    private String crypt_private(String password, String setting) {
+    private String cryptPrivate(String password, String setting) {
         String output = "*0";
         if (((setting.length() < 2 )? setting : setting.substring(0, 2))
                 .equalsIgnoreCase(output)) {
@@ -87,12 +86,12 @@ public class PHPass {
             return output;
         }
 
-        int count_log2 = itoa64.indexOf(setting.charAt(3));
-        if (count_log2 < 7 || count_log2 > 30) {
+        int countLog2 = itoa64.indexOf(setting.charAt(3));
+        if (countLog2 < 7 || countLog2 > 30) {
             return output;
         }
 
-        int count = 1 << count_log2;
+        int count = 1 << countLog2;
         String salt = setting.substring(4, 4+8);
         if (salt.length() != 8) {
             return output;
@@ -121,32 +120,32 @@ public class PHPass {
         return output;
     }
 
-    private String gensalt_private(byte[] input) {
+    private String gensaltPrivate(byte[] input) {
         String output = "$P$";
-        output += itoa64.charAt(Math.min(this.iteration_count_log2 + 5, 30));
+        output += itoa64.charAt(Math.min(this.iterationCountLog2 + 5, 30));
         output += this.encode64(input, 6);
         return output;
     }
 
     public String crypt(String password, String setting) {
-        return this.crypt_private(password, setting);
+        return this.cryptPrivate(password, setting);
     }
 
     public String gensalt(String input) {
-        return this.gensalt_private(EncryptionUtil.stringToUtf8(input));
+        return this.gensaltPrivate(EncryptionUtil.stringToUtf8(input));
     }
 
     public String gensalt(byte[] input) {
-        return this.gensalt_private(input);
+        return this.gensaltPrivate(input);
     }
 
     public String gensalt() {
         byte random[] = new byte[6];
-        this.random_gen.nextBytes(random);
+        this.randomGen.nextBytes(random);
         return this.gensalt(random);
     }
 
     public Random getRandomGen() {
-        return this.random_gen;
+        return this.randomGen;
     }
 }

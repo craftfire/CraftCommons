@@ -64,11 +64,11 @@ public class IPv6MaskRange implements IPRange {
         if (!address.isIPv6()) {
             return false;
         }
-        short[] addr = address.toIPv6().getAddress();
-        short[] data = getData().getAddress();
-        short[] mask = getMask().getAddress();
+        short[] addrShorts = address.toIPv6().getAddress();
+        short[] dataShorts = getData().getAddress();
+        short[] maskShorts = getMask().getAddress();
         for (int i = 0; i < 8; ++i) {
-            if (((addr[i] ^ data[i]) & mask[i]) != 0) {
+            if (((addrShorts[i] ^ dataShorts[i]) & maskShorts[i]) != 0) {
                 return false;
             }
         }
@@ -82,15 +82,15 @@ public class IPv6MaskRange implements IPRange {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 8; ++i) {
-            String mask = "0000000000000000" + Integer.toBinaryString(this.mask.getAddress()[i]);
-            String data = "0000000000000000" + Integer.toBinaryString(this.data.getAddress()[i]);
-            mask = mask.substring(mask.length() - 16, mask.length());
-            data = data.substring(data.length() - 16, data.length());
+            String maskStr = "0000000000000000" + Integer.toBinaryString(getMask().getAddress()[i]);
+            String dataStr = "0000000000000000" + Integer.toBinaryString(getData().getAddress()[i]);
+            maskStr = maskStr.substring(maskStr.length() - 16, maskStr.length());
+            dataStr = dataStr.substring(dataStr.length() - 16, dataStr.length());
             for (int j = 0; j < 16; ++j) {
-                if (mask.charAt(j) == '0') {
+                if (maskStr.charAt(j) == '0') {
                     builder.append("x");
                 } else {
-                    builder.append(data.charAt(j));
+                    builder.append(dataStr.charAt(j));
                 }
             }
             builder.append(" ");

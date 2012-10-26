@@ -21,7 +21,10 @@ package com.craftfire.commons.encryption;
 
 import java.io.UnsupportedEncodingException;
 
-public class EncryptionUtil {
+public final class EncryptionUtil {
+    private EncryptionUtil() {
+    }
+
     public static String pack(String hex) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < hex.length(); i += 2) {
@@ -37,7 +40,7 @@ public class EncryptionUtil {
         StringBuilder buf = new StringBuilder();
         for (byte aByte : data) {
             int halfbyte = (aByte >>> 4) & 0x0F;
-            int two_halfs = 0;
+            int twoHalfs = 0;
             do {
                 if ((0 <= halfbyte) && (halfbyte <= 9)) {
                     buf.append((char) ('0' + halfbyte));
@@ -46,7 +49,7 @@ public class EncryptionUtil {
                 }
                 halfbyte = aByte & 0x0F;
             }
-            while (two_halfs++ < 1);
+            while (twoHalfs++ < 1);
         }
         return buf.toString();
     }
@@ -75,7 +78,7 @@ public class EncryptionUtil {
         try {
             return new String(utf8, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("This system doesn't support UTF-8!", e);
+            throw new UnsupportedOperationException("This system doesn't support UTF-8!", e);
         }
     }
 
@@ -83,7 +86,7 @@ public class EncryptionUtil {
         try {
             return string.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("This system doesn't support UTF-8!", e);
+            throw new UnsupportedOperationException("This system doesn't support UTF-8!", e);
         }
     }
 }
