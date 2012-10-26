@@ -27,9 +27,10 @@ import java.util.regex.Pattern;
 public class Version {
     private final String version;
     private final String separator;
+    private final int radix;
 
     /**
-     * Parses a version from string using default version format (separated with <code>.</code> char).
+     * Parses a version from string using default version format (separated with <code>.</code> char, radix = <code>10</code>).
      * 
      * @param version  the string to parse
      */
@@ -38,14 +39,26 @@ public class Version {
     }
 
     /**
-     * Parses a version from string using given separator
+     * Parses a version from string using given {@link separator} and default radix (<code>10</code>).
      * 
      * @param version    the string to parse
      * @param separator  the separator used in <code>version</code> parameter
      */
     public Version(String version, String separator) {
+        this(version, separator, 10);
+    }
+
+    /**
+     * Parses a version from string using given separator and radix.
+     * 
+     * @param version    the string to parse
+     * @param separator  the separator used in <code>version</code> parameter
+     * @param radix      the radix to be used
+     */
+    public Version(String version, String separator, int radix) {
         this.version = version;
         this.separator = separator;
+        this.radix = radix;
     }
 
     /**
@@ -96,6 +109,15 @@ public class Version {
     }
     
     /**
+     * Returns the radix of this version.
+     * 
+     * @return the radix
+     */
+    public int getRadix() {
+        return this.radix;
+    }
+
+    /**
      * Compares two versions.
      * <p>
      * Note: If common parts of versions are equal and this version is longer than <code>anotherVersion</code>, it means this one is bigger, but if <code>anotherVersion</code> is longer than this one,
@@ -110,8 +132,8 @@ public class Version {
         int len = Math.min(splitA.length, splitB.length);
         for (int i = 0; i < len; ++i) {
             // TODO: Catch NumberFormatException somewhere or add throws declaration.
-            int a = Integer.parseInt(splitA[i]);
-            int b = Integer.parseInt(splitB[i]);
+            int a = Integer.parseInt(splitA[i], getRadix());
+            int b = Integer.parseInt(splitB[i], anotherVersion.getRadix());
             if (a > b) {
                 return 1;
             } else if (a < b) {
