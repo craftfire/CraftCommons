@@ -31,10 +31,6 @@ import com.craftfire.commons.managers.CacheManager;
 
 public class TestCache {
 
-    public TestCache() {
-        // TODO Auto-generated constructor stub
-    }
-
     @Test
     public void testPutGet() {
         CacheManager mgr = new CacheManager();

@@ -54,7 +54,8 @@ public class IPv6Address extends IPAddress {
             throw new IllegalArgumentException("IPv6 Address must be 16 byte long!");
         }
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        this.data = buffer.asShortBuffer().array();
+        this.data = new short[8];
+        buffer.asShortBuffer().get(this.data);
     }
 
     /**
@@ -106,9 +107,12 @@ public class IPv6Address extends IPAddress {
      * @see com.craftfire.commons.ip.IPAddress#getInetAddress()
      */
     @Override
-    public InetAddress getInetAddress() {
+    public Inet6Address getInetAddress() {
         try {
-            return InetAddress.getByName(toString());
+            InetAddress address = InetAddress.getByAddress(getBytes());
+            if (address instanceof Inet6Address) {
+                return (Inet6Address) address;
+            }
         } catch (UnknownHostException ignore) {
         }
         return null;
@@ -119,7 +123,12 @@ public class IPv6Address extends IPAddress {
      */
     @Override
     public IPv4Address toIPv4() {
-        if (this.data[0] == (short) 0x2002 || this.data[0] == (short) 0xfe80) {
+        InetAddress inet = getInetAddress();
+        if (inet.isLoopbackAddress()) {
+            return new IPv4Address(127, 0, 0, 1);
+        } else if (inet.isAnyLocalAddress()) {
+            return new IPv4Address(0, 0, 0, 0);
+        } else if (this.data[0] == (short) 0x2002 || this.data[0] == (short) 0xfe80) {
             ByteBuffer buffer = ByteBuffer.allocate(4);
             buffer.putShort(this.data[6]).putShort(this.data[7]);
             return new IPv4Address(buffer.array());

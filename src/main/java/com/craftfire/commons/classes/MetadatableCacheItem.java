@@ -20,9 +20,10 @@
 package com.craftfire.commons.classes;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MetadatableCacheItem extends CacheItem {
-    private HashMap<String, Object> metaMap = new HashMap<String, Object>();
+    private Map<String, Object> metaMap = new HashMap<String, Object>();
 
     public MetadatableCacheItem(Object id, int cacheTime, Object object) {
         super(id, cacheTime, object);

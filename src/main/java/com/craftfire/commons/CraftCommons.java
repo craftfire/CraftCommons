@@ -42,7 +42,7 @@ import com.craftfire.commons.enums.Encryption;
 import com.craftfire.commons.exceptions.AnalyticsException;
 import com.craftfire.commons.managers.AnalyticsManager;
 
-public class CraftCommons {
+public final class CraftCommons {
     private static Util util = new Util();
 
     private CraftCommons() {
@@ -222,10 +222,11 @@ public class CraftCommons {
         return encrypt(encryption, object, salt, 0);
     }
 
-    public static String encrypt(Encryption encryption, Object object, String salt, int iteration_count) {
+    public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount) {
         try {
             String string = (String) object;
             MessageDigest md = null;
+            String salt2use = salt;
             if (encryption.equals(Encryption.MD5)) {
                 md = MessageDigest.getInstance("MD5");
             } else if (encryption.equals(Encryption.SHA1)) {
@@ -246,26 +247,28 @@ public class CraftCommons {
                 w.NESSIEfinalize(digest);
                 return Whirlpool.display(digest);
             } else if (encryption.equals(Encryption.PHPASS)) {
-                if (iteration_count == 0) {
-                    iteration_count = 8;
+                PHPass phpass;
+                if (iterationCount == 0) {
+                    phpass = new PHPass(8);
+                } else {
+                    phpass = new PHPass(iterationCount);
                 }
-                PHPass phpass = new PHPass(iteration_count);
-                if (salt == null || salt.isEmpty()) {
-                    salt = phpass.gensalt();
+                if (salt2use == null || salt2use.isEmpty()) {
+                    salt2use = phpass.gensalt();
                 }
-                String hash = phpass.crypt(string, salt);
+                String hash = phpass.crypt(string, salt2use);
                 if (hash.length() == 34) {
                     return hash;
                 }
                 return "*";
             } else if (encryption.equals(Encryption.BLOWFISH)) {
-                if (iteration_count == 0) {
-                    iteration_count = 8;
+                if (iterationCount == 0) {
+                    iterationCount = 8;
                 }
-                if (salt == null || salt.isEmpty()) {
-                    salt = BCrypt.gensalt(iteration_count);
+                if (salt2use == null || salt2use.isEmpty()) {
+                    salt2use = BCrypt.gensalt(iterationCount);
                 }
-                return BCrypt.hashpw(string, salt);
+                return BCrypt.hashpw(string, salt2use);
             }
             if (md != null) {
                 md.update(string.getBytes("ISO-8859-1"), 0, string.length());
@@ -275,9 +278,9 @@ public class CraftCommons {
                 return null;
             }
         } catch (GeneralSecurityException e) {
-                throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new UnsupportedOperationException(e);
         }
     }
 
@@ -318,7 +321,7 @@ public class CraftCommons {
     public static Image urlToImage(String urlstring) {
         try {
             URL url = new URL(urlstring);
-            return Toolkit.getDefaultToolkit().getDefaultToolkit().createImage(url);
+            return Toolkit.getDefaultToolkit().createImage(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

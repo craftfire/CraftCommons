@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,7 +106,7 @@ public class LoggingManager {
 
     public void debug(String line) {
         if (isDebug()) {
-            this.logger.log(debugLevel, this.prefix + " " + line);
+            this.logger.log(this.debugLevel, this.prefix + " " + line);
             toFile(Type.debug, line);
         }
     }
@@ -129,7 +129,7 @@ public class LoggingManager {
         stackTrace(e, null);
     }
 
-    public void stackTrace(final Exception e, HashMap<Integer, String> extra) {
+    public void stackTrace(final Exception e, Map<Integer, String> extra) {
         advancedWarning();
         warning("Class name: " + e.getStackTrace()[1].getClassName());
         warning("Error message: " + e.getMessage());
@@ -138,10 +138,10 @@ public class LoggingManager {
         warning("Function name: " + e.getStackTrace()[1].getMethodName());
         warning("Error line: " + e.getStackTrace()[1].getLineNumber());
         if (this.logging) {
-            DateFormat LogFormat = new SimpleDateFormat(this.format);
+            DateFormat logFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
             warning("Check log file: " + this.directory + "error\\"
-                    + LogFormat.format(date) + "-error.log");
+                    + logFormat.format(date) + "-error.log");
         } else {
             warning("Enable logging in the config to get more information about the error.");
         }

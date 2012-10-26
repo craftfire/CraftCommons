@@ -23,7 +23,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,6 +94,12 @@ public class TestIPAddress {
     }
 
     @Test
+    public void testValueOfInetAddressNull() {
+        IPAddress addr = IPAddress.valueOf((InetAddress) null);
+        assertNull(addr);
+    }
+
+    @Test
     public void testIPv4() {
         System.out.println("testIPv4: " + ipv4);
         assertTrue(ipv4.isIPv4());
@@ -113,6 +121,57 @@ public class TestIPAddress {
     }
 
     @Test
+    public void testIPv4InvalidConstructorCall() {
+        try {
+            IPAddress addr = new IPv4Address(new byte[] { 127, 0, 1 });
+            fail("Shoudl be not able to create: " + addr);
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            IPAddress addr = new IPv4Address(192, 168, 1, 255, 8);
+            fail("Shoudl be not able to create: " + addr);
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    @Test
+    public void testIPv6InvalidConstructorCall() {
+        try {
+            IPAddress addr = new IPv6Address(new byte[] { 127, 0, 1, 60, 90 });
+            fail("Shoudl be not able to create: " + addr);
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            IPAddress addr = new IPv6Address(new short[] { 127, 0, 1, 60, 90, 1200 });
+            fail("Shoudl be not able to create: " + addr);
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            IPAddress addr = new IPv4Address(192, 168, 1, 255, 8, 1200, 91, 88, 1228);
+            fail("Shoudl be not able to create: " + addr);
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    @Test
+    public void testAnycastConversion() {
+        IPAddress ipv4new = new IPv4Address(0, 0, 0, 0);
+        IPv6Address addr = ipv4new.toIPv6();
+        System.out.println("testAnycastIPv4to6: " + addr);
+        assertTrue(addr.equals(new IPv6Address(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 })));
+        assertTrue(addr.toIPv4().equals(ipv4new));
+    }
+
+    @Test
+    public void testLoopbackConversion() {
+        IPAddress ipv6new = IPAddress.valueOf("0::1");
+        IPv4Address addr = ipv6new.toIPv4();
+        System.out.println("testLoopbackIPv6to4: " + addr);
+        assertTrue(addr.equals(new IPv4Address(127, 0, 0, 1)));
+        assertTrue(addr.toIPv6().equals(ipv6new));
+    }
+
+    @Test
     public void testIPv4to6() {
         IPv6Address addr = ipv4.toIPv6();
         System.out.println("testIPv4to6: " + addr);
@@ -127,6 +186,13 @@ public class TestIPAddress {
         System.out.println("testIPv6to4: " + addr);
         assertTrue(addr.equals(new IPv4Address(205, 253, 199, 182)));
         assertTrue(addr.toIPv6().equals(ipv6new));
+    }
+
+    @Test
+    public void testWrongConversion() {
+        IPAddress ipv6new = IPAddress.valueOf("2001::1");
+        IPv4Address addr = ipv6new.toIPv4();
+        assertNull(addr);
     }
 
     @Test
