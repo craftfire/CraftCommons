@@ -65,7 +65,7 @@ public class IPv6IntervalRange implements IPRange {
         if (!address.isIPv6()) {
             return false;
         }
-        return new VersionRange(getMin().toString(), getMax().toString(), ":").inVersionRange(new Version(address.toIPv6().toString(), ":"));
+        return new VersionRange(getMin().toString(), getMax().toString(), ":", 16).inVersionRange(new Version(address.toIPv6().toString(), ":", 16));
     }
 
     /* (non-Javadoc)

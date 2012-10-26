@@ -81,15 +81,15 @@ public class IPv4MaskRange implements IPRange {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        String mask = Integer.toString(this.mask.getInt(), 2);
-        String data = Integer.toString(this.data.getInt(), 2);
+        String mask = Integer.toBinaryString(this.mask.getInt());
+        String data = Integer.toBinaryString(this.data.getInt());
         for (int i = 0; i < 32; ++i) {
             if (mask.charAt(i) == '0') {
                 builder.append("x");
             } else {
                 builder.append(data.charAt(i));
             }
-            if (i % 8 == 0) {
+            if (i % 8 == 7) {
                 builder.append(" ");
             }
         }

@@ -82,8 +82,10 @@ public class IPv6MaskRange implements IPRange {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 8; ++i) {
-            String mask = Integer.toString(this.mask.getAddress()[i], 2);
-            String data = Integer.toString(this.data.getAddress()[i], 2);
+            String mask = "0000000000000000" + Integer.toBinaryString(this.mask.getAddress()[i]);
+            String data = "0000000000000000" + Integer.toBinaryString(this.data.getAddress()[i]);
+            mask = mask.substring(mask.length() - 16, mask.length());
+            data = data.substring(data.length() - 16, data.length());
             for (int j = 0; j < 16; ++j) {
                 if (mask.charAt(j) == '0') {
                     builder.append("x");

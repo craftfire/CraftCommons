@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.craftfire.commons.ip.IPAddress;
@@ -18,16 +16,8 @@ import com.craftfire.commons.ip.IPv4Address;
 import com.craftfire.commons.ip.IPv6Address;
 
 public class TestIPAddress {
-    static IPv4Address ipv4 = new IPv4Address(192, 168, 1, 1);
-    static IPv6Address ipv6 = new IPv6Address(0xfe80, 0, 0, 0, 0, 0x1015, 0xc0a8, 1);
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
+    private static IPv4Address ipv4 = new IPv4Address(192, 168, 1, 1);
+    private static IPv6Address ipv6 = new IPv6Address(0xfe80, 0, 0, 0, 0, 0x1015, 0xc0a8, 1);
 
     @Test
     public void testValueOfStringV4() {
