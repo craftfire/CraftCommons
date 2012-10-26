@@ -19,7 +19,12 @@
  */
 package com.craftfire.commons.managers;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import com.craftfire.commons.CraftCommons;
@@ -234,7 +239,7 @@ public class YamlManager {
                                 temp += ":" + split[i];
                             }
                         }
-                        int index = temp.lastIndexOf("#");
+                        int index = temp.lastIndexOf('#');
                         if (index != -1 && Character.isWhitespace(temp.charAt(index - 1))) {
                             temp = temp.substring(0, index - 1);
                         }
