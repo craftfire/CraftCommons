@@ -27,7 +27,7 @@ public class VersionRange {
     private Version min, max;
 
     /**
-     * Creates a version range with given minimal version and maximal version in string format, with default separator (<code>.</code>).
+     * Creates a version range with given minimal version and maximal version in string format, with default separator (<code>.</code>) and radix (<code>10</code>).
      * 
      * @param minVersion  the minimal version of the range
      * @param maxVersion  the maximal version of the range
@@ -39,7 +39,7 @@ public class VersionRange {
     }
     
     /**
-     * Creates a version range with given minimal version and maximal version in string format, with the given <code>separator</code>
+     * Creates a version range with given minimal version and maximal version in string format, with the given <code>separator</code> and default radix (<code>10</code>).
      * 
      * @param minVersion  the minimal version of the range
      * @param maxVersion  the maximal version of the range
@@ -51,6 +51,21 @@ public class VersionRange {
         this.max = new Version(maxVersion, separator);
     }
     
+    /**
+     * Creates a version range with given minimal version and maximal version in string format, with the given {@link separator} and {@link radix}.
+     * 
+     * @param minVersion  the minimal version of the range
+     * @param maxVersion  the maximal version of the range
+     * @param separator   the separator to use
+     * @param radix       the radix to use
+     * 
+     * @see               Version#Version(String, String, int)
+     */
+    public VersionRange(String minVersion, String maxVersion, String separator, int radix) {
+        this.min = new Version(minVersion, separator, radix);
+        this.max = new Version(maxVersion, separator, radix);
+    }
+
     /**
      * Creates a version range with given minimal version and maximal version.
      * 

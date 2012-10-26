@@ -19,7 +19,16 @@
  */
 package com.craftfire.commons.ip;
 
+/**
+ * An interface that represents an IP range.
+ */
 public interface IPRange {
+    /**
+     * Checks if given IP is in this range.
+     * 
+     * @param address  the IP address to check
+     * @return         true if in range, false if not
+     */
     boolean isInRange(IPAddress address);
 
 }

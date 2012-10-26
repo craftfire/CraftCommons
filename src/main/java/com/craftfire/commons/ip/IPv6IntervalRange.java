@@ -22,28 +22,55 @@ package com.craftfire.commons.ip;
 import com.craftfire.commons.classes.Version;
 import com.craftfire.commons.classes.VersionRange;
 
+/**
+ * An IPRange implementation for IPv6 intervals.
+ */
 public class IPv6IntervalRange implements IPRange {
     private final IPv6Address min, max;
 
+    /**
+     * Creates an IPv6IntervalRange object with given minimum and maximum address.
+     * 
+     * @param min  the minimum address
+     * @param max  the maximum address
+     */
     public IPv6IntervalRange(IPv6Address min, IPv6Address max) {
         this.min = min;
         this.max = max;
     }
 
+    /**
+     * Returns the minimum address of the interval.
+     * 
+     * @return the minimum address
+     */
     public IPv6Address getMin() {
         return this.min;
     }
 
+    /**
+     * Returns the minimum address of the interval.
+     * 
+     * @return the minimum address
+     */
     public IPv6Address getMax() {
         return this.max;
     }
 
+    /**
+     * Returns true, if the given IP address is an IPv4 address and is between min and max (including).
+     */
     @Override
     public boolean isInRange(IPAddress address) {
-        // TODO: Check if address is IPv6 and decide what to do if it's not.
-        return new VersionRange(getMin().toString(), getMax().toString(), ":").inVersionRange(new Version(address.toIPv6().toString(), ":"));
+        if (!address.isIPv6()) {
+            return false;
+        }
+        return new VersionRange(getMin().toString(), getMax().toString(), ":", 16).inVersionRange(new Version(address.toIPv6().toString(), ":", 16));
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "[" + getMin() + " - " + getMax() + "]";
