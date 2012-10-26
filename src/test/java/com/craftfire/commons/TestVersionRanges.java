@@ -56,7 +56,7 @@ public class TestVersionRanges {
 
     @Test
     public void test5() {
-        assertTrue(versionRange.inVersionRange(new Version("1.3")));
+        assertTrue(new Version("1.3").inVersionRange(versionRange));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class TestVersionRanges {
         }
         long end = System.nanoTime();
         double delta = (end - start) / 100.0;
-        System.out.print("Checking took " + delta + "ns (" + (delta / 1000000) + "ms)");
+        System.out.println("Checking took " + delta + "ns (" + (delta / 1000000) + "ms)");
     }
 
     @Test
@@ -121,5 +121,13 @@ public class TestVersionRanges {
         map.put(v1, "alice");
         map.put(v3, "bob");
         assertEquals("alice", map.get(v2));
+    }
+
+    @Test
+    public void testGetters() {
+        System.out.println(versionRange.toString());
+        VersionRange newRange = new VersionRange(versionRange.getMin().getString("'"), versionRange.getMax().getString("'"), "'");
+        assertTrue(newRange.getMin().equals(versionRange.getMin()));
+        assertTrue(versionRange.getMax().equals(newRange.getMax()));
     }
 }
