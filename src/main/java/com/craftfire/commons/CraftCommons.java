@@ -115,6 +115,7 @@ public final class CraftCommons {
      * @param input The string to parse/check.
      * @return true, if the input is an integer.
      */
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -130,6 +131,7 @@ public final class CraftCommons {
      * @param input The string to parse/check.
      * @return true, if the input is a Long object.
      */
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isLong(String input) {
         try {
             Long.parseLong(input);
@@ -164,6 +166,7 @@ public final class CraftCommons {
         }
     }
 
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static int getResponseCode(URL url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -177,6 +180,7 @@ public final class CraftCommons {
         }
     }
 
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isURLOnline(URL url) {
         return getResponseCode(url) == 200;
     }
@@ -356,12 +360,14 @@ public final class CraftCommons {
         return hex.toString();
     }
 
+    @Deprecated
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
                                     String newusername, String newuserid, String extrausername, String lastvalue) {
         return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
                                extrausername, lastvalue);
     }
 
+    @Deprecated
     public static String forumCacheValue(String cache, String value) {
         return util.forumCacheValue(cache, value);
     }
