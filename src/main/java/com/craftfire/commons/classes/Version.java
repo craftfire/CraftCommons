@@ -96,7 +96,7 @@ public class Version {
      * @return  an array representation of the version
      */
     public String[] getArray() {
-        return this.version.split(Pattern.quote(this.separator));
+        return this.version.split(Pattern.quote(getSeparator()));
     }
 
     /**
@@ -166,7 +166,7 @@ public class Version {
             return true;
         }
         if (obj instanceof Version) {
-            return ((Version) obj).getString(this.separator).equalsIgnoreCase(this.version);
+            return ((Version) obj).getString(getSeparator()).equalsIgnoreCase(this.version);
         }
         return false;
     }
