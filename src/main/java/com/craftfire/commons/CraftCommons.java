@@ -226,7 +226,7 @@ public final class CraftCommons {
         try {
             String string = (String) object;
             MessageDigest md = null;
-            String salt2use = salt;
+            String newSalt = salt;
             if (encryption.equals(Encryption.MD5)) {
                 md = MessageDigest.getInstance("MD5");
             } else if (encryption.equals(Encryption.SHA1)) {
@@ -253,22 +253,23 @@ public final class CraftCommons {
                 } else {
                     phpass = new PHPass(iterationCount);
                 }
-                if (salt2use == null || salt2use.isEmpty()) {
-                    salt2use = phpass.gensalt();
+                if (newSalt == null || newSalt.isEmpty()) {
+                    newSalt = phpass.gensalt();
                 }
-                String hash = phpass.crypt(string, salt2use);
+                String hash = phpass.crypt(string, newSalt);
                 if (hash.length() == 34) {
                     return hash;
                 }
                 return "*";
             } else if (encryption.equals(Encryption.BLOWFISH)) {
-                if (iterationCount == 0) {
-                    iterationCount = 8;
+                if (newSalt == null || newSalt.isEmpty()) {
+                    if (iterationCount == 0) {
+                        newSalt = BCrypt.gensalt(8);
+                    } else {
+                        newSalt = BCrypt.gensalt(iterationCount);
+                    }
                 }
-                if (salt2use == null || salt2use.isEmpty()) {
-                    salt2use = BCrypt.gensalt(iterationCount);
-                }
-                return BCrypt.hashpw(string, salt2use);
+                return BCrypt.hashpw(string, newSalt);
             }
             if (md != null) {
                 md.update(string.getBytes("ISO-8859-1"), 0, string.length());

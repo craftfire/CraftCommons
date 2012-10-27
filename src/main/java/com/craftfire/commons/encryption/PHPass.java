@@ -101,7 +101,7 @@ public class PHPass {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            // AVOID: e.printStackTrace();
             return output;
         }
 
