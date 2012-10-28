@@ -26,7 +26,7 @@ public class TimeUtil {
     private final TimeUnit unit;
     private final int amount;
 
-    enum TimeUnit {
+    public enum TimeUnit {
         SECOND(new String[]{"seconds", "sec", "secs", "s"}, 1, 20),
         MINUTE(new String[]{"minutes", "min", "mins", "m"}, 60, 1200),
         HOUR(new String[]{"hours", "hr", "hrs", "h"}, 3600, 72000),
@@ -63,7 +63,7 @@ public class TimeUtil {
 
         public static TimeUnit getUnit(String name) {
             for (TimeUnit unit : TimeUnit.values()) {
-                if (unit.getAliases().contains(name.toLowerCase())) {
+                if (unit.getName().equalsIgnoreCase(name) || unit.getAliases().contains(name.toLowerCase())) {
                     return unit;
                 }
             }

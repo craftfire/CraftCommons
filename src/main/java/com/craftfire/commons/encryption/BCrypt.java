@@ -443,10 +443,10 @@ public class BCrypt {
      * @return    the decoded value of x
      */
     private static byte char64(char x) {
-        if ((int)x < 0 || (int)x > index_64.length) {
+        if (x < 0 || x > index_64.length) {
             return -1;
         }
-        return index_64[(int)x];
+        return index_64[x];
     }
 
     /**
@@ -514,23 +514,23 @@ public class BCrypt {
     private final void encipher(int lr[], int off) {
         int i, n, l = lr[off], r = lr[off + 1];
 
-        l ^= P[0];
+        l ^= this.P[0];
         for (i = 0; i <= BLOWFISH_NUM_ROUNDS - 2;) {
             // Feistel substitution on left word
-            n = S[(l >> 24) & 0xff];
-            n += S[0x100 | ((l >> 16) & 0xff)];
-            n ^= S[0x200 | ((l >> 8) & 0xff)];
-            n += S[0x300 | (l & 0xff)];
-            r ^= n ^ P[++i];
+            n = this.S[(l >> 24) & 0xff];
+            n += this.S[0x100 | ((l >> 16) & 0xff)];
+            n ^= this.S[0x200 | ((l >> 8) & 0xff)];
+            n += this.S[0x300 | (l & 0xff)];
+            r ^= n ^ this.P[++i];
 
             // Feistel substitution on right word
-            n = S[(r >> 24) & 0xff];
-            n += S[0x100 | ((r >> 16) & 0xff)];
-            n ^= S[0x200 | ((r >> 8) & 0xff)];
-            n += S[0x300 | (r & 0xff)];
-            l ^= n ^ P[++i];
+            n = this.S[(r >> 24) & 0xff];
+            n += this.S[0x100 | ((r >> 16) & 0xff)];
+            n ^= this.S[0x200 | ((r >> 8) & 0xff)];
+            n += this.S[0x300 | (r & 0xff)];
+            l ^= n ^ this.P[++i];
         }
-        lr[off] = r ^ P[BLOWFISH_NUM_ROUNDS + 1];
+        lr[off] = r ^ this.P[BLOWFISH_NUM_ROUNDS + 1];
         lr[off + 1] = l;
     }
 
@@ -555,12 +555,15 @@ public class BCrypt {
         return word;
     }
 
+    private BCrypt() {
+    }
+
     /**
      * Initialise the Blowfish key schedule
      */
     private void init_key() {
-        P = (int[])P_orig.clone();
-        S = (int[])S_orig.clone();
+        this.P = P_orig.clone();
+        this.S = S_orig.clone();
     }
 
     /**
@@ -571,22 +574,22 @@ public class BCrypt {
         int i;
         int koffp[] = { 0 };
         int lr[] = { 0, 0 };
-        int plen = P.length, slen = S.length;
+        int plen = this.P.length, slen = this.S.length;
 
         for (i = 0; i < plen; i++) {
-            P[i] = P[i] ^ streamtoword(key, koffp);
+            this.P[i] = this.P[i] ^ streamtoword(key, koffp);
         }
 
         for (i = 0; i < plen; i += 2) {
             encipher(lr, 0);
-            P[i] = lr[0];
-            P[i + 1] = lr[1];
+            this.P[i] = lr[0];
+            this.P[i + 1] = lr[1];
         }
 
         for (i = 0; i < slen; i += 2) {
             encipher(lr, 0);
-            S[i] = lr[0];
-            S[i + 1] = lr[1];
+            this.S[i] = lr[0];
+            this.S[i + 1] = lr[1];
         }
     }
 
@@ -601,26 +604,26 @@ public class BCrypt {
         int i;
         int koffp[] = { 0 }, doffp[] = { 0 };
         int lr[] = { 0, 0 };
-        int plen = P.length, slen = S.length;
+        int plen = this.P.length, slen = this.S.length;
 
         for (i = 0; i < plen; i++) {
-            P[i] = P[i] ^ streamtoword(key, koffp);
+            this.P[i] = this.P[i] ^ streamtoword(key, koffp);
         }
 
         for (i = 0; i < plen; i += 2) {
             lr[0] ^= streamtoword(data, doffp);
             lr[1] ^= streamtoword(data, doffp);
             encipher(lr, 0);
-            P[i] = lr[0];
-            P[i + 1] = lr[1];
+            this.P[i] = lr[0];
+            this.P[i + 1] = lr[1];
         }
 
         for (i = 0; i < slen; i += 2) {
             lr[0] ^= streamtoword(data, doffp);
             lr[1] ^= streamtoword(data, doffp);
             encipher(lr, 0);
-            S[i] = lr[0];
-            S[i + 1] = lr[1];
+            this.S[i] = lr[0];
+            this.S[i + 1] = lr[1];
         }
     }
 
@@ -635,7 +638,7 @@ public class BCrypt {
      */
     private byte[] crypt_raw(byte password[], byte salt[], int log_rounds) {
         int rounds, i, j;
-        int cdata[] = (int[])bf_crypt_ciphertext.clone();
+        int cdata[] = bf_crypt_ciphertext.clone();
         int clen = cdata.length;
         byte ret[];
 
@@ -709,7 +712,7 @@ public class BCrypt {
             passwordb = (password + (minor >= 'a' ? "\000" : ""))
                     .getBytes("UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            throw new AssertionError("UTF-8 is not supported");
+            throw new UnsupportedOperationException("UTF-8 is not supported", uee);
         }
 
         saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);

@@ -45,7 +45,7 @@ public class AnalyticsManager {
 
     public void submit() throws AnalyticsException, IOException {
         if (CraftCommons.isURLOnline(getURL())) {
-            String data = getParameters();
+            String dataString = getParameters();
             HttpURLConnection connection = (HttpURLConnection) getURL().openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -53,10 +53,10 @@ public class AnalyticsManager {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             connection.setRequestProperty("charset", "utf-8");
-            connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
+            connection.setRequestProperty("Content-Length", "" + Integer.toString(dataString.getBytes().length));
             connection.setUseCaches(false);
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream ());
-            wr.writeBytes(data);
+            wr.writeBytes(dataString);
             wr.flush();
             wr.close();
             connection.disconnect();
@@ -68,7 +68,7 @@ public class AnalyticsManager {
     }
 
     public String getParameters() {
-        String data = getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
+        String dataString = getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
                     + getData().getVersion().getKeyUTF8() + "=" + getData().getVersion().getValueUTF8() + "&"
                     + getData().getOSName().getKeyUTF8() + "=" + getData().getOSName().getValueUTF8() + "&"
                     + getData().getOSVersion().getKeyUTF8() + "=" + getData().getOSVersion().getValueUTF8() + "&"
@@ -77,9 +77,9 @@ public class AnalyticsManager {
                     + getData().getTotalMemory().getKeyUTF8() + "=" + getData().getTotalMemory().getValueUTF8() + "&"
                     + getData().getJavaVersion().getKeyUTF8() + "=" + getData().getJavaVersion().getValueUTF8() + "&";
         for (AnalyticsItem item : getData().getCustomData().values()) {
-            data += item.getKeyUTF8() + "=" + item.getValueUTF8() + "&";
+            dataString += item.getKeyUTF8() + "=" + item.getValueUTF8() + "&";
         }
-        return data.substring(0, data.length() - 1);
+        return dataString.substring(0, dataString.length() - 1);
     }
 
     public LoggingManager getLogging() {

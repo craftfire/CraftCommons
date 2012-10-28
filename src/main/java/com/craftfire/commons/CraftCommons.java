@@ -115,6 +115,7 @@ public final class CraftCommons {
      * @param input The string to parse/check.
      * @return true, if the input is an integer.
      */
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -130,6 +131,7 @@ public final class CraftCommons {
      * @param input The string to parse/check.
      * @return true, if the input is a Long object.
      */
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isLong(String input) {
         try {
             Long.parseLong(input);
@@ -164,6 +166,7 @@ public final class CraftCommons {
         }
     }
 
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static int getResponseCode(URL url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -177,6 +180,7 @@ public final class CraftCommons {
         }
     }
 
+    // TODO: Move it elsewhere - used in CraftCommons aswell.
     public static boolean isURLOnline(URL url) {
         return getResponseCode(url) == 200;
     }
@@ -226,7 +230,7 @@ public final class CraftCommons {
         try {
             String string = (String) object;
             MessageDigest md = null;
-            String salt2use = salt;
+            String newSalt = salt;
             if (encryption.equals(Encryption.MD5)) {
                 md = MessageDigest.getInstance("MD5");
             } else if (encryption.equals(Encryption.SHA1)) {
@@ -253,22 +257,23 @@ public final class CraftCommons {
                 } else {
                     phpass = new PHPass(iterationCount);
                 }
-                if (salt2use == null || salt2use.isEmpty()) {
-                    salt2use = phpass.gensalt();
+                if (newSalt == null || newSalt.isEmpty()) {
+                    newSalt = phpass.gensalt();
                 }
-                String hash = phpass.crypt(string, salt2use);
+                String hash = phpass.crypt(string, newSalt);
                 if (hash.length() == 34) {
                     return hash;
                 }
                 return "*";
             } else if (encryption.equals(Encryption.BLOWFISH)) {
-                if (iterationCount == 0) {
-                    iterationCount = 8;
+                if (newSalt == null || newSalt.isEmpty()) {
+                    if (iterationCount == 0) {
+                        newSalt = BCrypt.gensalt(8);
+                    } else {
+                        newSalt = BCrypt.gensalt(iterationCount);
+                    }
                 }
-                if (salt2use == null || salt2use.isEmpty()) {
-                    salt2use = BCrypt.gensalt(iterationCount);
-                }
-                return BCrypt.hashpw(string, salt2use);
+                return BCrypt.hashpw(string, newSalt);
             }
             if (md != null) {
                 md.update(string.getBytes("ISO-8859-1"), 0, string.length());
@@ -355,12 +360,14 @@ public final class CraftCommons {
         return hex.toString();
     }
 
+    @Deprecated
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
                                     String newusername, String newuserid, String extrausername, String lastvalue) {
         return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
                                extrausername, lastvalue);
     }
 
+    @Deprecated
     public static String forumCacheValue(String cache, String value) {
         return util.forumCacheValue(cache, value);
     }

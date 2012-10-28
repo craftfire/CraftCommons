@@ -147,7 +147,7 @@ public class TestIPAddress {
         } catch (IllegalArgumentException e) {
         }
         try {
-            IPAddress addr = new IPv4Address(192, 168, 1, 255, 8, 1200, 91, 88, 1228);
+            IPAddress addr = new IPv6Address(192, 168, 1, 255, 8, 1200, 91, 88, 1228);
             fail("Shoudl be not able to create: " + addr);
         } catch (IllegalArgumentException e) {
         }
