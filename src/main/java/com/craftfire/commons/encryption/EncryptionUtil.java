@@ -58,9 +58,9 @@ public final class EncryptionUtil {
         if (ch >= '0' && ch <= '9') {
             return ch - '0';
         }
-        ch = Character.toUpperCase(ch);
-        if (ch >= 'A' && ch <= 'F') {
-            return ch - 'A' + 0xA;
+        char nch = Character.toUpperCase(ch);
+        if (nch >= 'A' && nch <= 'F') {
+            return nch - 'A' + 0xA;
         }
         throw new IllegalArgumentException("Not a hex character: " + ch);
     }

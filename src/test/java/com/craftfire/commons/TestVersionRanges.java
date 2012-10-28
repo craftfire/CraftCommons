@@ -117,6 +117,7 @@ public class TestVersionRanges {
         assertFalse(v2.equals(v3));
         assertFalse(v3.equals(v1));
         assertFalse(v3.equals(v2));
+        assertFalse(v1.equals("1.3.11.2"));
         Map<Version, String> map = new HashMap<Version, String>();
         map.put(v1, "alice");
         map.put(v3, "bob");
@@ -129,5 +130,11 @@ public class TestVersionRanges {
         VersionRange newRange = new VersionRange(versionRange.getMin().getString("'"), versionRange.getMax().getString("'"), "'");
         assertTrue(newRange.getMin().equals(versionRange.getMin()));
         assertTrue(versionRange.getMax().equals(newRange.getMax()));
+    }
+
+    @Test
+    public void testYetAnotherConstructor() {
+        VersionRange newRange = new VersionRange(versionRange.getMin(), versionRange.getMax());
+        assertTrue(newRange.toString().equals(versionRange.toString()));
     }
 }

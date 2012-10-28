@@ -31,6 +31,7 @@ public class Util {
     }
 
     //TODO: Rewrite this function. (PHP deserialize)
+    @Deprecated
     public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
         StringTokenizer st = new StringTokenizer(cache, ":");
         int i = 0;
@@ -97,6 +98,7 @@ public class Util {
         return newcache.toString();
     }
 
+    @Deprecated
     public String forumCacheValue(String cache, String value) {
         StringTokenizer st = new StringTokenizer(cache, ":");
         int i = 0;
@@ -137,6 +139,7 @@ public class Util {
      * @return             unserialized data - Integer, Double, String,
      *                     Boolean, Map<Object,Object> or PhpObject
      */
+    // TODO: Move this method to CraftCommons - it's used only from outside
     public Object phpUnserialize(String serialized) {
         SerializedPhpParser parser = new SerializedPhpParser(serialized);
         return parser.parse();
@@ -148,6 +151,7 @@ public class Util {
      * @param  value  object to serialize
      * @return        object serialized to String.
      */
+    // TODO: Move this method to CraftCommons - it's used only from outside
     public String phpSerialize(Object value) {
         return this.serializer.serialize(value);
     }
@@ -157,6 +161,7 @@ public class Util {
      *
      * @return default php serializer.
      */
+    // TODO: Move this method to CraftCommons - it's used only from outside
     public PhpSerializer getPhpSerializer() {
         return this.serializer;
     }

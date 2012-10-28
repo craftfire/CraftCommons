@@ -26,7 +26,7 @@ import com.craftfire.commons.classes.CacheItem;
 import com.craftfire.commons.classes.MetadatableCacheItem;
 
 public class CacheManager {
-    protected final String defaultGroup = "default";
+    protected static final String defaultGroup = "default";
     private HashMap<String, HashMap<Object, CacheItem>> items = new HashMap<String, HashMap<Object, CacheItem>>();
     private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
@@ -64,11 +64,11 @@ public class CacheManager {
     }
 
     public int getLastID(String group) {
-        group = group.toLowerCase();
-        if (this.lastID.containsKey(group)) {
-            return this.lastID.get(group);
+        String newGroup = group.toLowerCase();
+        if (this.lastID.containsKey(newGroup)) {
+            return this.lastID.get(newGroup);
         }
-        this.lastID.put(group, 0);
+        this.lastID.put(newGroup, 0);
         return 0;
     }
 
@@ -81,12 +81,12 @@ public class CacheManager {
     }
 
     public boolean contains(String group, Object id) {
-        group = group.toLowerCase();
-        if (this.enabled && containsGroup(group) && this.items.get(group).containsKey(id)) {
-            if (this.items.get(group).get(id).getSecondsLeft() >= 1) {
+        String newGroup = group.toLowerCase();
+        if (this.enabled && containsGroup(newGroup) && this.items.get(newGroup).containsKey(id)) {
+            if (this.items.get(newGroup).get(id).getSecondsLeft() >= 1) {
                 return true;
             } else {
-                this.items.get(group).remove(id);
+                this.items.get(newGroup).remove(id);
             }
         }
         return false;
@@ -108,15 +108,15 @@ public class CacheManager {
 
     public void put(String group, Object id, Object object) {
         if (this.enabled) {
-            group = group.toLowerCase();
-            if (!containsGroup(group)) {
-                this.items.put(group, new HashMap<Object, CacheItem>());
+            String newGroup = group.toLowerCase();
+            if (!containsGroup(newGroup)) {
+                this.items.put(newGroup, new HashMap<Object, CacheItem>());
             }
-            HashMap<Object, CacheItem> temp = this.items.get(group);
+            HashMap<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new CacheItem(id, this.seconds, object));
-            this.items.put(group, temp);
+            this.items.put(newGroup, temp);
             if (id instanceof String && CraftCommons.isInteger((String) id)) {
-                this.lastID.put(group, Integer.parseInt((String) id));
+                this.lastID.put(newGroup, Integer.parseInt((String) id));
             }
         }
     }
@@ -137,15 +137,15 @@ public class CacheManager {
 
     public void putMetadatable(String group, Object id, Object object) {
         if (this.enabled) {
-            group = group.toLowerCase();
-            if (!containsGroup(group)) {
-                this.items.put(group, new HashMap<Object, CacheItem>());
+            String newGroup = group.toLowerCase();
+            if (!containsGroup(newGroup)) {
+                this.items.put(newGroup, new HashMap<Object, CacheItem>());
             }
-            HashMap<Object, CacheItem> temp = this.items.get(group);
+            HashMap<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new MetadatableCacheItem(id, this.seconds, object));
-            this.items.put(group, temp);
+            this.items.put(newGroup, temp);
             if (id instanceof String && CraftCommons.isInteger((String) id)) {
-                this.lastID.put(group, Integer.parseInt((String) id));
+                this.lastID.put(newGroup, Integer.parseInt((String) id));
             }
         }
 
@@ -156,9 +156,9 @@ public class CacheManager {
     }
 
     public CacheItem getItem(String group, Object id) {
-        group = group.toLowerCase();
-        if (contains(group, id)) {
-            return this.items.get(group).get(id);
+        String newGroup = group.toLowerCase();
+        if (contains(newGroup, id)) {
+            return this.items.get(newGroup).get(id);
         }
         return null;
     }
@@ -168,9 +168,9 @@ public class CacheManager {
     }
 
     public MetadatableCacheItem getMetadatableItem(String group, Object id) {
-        group = group.toLowerCase();
-        if (contains(group, id)) {
-            CacheItem item = this.items.get(group).get(id);
+        String newGroup = group.toLowerCase();
+        if (contains(newGroup, id)) {
+            CacheItem item = this.items.get(newGroup).get(id);
             if (item instanceof MetadatableCacheItem) {
                 return (MetadatableCacheItem) item;
             }
@@ -191,9 +191,9 @@ public class CacheManager {
     }
 
     public Object get(String group, Object id) {
-        group = group.toLowerCase();
-        if (contains(group, id)) {
-            return this.items.get(group).get(id).getObject();
+        String newGroup = group.toLowerCase();
+        if (contains(newGroup, id)) {
+            return this.items.get(newGroup).get(id).getObject();
         }
         return null;
     }
@@ -217,12 +217,12 @@ public class CacheManager {
     }
 
     public void clear(String group) {
-        group = group.toLowerCase();
-        if (containsGroup(group)) {
-            this.items.get(group).clear();
+        String newGroup = group.toLowerCase();
+        if (containsGroup(newGroup)) {
+            this.items.get(newGroup).clear();
         }
-        if (this.lastID.containsKey(group)) {
-            this.items.remove(group);
+        if (this.lastID.containsKey(newGroup)) {
+            this.items.remove(newGroup);
         }
     }
 

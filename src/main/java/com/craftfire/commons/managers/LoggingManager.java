@@ -34,7 +34,7 @@ public class LoggingManager {
     private final Logger logger;
     private String prefix, directory, format = "HH:mm:ss";
     private boolean debug = false, logging = false;
-    Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};
+    protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};
 
     public LoggingManager(String logger, String prefix) {
         this.logger = Logger.getLogger(logger);

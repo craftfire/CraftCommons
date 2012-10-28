@@ -114,9 +114,9 @@ public class FileDownloader {
 
     private void setURL() {
         URL chosen = null;
-        for (String url : this.urls) {
+        for (String urlString : this.urls) {
             try {
-                chosen = new URL(url);
+                chosen = new URL(urlString);
                 HttpURLConnection connection = (HttpURLConnection) chosen.openConnection();
                 connection.setConnectTimeout(3000);
                 connection.setRequestMethod("GET");
