@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import com.craftfire.commons.CraftCommons;
+import com.craftfire.commons.Util;
 
 public class YamlManager {
     //TODO: Make it possible to save to a file
@@ -264,11 +264,11 @@ public class YamlManager {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Boolean value 'false'.");
                             this.yaml.put(node + finalNode, false);
-                        } else if (CraftCommons.isInteger(value)) {
+                        } else if (Util.isInteger(value)) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Integer value '" + value + "'.");
                             this.yaml.put(node + finalNode, Integer.parseInt(value));
-                        } else if (CraftCommons.isLong(value)) {
+                        } else if (Util.isLong(value)) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Long value '" + value + "'.");
                             this.yaml.put(node + finalNode, Long.parseLong(value));

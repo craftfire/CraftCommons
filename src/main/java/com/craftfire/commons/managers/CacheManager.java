@@ -21,7 +21,7 @@ package com.craftfire.commons.managers;
 
 import java.util.HashMap;
 
-import com.craftfire.commons.CraftCommons;
+import com.craftfire.commons.Util;
 import com.craftfire.commons.classes.CacheItem;
 import com.craftfire.commons.classes.MetadatableCacheItem;
 
@@ -115,7 +115,7 @@ public class CacheManager {
             HashMap<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new CacheItem(id, this.seconds, object));
             this.items.put(newGroup, temp);
-            if (id instanceof String && CraftCommons.isInteger((String) id)) {
+            if (id instanceof String && Util.isInteger((String) id)) {
                 this.lastID.put(newGroup, Integer.parseInt((String) id));
             }
         }
@@ -144,7 +144,7 @@ public class CacheManager {
             HashMap<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new MetadatableCacheItem(id, this.seconds, object));
             this.items.put(newGroup, temp);
-            if (id instanceof String && CraftCommons.isInteger((String) id)) {
+            if (id instanceof String && Util.isInteger((String) id)) {
                 this.lastID.put(newGroup, Integer.parseInt((String) id));
             }
         }

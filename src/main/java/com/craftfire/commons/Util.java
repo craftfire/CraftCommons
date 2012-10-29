@@ -19,135 +19,126 @@
  */
 package com.craftfire.commons;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class Util {
 
-    //TODO: Rewrite this function. (PHP deserialize)
-    @Deprecated
-    public static String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
-        StringTokenizer st = new StringTokenizer(cache, ":");
-        int i = 0;
-        List<String> array = new ArrayList<String>();
-        while (st.hasMoreTokens()) { array.add(st.nextToken() + ":"); }
-        StringBuffer newcache = new StringBuffer();
-        while (array.size() > i) {
-            if (array.get(i).equals("\"" + nummember + "\";i:") && nummember != null) {
-                String temp = array.get(i + 1);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
-                temp = temp.trim();
-                int tempnum = Integer.parseInt(temp) + 1;
-                if (lastvalue.equalsIgnoreCase(nummember)) {
-                    temp = tempnum + ";}";
-                } else {
-                    temp = tempnum + ";s:";
-                }
-                array.set(i + 1, temp);
-            } else if (array.get(i).equals("\"" + newusername + "\";s:") && newusername != null) {
-                array.set(i + 1, player.length() + ":");
-                if (lastvalue.equalsIgnoreCase(newusername)) {
-                    array.set(i + 2, "\"" + player + "\"" + ";}");
-                } else {
-                    array.set(i + 2, "\"" + player + "\"" + ";s" + ":");
-                }
-            } else if (array.get(i).equals("\"" + extrausername + "\";s:") && extrausername != null) {
-                array.set(i + 1, player.length() + ":");
-                if (lastvalue.equalsIgnoreCase(extrausername)) {
-                    array.set(i + 2, "\"" + player + "\"" + ";}");
-                } else {
-                    array.set(i + 2, "\"" + player + "\"" + ";s" + ":");
-                }
-            } else if (array.get(i).equals("\"" + activemembers + "\";s:") && activemembers != null) {
-                String temp = array.get(i + 2);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
-                temp = temp.trim();
-                int tempnum = Integer.parseInt(temp) + 1;
-                String templength = "" + tempnum;
-                if (lastvalue.equalsIgnoreCase(activemembers)) {
-                    temp = "\"" + tempnum + "\"" + ";}";
-                } else {
-                    temp = "\"" + tempnum + "\"" + ";s:";
-                }
-                array.set(i + 1, templength.length() + ":");
-                array.set(i + 2, temp);
-            } else if (array.get(i).equals("\"" + newuserid + "\";s:") && newuserid != null) {
-                String dupe = "" + userid;
-                array.set(i + 1, dupe.length() + ":");
-                if (lastvalue.equalsIgnoreCase(newuserid)) {
-                    array.set(i + 2, "\"" + userid + "\"" + ";}");
-                } else {
-                    array.set(i + 2, "\"" + userid + "\"" + ";s:");
-                }
-            }
-            newcache.append(array.get(i));
-            i++;
-        }
-        return newcache.toString();
-    }
-
-    @Deprecated
-    public static String forumCacheValue(String cache, String value) {
-        StringTokenizer st = new StringTokenizer(cache, ":");
-        int i = 0;
-        List<String> array = new ArrayList<String>();
-        while (st.hasMoreTokens()) { array.add(st.nextToken() + ":"); }
-        while (array.size() > i) {
-            if (array.get(i).equals("\"" + value + "\";s:") && value != null) {
-                String temp = array.get(i + 2);
-                temp = removeChar(temp, '"');
-                temp = removeChar(temp, ':');
-                temp = removeChar(temp, 's');
-                temp = removeChar(temp, ';');
-                temp = temp.trim();
-                return temp;
-            }
-            i++;
-        }
-        return null;
-    }
-
-    public static String removeChar(String s, char c) {
-        StringBuilder r = new StringBuilder(s.length());
-        r.setLength(s.length());
-        int current = 0;
-        for (int i = 0; i < s.length(); i++) {
-            char cur = s.charAt(i);
-            if (cur != c) {
-                r.setCharAt(current++, cur);
+    /**
+     * Checks if the string is an email.
+     *
+     * @param string The email.
+     * @return true, if the string is an email.
+     */
+    public static boolean isEmail(String string) {
+        if (string != null && ! string.isEmpty()) {
+            Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+            Matcher m = p.matcher(string);
+            if (m.matches()) {
+                return true;
             }
         }
-        return r.toString();
+        return false;
     }
 
     /**
-     * Unserialize object serialized with php serialization.
+     * Checks if string is a valid IP. Wildcards (*) are allowed.
      *
-     * @param  serialized  string to unserialize
-     * @return             unserialized data - Integer, Double, String,
-     *                     Boolean, Map<Object,Object> or PhpObject
+     * @param string The IP as a string.
+     * @return true, if string is an IP.
      */
-    // TODO: Move this method to CraftCommons - it's used only from outside
-    public static Object phpUnserialize(String serialized) {
-        SerializedPhpParser parser = new SerializedPhpParser(serialized);
-        return parser.parse();
+    public static boolean isIP(String string) {
+        if (string != null && ! string.isEmpty()) {
+            String[] parts = string.split("\\.");
+            if (parts.length == 4) {
+                for (String s : parts) {
+                    if (s.equals("*")) {
+                        continue;
+                    }
+                    if (! isInteger(s)) {
+                        return false;
+                    }
+                    int i = Integer.parseInt(s);
+                    if (i < 0 || i > 255) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Serialize object with php serialization.
+     * Checks if input is an integer.
      *
-     * @param  value  object to serialize
-     * @return        object serialized to String.
+     * @param input The string to parse/check.
+     * @return true, if the input is an integer.
      */
-    // TODO: Move this method to CraftCommons - it's used only from outside
-    public static String phpSerialize(Object value) {
-        return PhpSerializer.serialize(value);
+    public static boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if input is a Long object.
+     *
+     * @param input The string to parse/check.
+     * @return true, if the input is a Long object.
+     */
+    public static boolean isLong(String input) {
+        try {
+            Long.parseLong(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isURLOnline(URL url) {
+        return Util.getResponseCode(url) == 200;
+    }
+
+    public static boolean isURLOnline(String urlString) {
+        URL url = isValidURL(urlString);
+        return url != null && isURLOnline(url);
+    }
+
+    public static URL isValidURL(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+
+    public static int getResponseCode(String urlString) {
+        try {
+            return getResponseCode(new URL(urlString));
+        } catch (MalformedURLException e) {
+            return 0;
+        }
+    }
+
+    public static int getResponseCode(URL url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
+            connection.connect();
+            return connection.getResponseCode();
+        } catch (IOException e) {
+            return 0;
+        }
     }
 }

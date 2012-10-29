@@ -19,51 +19,47 @@
  */
 package com.craftfire.commons;
 
-import com.craftfire.commons.SerializedPhpParser.PhpObject;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import com.craftfire.commons.SerializedPhpParser.PhpObject;
 
 public class TestPhpSerialization {
-    PhpSerializer serializer;
-
-    public TestPhpSerialization() {
-        this.serializer = new PhpSerializer();
-    }
 
     @Test
     public void testSerializeNull() {
-        String s = this.serializer.serialize((Object) null);
+        String s = PhpSerializer.serialize((Object) null);
         assertEquals("N;", s);
     }
 
     @Test
     public void testSerializeInt() {
-        String s = this.serializer.serialize(123);
+        String s = PhpSerializer.serialize(123);
         assertEquals("i:123;", s);
     }
 
     @Test
     public void testSerializeDouble() {
-        String s = this.serializer.serialize(123.123d);
+        String s = PhpSerializer.serialize(123.123d);
         assertEquals("d:123.123;", s);
     }
 
     @Test
     public void testSerializeBoolean() {
-        String s = this.serializer.serialize(true);
+        String s = PhpSerializer.serialize(true);
         assertEquals("b:1;", s);
     }
 
     @Test
     public void testSerializeString() {
-        String s = this.serializer.serialize("string");
+        String s = PhpSerializer.serialize("string");
         assertEquals("s:6:\"string\";", s);
     }
 
@@ -71,7 +67,7 @@ public class TestPhpSerialization {
     public void testSerializeArray() {
         List<Integer> list = new ArrayList<Integer>();
         list.add(2);
-        String s = this.serializer.serialize(list);
+        String s = PhpSerializer.serialize(list);
         assertEquals("a:1:{i:0;i:2;}", s);
     }
 
@@ -81,7 +77,7 @@ public class TestPhpSerialization {
         obj.name = "TypeName";
         obj.attributes = new HashMap<Object, Object>();
         obj.attributes.put("foo", "bar");
-        String s = this.serializer.serialize(obj);
+        String s = PhpSerializer.serialize(obj);
         assertEquals("O:8:\"TypeName\":1:{s:3:\"foo\";s:3:\"bar\";};", s);
     }
 
@@ -107,7 +103,7 @@ public class TestPhpSerialization {
         Map results = (Map) new SerializedPhpParser(input).parse();
         assertEquals(2,
                 ((Map) ((Map) results.get("ResultSet")).get("Result")).size());
-        String s = this.serializer.serialize(results);
+        String s = PhpSerializer.serialize(results);
         assertEquals(input, s);
     }
 
