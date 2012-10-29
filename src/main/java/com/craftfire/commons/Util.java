@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Util {
-    private static PhpSerializer serializer = new PhpSerializer();
 
     //TODO: Rewrite this function. (PHP deserialize)
     @Deprecated
@@ -149,16 +148,6 @@ public class Util {
      */
     // TODO: Move this method to CraftCommons - it's used only from outside
     public static String phpSerialize(Object value) {
-        return serializer.serialize(value);
-    }
-
-    /**
-     * Returns default php serializer.
-     *
-     * @return default php serializer.
-     */
-    // TODO: Move this method to CraftCommons - it's used only from outside
-    public static PhpSerializer getPhpSerializer() {
-        return serializer;
+        return PhpSerializer.serialize(value);
     }
 }
