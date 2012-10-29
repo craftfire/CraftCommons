@@ -35,13 +35,14 @@ import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import com.craftfire.commons.analytics.AnalyticsException;
+import com.craftfire.commons.analytics.AnalyticsManager;
 import com.craftfire.commons.encryption.BCrypt;
+import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.encryption.EncryptionUtil;
 import com.craftfire.commons.encryption.PHPass;
 import com.craftfire.commons.encryption.Whirlpool;
-import com.craftfire.commons.enums.Encryption;
-import com.craftfire.commons.exceptions.AnalyticsException;
-import com.craftfire.commons.managers.AnalyticsManager;
+import com.craftfire.commons.util.Util;
 
 public final class CraftCommons {
     private static Util util = new Util();

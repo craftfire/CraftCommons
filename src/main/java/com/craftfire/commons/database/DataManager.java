@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons.managers;
+package com.craftfire.commons.database;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,10 +44,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import com.craftfire.commons.database.DataField;
-import com.craftfire.commons.database.Results;
-import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.enums.FieldType;
+import com.craftfire.commons.util.LoggingManager;
 
 public class DataManager {
     private boolean keepAlive, reconnect;

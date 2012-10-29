@@ -17,13 +17,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons.managers;
+package com.craftfire.commons.cache;
 
 import java.util.HashMap;
 
-import com.craftfire.commons.Util;
-import com.craftfire.commons.classes.CacheItem;
-import com.craftfire.commons.classes.MetadatableCacheItem;
+import com.craftfire.commons.util.Util;
 
 public class CacheManager {
     protected static final String defaultGroup = "default";

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons.managers;
+package com.craftfire.commons;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import com.craftfire.commons.Util;
+import com.craftfire.commons.util.LoggingManager;
+import com.craftfire.commons.util.Util;
 
 public class YamlManager {
     //TODO: Make it possible to save to a file

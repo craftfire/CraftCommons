@@ -24,7 +24,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-import com.craftfire.commons.enums.Encryption;
+import com.craftfire.commons.encryption.Encryption;
 
 public class TestEncryption {
     @Test
