@@ -33,10 +33,10 @@ import java.util.Iterator;
 import org.junit.Test;
 
 import com.craftfire.commons.database.DataField;
+import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
-import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.enums.FieldType;
-import com.craftfire.commons.managers.DataManager;
+import com.craftfire.commons.database.DataType;
+import com.craftfire.commons.database.FieldType;
 
 public class DbTest_H2 {
     static DataManager datamanager;

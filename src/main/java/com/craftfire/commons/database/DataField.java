@@ -31,7 +31,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-import com.craftfire.commons.enums.FieldType;
 
 public class DataField {
     private final String name, table /* , type */;
