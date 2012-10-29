@@ -17,13 +17,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons.managers;
+package com.craftfire.commons.analytics;
 
-import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.Util;
-import com.craftfire.commons.classes.AnalyticsData;
-import com.craftfire.commons.classes.AnalyticsItem;
-import com.craftfire.commons.exceptions.AnalyticsException;
+import com.craftfire.commons.util.LoggingManager;
+import com.craftfire.commons.util.Util;
 
 import java.io.*;
 import java.net.*;
@@ -44,7 +41,7 @@ public class AnalyticsManager {
     }
 
     public void submit() throws AnalyticsException, IOException {
-        if (CraftCommons.isURLOnline(getURL())) {
+        if (Util.isURLOnline(getURL())) {
             String dataString = getParameters();
             HttpURLConnection connection = (HttpURLConnection) getURL().openConnection();
             connection.setDoOutput(true);
@@ -62,7 +59,7 @@ public class AnalyticsManager {
             connection.disconnect();
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
-                       CraftCommons.getResponseCode(getURL()) + ".";
+                       Util.getResponseCode(getURL()) + ".";
         getLogging().error(error);
         throw new AnalyticsException(this, error);
     }

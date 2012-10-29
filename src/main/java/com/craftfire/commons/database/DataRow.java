@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import com.craftfire.commons.enums.FieldType;
 
 public class DataRow extends ArrayList<DataField> {
     public DataField get(String fieldName) {

@@ -17,12 +17,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons.exceptions;
+package com.craftfire.commons.analytics;
 
-import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.Util;
-import com.craftfire.commons.classes.AnalyticsData;
-import com.craftfire.commons.managers.AnalyticsManager;
+import com.craftfire.commons.util.Util;
 
 public class AnalyticsException extends Exception {
     private AnalyticsManager manager;
@@ -41,6 +38,6 @@ public class AnalyticsException extends Exception {
     }
 
     public int getResponseCode() {
-        return CraftCommons.getResponseCode(getManager().getURL());
+        return Util.getResponseCode(getManager().getURL());
     }
 }

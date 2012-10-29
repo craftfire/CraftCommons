@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.craftfire.commons.util.Util;
+
 /**
  * PhpSerializer - util class to serialize java objects with php serialization
  *
@@ -30,13 +32,15 @@ import java.util.Map;
  * @see Util
  */
 public class PhpSerializer {
+    private PhpSerializer() {
+    }
     /**
      * Serialize integer.
      *
      * @param i     integer to serialize
      * @return      serialized i
      */
-    public String serialize(int i) {
+    public static String serialize(int i) {
         return "i:" + String.valueOf(i) + ";";
     }
 
@@ -46,7 +50,7 @@ public class PhpSerializer {
      * @param d     double to serialize
      * @return      serialized d
      */
-    public String serialize(double d) {
+    public static String serialize(double d) {
         return "d:" + String.valueOf(d) + ";";
     }
 
@@ -56,7 +60,7 @@ public class PhpSerializer {
      * @param b     boolean to serialize
      * @return      serialized b
      */
-    public String serialize(boolean b) {
+    public static String serialize(boolean b) {
         return "b:" + (b ? "1" : "0") + ";";
     }
 
@@ -66,7 +70,7 @@ public class PhpSerializer {
      * @param s     string to serialize
      * @return      s serialized to string
      */
-    public String serialize(String s) {
+    public static String serialize(String s) {
         if (s == null) {
             return "N;";
         }
@@ -79,7 +83,7 @@ public class PhpSerializer {
      * @param list  list to serialize
      * @return      list serialized to string
      */
-    public String serialize(List<?> list) {
+    public static String serialize(List<?> list) {
         if (list == null) {
             return "N;";
         }
@@ -87,8 +91,8 @@ public class PhpSerializer {
         int index = 0;
         Iterator<?> i = list.iterator();
         while (i.hasNext()) {
-            out += this.serialize(index++);
-            out += this.serialize(i.next());
+            out += serialize(index++);
+            out += serialize(i.next());
             if (!out.endsWith(";")) {
                 out += ";";
             }
@@ -103,7 +107,7 @@ public class PhpSerializer {
      * @param map   map to serialize
      * @return      map serialized to string
      */
-    public String serialize(Map<?, ?> map) {
+    public static String serialize(Map<?, ?> map) {
         if (map == null) {
             return "N;";
         }
@@ -111,8 +115,8 @@ public class PhpSerializer {
         Iterator<?> i = map.keySet().iterator();
         while (i.hasNext()) {
             Object key = i.next();
-            out += this.serialize(key);
-            out += this.serialize(map.get(key));
+            out += serialize(key);
+            out += serialize(map.get(key));
         }
         out += "}";
         return out;
@@ -124,7 +128,7 @@ public class PhpSerializer {
      * @param value     PhpObject to serialize
      * @return          serialized value
      */
-    public String serialize(SerializedPhpParser.PhpObject value) {
+    public static String serialize(SerializedPhpParser.PhpObject value) {
         if (value == null) {
             return "N;";
         }
@@ -133,8 +137,8 @@ public class PhpSerializer {
         Iterator<Object> i = value.attributes.keySet().iterator();
         while (i.hasNext()) {
             Object key = i.next();
-            out += this.serialize(key);
-            out += this.serialize(value.attributes.get(key));
+            out += serialize(key);
+            out += serialize(value.attributes.get(key));
         }
         out += "};";
         return out;
@@ -147,22 +151,22 @@ public class PhpSerializer {
      * @return          serialized value, or serialized value.toString
      *                  if unknown type.
      */
-    public String serialize(Object value) {
+    public static String serialize(Object value) {
         if (value == null) {
             return "N;";
         } else if (value instanceof Integer) {
-            return this.serialize(((Integer) value).intValue());
+            return serialize(((Integer) value).intValue());
         } else if (value instanceof Number) {
-            return this.serialize(((Number) value).doubleValue());
+            return serialize(((Number) value).doubleValue());
         } else if (value instanceof Boolean) {
-            return this.serialize(((Boolean) value).booleanValue());
+            return serialize(((Boolean) value).booleanValue());
         } else if (value instanceof List<?>) {
-            return this.serialize((List<?>) value);
+            return serialize((List<?>) value);
         } else if (value instanceof Map<?,?>) {
-            return this.serialize((Map<?, ?>) value);
+            return serialize((Map<?, ?>) value);
         } else if (value instanceof SerializedPhpParser.PhpObject) {
-            return this.serialize((SerializedPhpParser.PhpObject) value);
+            return serialize((SerializedPhpParser.PhpObject) value);
         }
-        return this.serialize(value.toString());
+        return serialize(value.toString());
     }
 }

@@ -19,7 +19,7 @@
  */
 package com.craftfire.commons.ip;
 
-import com.craftfire.commons.classes.VersionRange;
+import com.craftfire.commons.util.VersionRange;
 
 /**
  * An IPRange implementation for IPv4 intervals.

@@ -26,8 +26,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.craftfire.commons.classes.MetadatableCacheItem;
-import com.craftfire.commons.managers.CacheManager;
+import com.craftfire.commons.cache.CacheManager;
+import com.craftfire.commons.cache.MetadatableCacheItem;
 
 public class TestCache {
 

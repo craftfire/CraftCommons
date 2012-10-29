@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.craftfire.commons.classes.Version;
-import com.craftfire.commons.classes.VersionRange;
+import com.craftfire.commons.util.Version;
+import com.craftfire.commons.util.VersionRange;
 
 public class TestVersionRanges {
     private static VersionRange versionRange = new VersionRange("1.2", "1.3.11");
