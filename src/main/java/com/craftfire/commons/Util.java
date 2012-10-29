@@ -24,15 +24,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Util {
-    private PhpSerializer serializer;
-
-    public Util() {
-        this.serializer = new PhpSerializer();
-    }
+    private static PhpSerializer serializer = new PhpSerializer();
 
     //TODO: Rewrite this function. (PHP deserialize)
     @Deprecated
-    public String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
+    public static String forumCache(String cache, String player, int userid, String nummember, String activemembers, String newusername, String newuserid, String extrausername, String lastvalue) {
         StringTokenizer st = new StringTokenizer(cache, ":");
         int i = 0;
         List<String> array = new ArrayList<String>();
@@ -41,10 +37,10 @@ public class Util {
         while (array.size() > i) {
             if (array.get(i).equals("\"" + nummember + "\";i:") && nummember != null) {
                 String temp = array.get(i + 1);
-                temp = this.removeChar(temp, '"');
-                temp = this.removeChar(temp, ':');
-                temp = this.removeChar(temp, 's');
-                temp = this.removeChar(temp, ';');
+                temp = removeChar(temp, '"');
+                temp = removeChar(temp, ':');
+                temp = removeChar(temp, 's');
+                temp = removeChar(temp, ';');
                 temp = temp.trim();
                 int tempnum = Integer.parseInt(temp) + 1;
                 if (lastvalue.equalsIgnoreCase(nummember)) {
@@ -69,10 +65,10 @@ public class Util {
                 }
             } else if (array.get(i).equals("\"" + activemembers + "\";s:") && activemembers != null) {
                 String temp = array.get(i + 2);
-                temp = this.removeChar(temp, '"');
-                temp = this.removeChar(temp, ':');
-                temp = this.removeChar(temp, 's');
-                temp = this.removeChar(temp, ';');
+                temp = removeChar(temp, '"');
+                temp = removeChar(temp, ':');
+                temp = removeChar(temp, 's');
+                temp = removeChar(temp, ';');
                 temp = temp.trim();
                 int tempnum = Integer.parseInt(temp) + 1;
                 String templength = "" + tempnum;
@@ -99,7 +95,7 @@ public class Util {
     }
 
     @Deprecated
-    public String forumCacheValue(String cache, String value) {
+    public static String forumCacheValue(String cache, String value) {
         StringTokenizer st = new StringTokenizer(cache, ":");
         int i = 0;
         List<String> array = new ArrayList<String>();
@@ -107,10 +103,10 @@ public class Util {
         while (array.size() > i) {
             if (array.get(i).equals("\"" + value + "\";s:") && value != null) {
                 String temp = array.get(i + 2);
-                temp = this.removeChar(temp, '"');
-                temp = this.removeChar(temp, ':');
-                temp = this.removeChar(temp, 's');
-                temp = this.removeChar(temp, ';');
+                temp = removeChar(temp, '"');
+                temp = removeChar(temp, ':');
+                temp = removeChar(temp, 's');
+                temp = removeChar(temp, ';');
                 temp = temp.trim();
                 return temp;
             }
@@ -119,7 +115,7 @@ public class Util {
         return null;
     }
 
-    public String removeChar(String s, char c) {
+    public static String removeChar(String s, char c) {
         StringBuilder r = new StringBuilder(s.length());
         r.setLength(s.length());
         int current = 0;
@@ -140,7 +136,7 @@ public class Util {
      *                     Boolean, Map<Object,Object> or PhpObject
      */
     // TODO: Move this method to CraftCommons - it's used only from outside
-    public Object phpUnserialize(String serialized) {
+    public static Object phpUnserialize(String serialized) {
         SerializedPhpParser parser = new SerializedPhpParser(serialized);
         return parser.parse();
     }
@@ -152,8 +148,8 @@ public class Util {
      * @return        object serialized to String.
      */
     // TODO: Move this method to CraftCommons - it's used only from outside
-    public String phpSerialize(Object value) {
-        return this.serializer.serialize(value);
+    public static String phpSerialize(Object value) {
+        return serializer.serialize(value);
     }
 
     /**
@@ -162,7 +158,7 @@ public class Util {
      * @return default php serializer.
      */
     // TODO: Move this method to CraftCommons - it's used only from outside
-    public PhpSerializer getPhpSerializer() {
-        return this.serializer;
+    public static PhpSerializer getPhpSerializer() {
+        return serializer;
     }
 }

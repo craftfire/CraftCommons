@@ -363,17 +363,17 @@ public final class CraftCommons {
     @Deprecated
     public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,
                                     String newusername, String newuserid, String extrausername, String lastvalue) {
-        return util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
+        return Util.forumCache(cache, player, userid, nummember, activemembers, newusername, newuserid,
                                extrausername, lastvalue);
     }
 
     @Deprecated
     public static String forumCacheValue(String cache, String value) {
-        return util.forumCacheValue(cache, value);
+        return Util.forumCacheValue(cache, value);
     }
 
     public static String removeChar(String s, char c) {
-        return util.removeChar(s, c);
+        return Util.removeChar(s, c);
     }
 
     public static Util getUtil() {
