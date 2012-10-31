@@ -27,8 +27,8 @@ import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -87,7 +87,7 @@ public class DbTest_H2 {
         gcount = 0;
         System.out.println(seperate + seperate);
         System.out.println("TESTING getField");
-        HashMap<String, Object> labels = datamanager
+        Map<String, Object> labels = datamanager
                 .getArray("SELECT * FROM `typetest` LIMIT 1");
         for (Object o : labels.keySet().toArray()) {
             String s = (String) o;
