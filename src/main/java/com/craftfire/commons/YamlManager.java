@@ -69,8 +69,8 @@ public class YamlManager {
         return getBoolean(node, false);
     }
 
-    public boolean getBoolean(String node_, boolean defaultValue) {
-        String newNode = node_.toLowerCase();
+    public boolean getBoolean(String node, boolean defaultValue) {
+        String newNode = node.toLowerCase();
         if (exist(newNode)) {
             Object value = this.yaml.get(newNode);
             if (value instanceof Boolean) {
@@ -135,8 +135,8 @@ public class YamlManager {
         return getLong(node, null);
     }
 
-    public Long getLong(String node_, Long defaultValue) {
-        String newNode = node_.toLowerCase();
+    public Long getLong(String node, Long defaultValue) {
+        String newNode = node.toLowerCase();
         if (exist(newNode)) {
             Object value = this.yaml.get(newNode);
             if (value instanceof Long) {

@@ -31,7 +31,7 @@ import com.craftfire.commons.util.Util;
  * @see SerializedPhpParser
  * @see Util
  */
-public class PhpSerializer {
+public final class PhpSerializer {
     private PhpSerializer() {
     }
     /**

@@ -27,7 +27,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Util {
+public final class Util {
+    private Util() {
+    }
 
     /**
      * Checks if the string is an email.
