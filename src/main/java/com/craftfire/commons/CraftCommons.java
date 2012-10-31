@@ -42,11 +42,8 @@ import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.encryption.EncryptionUtil;
 import com.craftfire.commons.encryption.PHPass;
 import com.craftfire.commons.encryption.Whirlpool;
-import com.craftfire.commons.util.Util;
 
 public final class CraftCommons {
-    private static Util util = new Util();
-
     private CraftCommons() {
         try {
             new AnalyticsManager("http://stats.craftfire.com/", "CraftCommons", "1.0.0").submit();
