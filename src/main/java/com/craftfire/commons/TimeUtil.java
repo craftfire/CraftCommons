@@ -36,7 +36,7 @@ public class TimeUtil {
         private int seconds;
         private int ticks;
         TimeUnit(String[] aliases, int seconds, int ticks) {
-            this.aliases = aliases;
+            this.aliases = aliases.clone();
             this.seconds = seconds;
             this.ticks = ticks;
         }

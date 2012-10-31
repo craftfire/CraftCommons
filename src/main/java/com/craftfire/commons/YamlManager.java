@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.commons.util.Util;
@@ -33,7 +34,7 @@ import com.craftfire.commons.util.Util;
 public class YamlManager {
     //TODO: Make it possible to save to a file
     private LoggingManager loggingManager = new LoggingManager("Craftfire.YamlManager", "[YamlManager]");
-    private HashMap<String, Object> yaml = new HashMap<String, Object>();
+    private Map<String, Object> yaml = new HashMap<String, Object>();
     private File file;
 
     public YamlManager(File file) throws IOException {
@@ -69,8 +70,8 @@ public class YamlManager {
         return getBoolean(node, false);
     }
 
-    public boolean getBoolean(String node_, boolean defaultValue) {
-        String newNode = node_.toLowerCase();
+    public boolean getBoolean(String node, boolean defaultValue) {
+        String newNode = node.toLowerCase();
         if (exist(newNode)) {
             Object value = this.yaml.get(newNode);
             if (value instanceof Boolean) {
@@ -135,8 +136,8 @@ public class YamlManager {
         return getLong(node, null);
     }
 
-    public Long getLong(String node_, Long defaultValue) {
-        String newNode = node_.toLowerCase();
+    public Long getLong(String node, Long defaultValue) {
+        String newNode = node.toLowerCase();
         if (exist(newNode)) {
             Object value = this.yaml.get(newNode);
             if (value instanceof Long) {
@@ -153,7 +154,7 @@ public class YamlManager {
         return defaultValue;
     }
 
-    public HashMap<String, Object> getNodes() {
+    public Map<String, Object> getNodes() {
         return this.yaml;
     }
 
@@ -162,7 +163,7 @@ public class YamlManager {
         this.yaml.putAll(yamlManager.getNodes());
     }
 
-    public void addNodes(HashMap<String, Object> map) {
+    public void addNodes(Map<String, Object> map) {
         getLogger().debug("Adding node list to current node list: " + map.toString());
         this.yaml.putAll(map);
     }

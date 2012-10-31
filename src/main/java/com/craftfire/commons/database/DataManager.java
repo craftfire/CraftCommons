@@ -631,7 +631,7 @@ public class DataManager {
     }
 
     @Deprecated
-    public HashMap<String, Object> getArray(String query) {
+    public Map<String, Object> getArray(String query) {
         try {
             this.connect();
             this.stmt = this.con.createStatement();
@@ -639,7 +639,7 @@ public class DataManager {
             this.log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
-            HashMap<String, Object> data = new HashMap<String, Object>();
+            Map<String, Object> data = new HashMap<String, Object>();
             while (this.rs.next()) {
                 for (int i = 1; i <= numberOfColumns; i++) {
                     data.put(metaData.getColumnLabel(i), this.rs.getObject(i));

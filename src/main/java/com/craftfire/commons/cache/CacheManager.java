@@ -20,12 +20,13 @@
 package com.craftfire.commons.cache;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.craftfire.commons.util.Util;
 
 public class CacheManager {
     protected static final String defaultGroup = "default";
-    private HashMap<String, HashMap<Object, CacheItem>> items = new HashMap<String, HashMap<Object, CacheItem>>();
+    private Map<String, Map<Object, CacheItem>> items = new HashMap<String, Map<Object, CacheItem>>();
     private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
     private boolean enabled = true;
@@ -46,11 +47,11 @@ public class CacheManager {
         return this.enabled;
     }
 
-    public HashMap<String, HashMap<Object, CacheItem>> getCache() {
+    public Map<String, Map<Object, CacheItem>> getCache() {
         return this.items;
     }
 
-    public HashMap<Object, CacheItem> getCache(String group) {
+    public Map<Object, CacheItem> getCache(String group) {
         if (this.containsGroup(group)) {
             return this.items.get(group);
         }
@@ -110,7 +111,7 @@ public class CacheManager {
             if (!containsGroup(newGroup)) {
                 this.items.put(newGroup, new HashMap<Object, CacheItem>());
             }
-            HashMap<Object, CacheItem> temp = this.items.get(newGroup);
+            Map<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new CacheItem(id, this.seconds, object));
             this.items.put(newGroup, temp);
             if (id instanceof String && Util.isInteger((String) id)) {
@@ -139,7 +140,7 @@ public class CacheManager {
             if (!containsGroup(newGroup)) {
                 this.items.put(newGroup, new HashMap<Object, CacheItem>());
             }
-            HashMap<Object, CacheItem> temp = this.items.get(newGroup);
+            Map<Object, CacheItem> temp = this.items.get(newGroup);
             temp.put(id, new MetadatableCacheItem(id, this.seconds, object));
             this.items.put(newGroup, temp);
             if (id instanceof String && Util.isInteger((String) id)) {
