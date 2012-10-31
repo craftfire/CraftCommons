@@ -41,7 +41,7 @@ public final class PhpSerializer {
      * @return      serialized i
      */
     public static String serialize(int i) {
-        return "i:" + String.valueOf(i) + ";";
+        return "i:" + i + ";";
     }
 
     /**
@@ -51,7 +51,7 @@ public final class PhpSerializer {
      * @return      serialized d
      */
     public static String serialize(double d) {
-        return "d:" + String.valueOf(d) + ";";
+        return "d:" + d + ";";
     }
 
     /**
