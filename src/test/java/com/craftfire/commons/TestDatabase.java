@@ -2,7 +2,9 @@ package com.craftfire.commons;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -130,7 +132,48 @@ public class TestDatabase {
 	
 	@Test
 	public void testBlob() throws SQLException {
-		//TODO
+        final String name = "blob";
+        DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
+
+        // DataRow.getField()
+        DataField field = row.get(name);
+        assertNotNull(field.getBigInt());
+        assertNotNull(field.getBlob());
+        assertTrue(field.getBool());
+        assertNotNull(field.getBytes());
+        assertThat(field.getDouble(), not(equalTo(0d)));
+        assertThat(field.getFloat(), not(equalTo(0f)));
+        assertThat(field.getInt(), not(equalTo(0)));
+        assertThat(field.getLong(), not(equalTo(0L)));
+        assertNotNull(field.getString());
+
+        // DataManager.getField()
+        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        assertNotNull(field.getBigInt());
+        assertNotNull(field.getBlob());
+        assertTrue(field.getBool());
+        assertNotNull(field.getBytes());
+        assertThat(field.getDouble(), not(equalTo(0d)));
+        assertThat(field.getFloat(), not(equalTo(0f)));
+        assertThat(field.getInt(), not(equalTo(0)));
+        assertThat(field.getLong(), not(equalTo(0L)));
+        assertNotNull(field.getString());
+
+        // DataManager.get<Kinda>Field()
+        assertNotNull(datamanager.getBinaryField(table, name, "1"));
+        assertNotNull(datamanager.getBlobField(table, name, "1"));
+        assertNotNull(datamanager.getStringField(table, name, "1"));
+
+        // DataRow.get<Kinda>Field()
+        assertNotNull(row.getBigIntField(name));
+        assertNotNull(row.getBlobField(name));
+        assertTrue(row.getBoolField(name));
+        assertNotNull(row.getBinaryField(name));
+        assertThat(row.getDoubleField(name), not(equalTo(0d)));
+        assertThat(row.getFloatField(name), not(equalTo(0f)));
+        assertThat(row.getIntField(name), not(equalTo(0)));
+        assertThat(row.getLongField(name), not(equalTo(0L)));
+        assertNotNull(row.getStringField(name));
 	}
 
 	public void testTemplate() throws SQLException {
