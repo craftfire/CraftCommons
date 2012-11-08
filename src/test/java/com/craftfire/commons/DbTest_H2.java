@@ -257,7 +257,7 @@ public class DbTest_H2 {
         s += name;
         s += ": ";
         if (x != null) {
-            s += x.toString();
+            s += x.toString().replace("\u0000", "\u2400");
         } else {
             s += "Doesn't work";
         }
