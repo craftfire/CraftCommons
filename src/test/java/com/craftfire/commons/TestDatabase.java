@@ -1032,7 +1032,7 @@ public class TestDatabase {
         assertNotNull(row.getStringField(name));
     }
 
-    public void testTemplate() throws SQLException {
+/*    public void testTemplate() throws SQLException {
         final String name = "";
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
@@ -1086,5 +1086,5 @@ public class TestDatabase {
         assertThat(row.getLongField(name), not(equalTo(0L)));
         assertNotNull(row.getStringField(name));
     }
-
+*/
 }
