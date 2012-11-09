@@ -26,6 +26,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 
 import org.junit.BeforeClass;
@@ -296,6 +298,13 @@ public class TestDatabase {
         DataField field = row.get(name);
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
+        if (field.getDate() == null) {
+            // Just for debug purposes, to see what is the locale of host.
+            System.out.println(DateFormat.getDateInstance().format(new Date()));
+            System.out.println(DateFormat.getDateTimeInstance().format(new Date()));
+        System.out.println(DateFormat.getTimeInstance().format(new Date()));
+            System.out.println(DateFormat.getInstance().format(new Date()));
+        }
         assertNotNull(field.getDate());
         assertNotNull(field.getString());
 
@@ -1032,7 +1041,7 @@ public class TestDatabase {
         assertNotNull(row.getStringField(name));
     }
 
-    public void testTemplate() throws SQLException {
+/*    public void testTemplate() throws SQLException {
         final String name = "";
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
@@ -1086,5 +1095,5 @@ public class TestDatabase {
         assertThat(row.getLongField(name), not(equalTo(0L)));
         assertNotNull(row.getStringField(name));
     }
-
+*/
 }
