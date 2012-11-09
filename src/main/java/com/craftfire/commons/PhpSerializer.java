@@ -23,13 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.craftfire.commons.util.Util;
-
 /**
  * PhpSerializer - util class to serialize java objects with php serialization
  *
  * @see SerializedPhpParser
- * @see Util
+ * @see CraftCommons
  */
 public final class PhpSerializer {
     private PhpSerializer() {

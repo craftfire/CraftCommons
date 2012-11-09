@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.junit.Test;
 
@@ -56,6 +57,7 @@ public class DbTest_H2 {
         String user = "sa";
         String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
+        datamanager.getLogging().getLogger().setLevel(Level.OFF);	//Turn off logging temporarily so we won't be spammed with red warnings. 
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
@@ -255,7 +257,7 @@ public class DbTest_H2 {
         s += name;
         s += ": ";
         if (x != null) {
-            s += x.toString();
+            s += x.toString().replace("\u0000", "\u2400");
         } else {
             s += "Doesn't work";
         }
@@ -267,24 +269,26 @@ public class DbTest_H2 {
     }
 
     public static String arrayToString(Object[] array) {
-        String s = "";
+        String s = "[";
         if (array == null) {
             return null;
         }
         for (int i = 0; i < array.length; ++i) {
-            s += "[" + i + "] => [" + array[i].toString() + "] | ";
+            s += array[i].toString() + ", ";
         }
+        s+= "]";
         return s;
     }
 
     public static String arrayToString(byte[] array) {
-        String s = "";
+        String s = "[";
         if (array == null) {
             return null;
         }
         for (int i = 0; i < array.length; ++i) {
-            s += "[" + i + "] => [" + array[i] + "] | ";
+            s += array[i] + ", ";
         }
+        s+="]";
         return s;
     }
 

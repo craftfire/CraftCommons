@@ -19,7 +19,6 @@
  */
 package com.craftfire.commons.analytics;
 
-import java.io.UTFDataFormatException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
