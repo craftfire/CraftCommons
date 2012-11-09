@@ -27,7 +27,7 @@ import com.craftfire.commons.util.Util;
 public class CacheManager {
     protected static final String defaultGroup = "default";
     private Map<String, Map<Object, CacheItem>> items = new HashMap<String, Map<Object, CacheItem>>();
-    private HashMap<Object, Integer> lastID = new HashMap<Object, Integer>();
+    private Map<Object, Integer> lastID = new HashMap<Object, Integer>();
     private int seconds = 300;
     private boolean enabled = true;
 
