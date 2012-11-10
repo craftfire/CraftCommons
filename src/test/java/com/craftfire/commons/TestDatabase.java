@@ -292,6 +292,16 @@ public class TestDatabase {
     @Test
     public void testClob() throws SQLException {
         final String name = "clob";
+
+        if (datamanager.getField(FieldType.UNKNOWN, table, name, "1").getDate() == null) {
+            datamanager.updateField(table, name, DateFormat.getDateTimeInstance().format(new Date()), "1");
+            // Just for debug purposes, to see what is the locale of host.
+            System.out.println(DateFormat.getDateInstance().format(new Date()));
+            System.out.println(DateFormat.getDateTimeInstance().format(new Date()));
+            System.out.println(DateFormat.getTimeInstance().format(new Date()));
+            System.out.println(DateFormat.getInstance().format(new Date()));
+        }
+
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
         // DataRow.getField()
@@ -302,7 +312,7 @@ public class TestDatabase {
             // Just for debug purposes, to see what is the locale of host.
             System.out.println(DateFormat.getDateInstance().format(new Date()));
             System.out.println(DateFormat.getDateTimeInstance().format(new Date()));
-        System.out.println(DateFormat.getTimeInstance().format(new Date()));
+            System.out.println(DateFormat.getTimeInstance().format(new Date()));
             System.out.println(DateFormat.getInstance().format(new Date()));
         }
         assertNotNull(field.getDate());
