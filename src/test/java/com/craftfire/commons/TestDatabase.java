@@ -21,6 +21,7 @@ package com.craftfire.commons;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -42,18 +43,31 @@ import com.craftfire.commons.database.FieldType;
 public class TestDatabase {
     private static final String table = "typetest";
     private static DataManager datamanager;
+    private static String user = "sa";
+    private static String password = "";
 
     @BeforeClass
     public static void init() {
-        String user = "sa";
-        String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogging().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings. 
+        datamanager.getLogging().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
         datamanager.setKeepAlive(true);
         datamanager.setPrefix("");
+    }
+
+    @Test
+    public void testSettings() {
+        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
+        assertEquals(user, datamanager.getUsername());
+        assertEquals(password, datamanager.getPassword());
+        assertEquals("test", datamanager.getDatabase());
+        assertEquals("./src/test/resource/", datamanager.getDirectory());
+        assertEquals(0, datamanager.getTimeout());
+        assertTrue(datamanager.isKeepAlive());
+        assertEquals("", datamanager.getPrefix());
+        assertTrue(datamanager.isConnected());
     }
 
     @Test
