@@ -243,6 +243,14 @@ public class DataManager {
         }
     }
 
+    public boolean tableExist(String table) {
+        try {
+            return this.getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` LIMIT 1") != null;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public int getLastID(String field, String table) {
         DataField f;
         try {
