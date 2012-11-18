@@ -71,6 +71,24 @@ public class TestDatabase {
     }
 
     @Test
+    public void testExist() {
+        assertTrue(datamanager.tableExist(table));
+        assertTrue(datamanager.exist(table, "ID", 1));
+    }
+
+    @Test
+    public void getLastID() {
+        assertEquals(1, datamanager.getLastID("ID", table));
+        assertEquals(0, datamanager.getLastID("ID", table, "`char` = 'alice has a cat'"));
+    }
+
+    @Test
+    public void testCount() {
+        assertEquals(1, datamanager.getCount(table));
+        assertEquals(0, datamanager.getCount(table, "`char` = 'alice has a cat'"));
+    }
+
+    @Test
     public void testBInt() throws SQLException {
         final String name = "bint";
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
