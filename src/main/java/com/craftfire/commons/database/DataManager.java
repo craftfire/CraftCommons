@@ -104,7 +104,7 @@ public class DataManager {
     public void setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
         if (keepAlive) {
-            this.connect();
+            connect();
         }
     }
 
@@ -185,18 +185,6 @@ public class DataManager {
         this.prefix = prefix;
     }
 
-    public ResultSet getCurrentResultSet() {
-        return this.rs;
-    }
-
-    public PreparedStatement getCurrentPreparedStatement() {
-        return this.pStmt;
-    }
-
-    public Statement getCurrentStatement() {
-        return this.stmt;
-    }
-
     public int getQueriesCount() {
         return this.queriesCount;
     }
@@ -236,7 +224,7 @@ public class DataManager {
     public boolean exist(String table, String field, Object value) {
         try {
             return this.getField(FieldType.STRING, "SELECT `" + field + "` "
-                    + "FROM `" + this.getPrefix() + table + "` " + "WHERE `"
+                    + "FROM `" + getPrefix() + table + "` " + "WHERE `"
                     + field + "` = '" + value + "' " + "LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
@@ -245,7 +233,7 @@ public class DataManager {
 
     public boolean tableExist(String table) {
         try {
-            return this.getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + this.getPrefix() + table + "` LIMIT 1") != null;
+            return this.getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
         }
@@ -255,7 +243,7 @@ public class DataManager {
         DataField f;
         try {
             f = this.getField(FieldType.INTEGER, "SELECT `" + field
-                    + "` FROM `" + this.getPrefix() + table + "` ORDER BY `"
+                    + "` FROM `" + getPrefix() + table + "` ORDER BY `"
                     + field + "` DESC LIMIT 1");
             if (f != null) {
                 return f.getInt();
@@ -270,7 +258,7 @@ public class DataManager {
         DataField f;
         try {
             f = this.getField(FieldType.INTEGER, "SELECT `" + field + "` "
-                    + "FROM `" + this.getPrefix() + table + "` " + "WHERE "
+                    + "FROM `" + getPrefix() + table + "` " + "WHERE "
                     + where + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
             if (f != null) {
                 return f.getInt();
@@ -285,7 +273,7 @@ public class DataManager {
         DataField f;
         try {
             f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
-                    + this.getPrefix() + table + "` WHERE " + where
+                    + getPrefix() + table + "` WHERE " + where
                     + " LIMIT 1");
             if (f != null) {
                 return f.getInt();
@@ -300,7 +288,7 @@ public class DataManager {
         DataField f;
         try {
             f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
-                    + this.getPrefix() + table + "` LIMIT 1");
+                    + getPrefix() + table + "` LIMIT 1");
             if (f != null) {
                 return f.getInt();
             }
@@ -311,7 +299,7 @@ public class DataManager {
     }
 
     public void increaseField(String table, String field, String where) throws SQLException {
-        this.executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field
+        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field
                           + "` = " + field + " + 1 WHERE " + where);
     }
 
@@ -500,16 +488,16 @@ public class DataManager {
     public DataField getField(FieldType fieldType, String table, String field,
             String where) throws SQLException {
         return this.getField(fieldType, "SELECT `" + field + "` FROM `"
-                + this.getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+                + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
     public DataField getField(FieldType field, String query)
             throws SQLException {
         try {
-            this.connect();
+            connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.log(query);
+            log(query);
             if (this.rs.next()) {
                 Object value = null;
                 if (field.equals(FieldType.STRING)) {
@@ -529,7 +517,7 @@ public class DataManager {
                 } else if (field.equals(FieldType.UNKNOWN)) {
                     return new DataField(1, this.rs);
                 }
-                this.close();
+                close();
                 if (value == null) {
                     return null;
                 }
@@ -537,26 +525,26 @@ public class DataManager {
                         .getColumnDisplaySize(1), value);
             }
         } finally {
-            this.close();
+            close();
         }
         return null;
     }
 
     public void executeQuery(String query) throws SQLException {
-        this.connect();
+        connect();
         this.pStmt = this.con.prepareStatement(query);
         this.pStmt.executeUpdate();
-        this.log(query);
-        this.close();
+        log(query);
+        close();
     }
 
     public void executeQueryVoid(String query) {
         try {
-            this.connect();
+            connect();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.executeUpdate();
-            this.log(query);
-            this.close();
+            log(query);
+            close();
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
@@ -564,43 +552,43 @@ public class DataManager {
 
     public void updateBlob(String table, String field, String where, String data) {
         try {
-            String query = "UPDATE `" + this.getPrefix() + table + "` " + "SET `"
+            String query = "UPDATE `" + getPrefix() + table + "` " + "SET `"
                     + field + "` = ? " + "WHERE " + where;
             byte[] array = data.getBytes();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
-            this.connect();
-            this.log(query);
+            connect();
+            log(query);
             this.stmt = this.con.createStatement();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.setBlob(1, inputStream, array.length);
             this.pStmt.executeUpdate();
-            this.close();
+            close();
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
     }
 
     public void updateField(String table, String field, Object value, String where) throws SQLException {
-        executeQuery("UPDATE `" + this.getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
+        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
     }
 
     public void updateFields(Map<String, Object> data, String table, String where) throws SQLException {
-        String update = this.updateFieldsString(data);
-        executeQuery("UPDATE `" + this.getPrefix() + table + "`" + update + " WHERE " + where);
+        String update = updateFieldsString(data);
+        executeQuery("UPDATE `" + getPrefix() + table + "`" + update + " WHERE " + where);
     }
 
     public void insertFields(Map<String, Object> data, String table) throws SQLException {
-        String insert = this.insertFieldString(data);
-        executeQuery("INSERT INTO `" + this.getPrefix() + table + "` " + insert);
+        String insert = insertFieldString(data);
+        executeQuery("INSERT INTO `" + getPrefix() + table + "` " + insert);
     }
 
     @Deprecated
     public TableModel resultSetToTableModel(String query) {
         try {
-            this.connect();
+            connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.log(query);
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
@@ -615,36 +603,36 @@ public class DataManager {
                 }
                 rows.addElement(newRow);
             }
-            this.close();
+            close();
             return new DefaultTableModel(rows, columnNames);
         } catch (Exception e) {
             getLogging().stackTrace(e);
-            this.close();
+            close();
             return null;
         }
     }
 
     public Results getResults(String query) throws SQLException {
         try {
-            this.connect();
+            connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.log(query);
+            log(query);
             Results results = new Results(query, this.rs);
-            this.close();
+            close();
             return results;
         } finally {
-            this.close();
+            close();
         }
     }
 
     @Deprecated
     public Map<String, Object> getArray(String query) {
         try {
-            this.connect();
+            connect();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.log(query);
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Map<String, Object> data = new HashMap<String, Object>();
@@ -653,10 +641,10 @@ public class DataManager {
                     data.put(metaData.getColumnLabel(i), this.rs.getObject(i));
                 }
             }
-            this.close();
+            close();
             return data;
         } catch (SQLException e) {
-            this.close();
+            close();
             getLogging().stackTrace(e);
         }
         return null;
@@ -665,11 +653,11 @@ public class DataManager {
     @Deprecated
     public List<HashMap<String, Object>> getArrayList(String query) {
         try {
-            this.connect();
+            connect();
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             this.stmt = this.con.createStatement();
             this.rs = this.stmt.executeQuery(query);
-            this.log(query);
+            log(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while (this.rs.next()) {
@@ -679,19 +667,19 @@ public class DataManager {
                 }
                 list.add(data);
             }
-            this.close();
+            close();
             return list;
         } catch (SQLException e) {
-            this.close();
+            close();
             getLogging().stackTrace(e);
         }
         return null;
     }
 
     public ResultSet getResultSet(String query) throws SQLException {
-        this.connect();
+        connect();
         this.stmt = this.con.createStatement();
-        this.log(query);
+        log(query);
         this.rs = this.stmt.executeQuery(query);
         return this.rs;
     }
@@ -730,11 +718,11 @@ public class DataManager {
     public boolean hasConnection() {
         try {
             boolean result = false;
-            this.connect();
+            connect();
             if (this.con != null) {
                 result = !this.con.isClosed();
             }
-            this.close();
+            close();
             return result;
         } catch (SQLException e) {
             getLogging().stackTrace(e);
@@ -744,9 +732,9 @@ public class DataManager {
 
     public void connect() {
         if (this.url == null) {
-            this.setURL();
+            setURL();
         }
-        if (this.con != null && this.isConnected()) {
+        if (this.con != null && isConnected()) {
             return;
         }
         try {
@@ -813,7 +801,7 @@ public class DataManager {
                 this.stmt = null;
             }
             if (this.keepAlive) {
-                this.connect();
+                connect();
             }
         } catch (SQLException e) {
             getLogging().stackTrace(e);
@@ -822,8 +810,8 @@ public class DataManager {
 
     public void reconnect() {
         this.reconnect = true;
-        this.close();
-        this.connect();
+        close();
+        connect();
     }
 
     private String updateFieldsString(Map<String, Object> data) {

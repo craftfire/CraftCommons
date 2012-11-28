@@ -21,6 +21,7 @@ package com.craftfire.commons;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -28,6 +29,9 @@ import static org.junit.Assert.assertTrue;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 
 import org.junit.BeforeClass;
@@ -41,19 +45,105 @@ import com.craftfire.commons.database.FieldType;
 
 public class TestDatabase {
     private static final String table = "typetest";
+    private static final String wrtable = "writetest";
     private static DataManager datamanager;
+    private static String user = "sa";
+    private static String password = "";
+    private static int randomInt = new Random().nextInt(1000);
 
     @BeforeClass
     public static void init() {
-        String user = "sa";
-        String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogging().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings. 
+        datamanager.getLogging().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
         datamanager.setKeepAlive(true);
         datamanager.setPrefix("");
+    }
+
+    @Test
+    public void testSettings() {
+        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
+        assertEquals(user, datamanager.getUsername());
+        assertEquals(password, datamanager.getPassword());
+        assertEquals("test", datamanager.getDatabase());
+        assertEquals("./src/test/resource/", datamanager.getDirectory());
+        assertEquals(0, datamanager.getTimeout());
+        assertTrue(datamanager.isKeepAlive());
+        assertEquals("", datamanager.getPrefix());
+        assertTrue(datamanager.isConnected());
+    }
+
+    @Test
+    public void testExist() {
+        assertTrue(datamanager.tableExist(table));
+        assertTrue(datamanager.exist(table, "ID", 1));
+    }
+
+    @Test
+    public void getLastID() {
+        assertEquals(1, datamanager.getLastID("ID", table));
+        assertEquals(0, datamanager.getLastID("ID", table, "`char` = 'alice has a cat'"));
+    }
+
+    @Test
+    public void testCount() {
+        assertEquals(1, datamanager.getCount(table));
+        assertEquals(0, datamanager.getCount(table, "`char` = 'alice has a cat'"));
+    }
+
+    @Test
+    public void testInsert() throws SQLException {
+        int prevId = datamanager.getLastID("id", wrtable);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("TXT", "commons" + randomInt);
+        data.put("x", randomInt + 1);
+        datamanager.insertFields(data, wrtable);
+        int id = datamanager.getLastID("id", wrtable);
+        assertTrue(id > prevId);
+        assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
+        assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
+    }
+
+    @Test
+    public void testUpdate() throws SQLException {
+        String oldString = datamanager.getStringField(wrtable, "txt", "`id` = '1'");
+        String testString = "crafttest" + (randomInt + 2);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("txt", testString);
+        datamanager.updateFields(data, wrtable, "`id` = '1'");
+        assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
+        assertEquals(oldString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+    }
+    
+    @Test
+    public void testIncrease() throws SQLException {
+        int oldValue = datamanager.getIntegerField(wrtable, "x", "`id` = '1'");
+        datamanager.increaseField(wrtable, "x", "`id` = '1'");
+        assertEquals(oldValue + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '1'"));
+    }
+
+    @Test
+    public void testUpdateBlob() {
+        String old = datamanager.getBinaryField(wrtable, "b", "`id` = '1'");
+        String test = "I love JUnit Test Cases!";
+        datamanager.updateBlob(wrtable, "b", "`id` = '1'", test);
+        assertEquals(test, datamanager.getBinaryField(wrtable, "b", "`id` = '1'"));
+        datamanager.updateBlob(wrtable, "b", "`id` = '1'", old);
+        assertEquals(old, datamanager.getBinaryField(wrtable, "b", "`id` = '1'"));
+    }
+
+    @Test
+    public void testGetKindaFieldRawQuery() {
+        assertTrue(datamanager.getBooleanField("SELECT `bool` FROM `" + table + "`"));
+        assertNotNull(datamanager.getBinaryField("SELECT `bin` FROM `" + table + "`"));
+        assertNotNull(datamanager.getBlobField("SELECT `blob` FROM `" + table + "`"));
+        assertNotNull(datamanager.getDateField("SELECT `date` FROM `" + table + "`"));
+        assertThat(datamanager.getDoubleField("SELECT `double` FROM `" + table + "`"), not(equalTo(0d)));
+        assertThat(datamanager.getIntegerField("SELECT `int` FROM `" + table + "`"), not(equalTo(0)));
+        assertNotNull(datamanager.getStringField("SELECT `vchar` FROM `" + table + "`"));
     }
 
     @Test

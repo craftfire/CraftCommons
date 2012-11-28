@@ -9001,3 +9001,85 @@ UPDATE `typetest` SET `clob` = `Nov 9, 2012 10:20:15 PM` [42122-167]
 org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "UPDATE `typetest` SET `clob` =  [*]'Nov 9, 2012 10:20:15 PM;"
 Syntax error in SQL statement "UPDATE `typetest` SET `clob` =  [*]'Nov 9, 2012 10:20:15 PM;"; SQL statement:
 UPDATE `typetest` SET `clob` =  'Nov 9, 2012 10:20:15 PM; [42000-167]
+11-28 19:40:42 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "ALTER TABLE WRITETEST MODIFY[*] COLUMN ID INT NOT NULL AUTO INCREMENT"; oczekiwano "., ADD, SET, RENAME, DROP, ALTER"
+Syntax error in SQL statement "ALTER TABLE WRITETEST MODIFY[*] COLUMN ID INT NOT NULL AUTO INCREMENT"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
+ALTER TABLE WRITETEST MODIFY COLUMN ID INT NOT NULL AUTO INCREMENT [42001-169]
+11-28 19:40:51 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "ALTER TABLE WRITETEST MODIFY[*] COLUMN ID INT NOT NULL AUTO_INCREMENT"; oczekiwano "., ADD, SET, RENAME, DROP, ALTER"
+Syntax error in SQL statement "ALTER TABLE WRITETEST MODIFY[*] COLUMN ID INT NOT NULL AUTO_INCREMENT"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
+ALTER TABLE WRITETEST MODIFY COLUMN ID INT NOT NULL AUTO_INCREMENT [42001-169]
+11-28 19:42:18 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "INSERT X[*] INTO WRITETEST VALUES  (0) "; oczekiwano "INTO"
+Syntax error in SQL statement "INSERT X[*] INTO WRITETEST VALUES  (0) "; expected "INTO"; SQL statement:
+INSERT x INTO WRITETEST VALUES  (0) [42001-169]
+11-28 19:42:35 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "INSERT ([*]X) INTO WRITETEST VALUES  (0) "; oczekiwano "INTO"
+Syntax error in SQL statement "INSERT ([*]X) INTO WRITETEST VALUES  (0) "; expected "INTO"; SQL statement:
+INSERT (x) INTO WRITETEST VALUES  (0) [42001-169]
+11-28 20:33:42 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Kolumna "CraftCommons rule!" nie istnieje
+Column "CraftCommons rule!" not found; SQL statement:
+UPDATE WRITETEST SET B="CraftCommons rule!" [42122-169]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:138)
+	at org.h2.command.dml.Update.prepare(Update.java:184)
+	at org.h2.command.Parser.prepareCommand(Parser.java:218)
+	at org.h2.engine.Session.prepareLocal(Session.java:415)
+	at org.h2.engine.Session.prepareCommand(Session.java:364)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1114)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:164)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:152)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1311)
+	at org.h2.server.web.WebApp.query(WebApp.java:1001)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:964)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:953)
+	at org.h2.server.web.WebThread.process(WebThread.java:166)
+	at org.h2.server.web.WebThread.run(WebThread.java:93)
+	at java.lang.Thread.run(Thread.java:679)
+11-28 20:33:51 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Kolumna "CraftCommons rule!" nie istnieje
+Column "CraftCommons rule!" not found; SQL statement:
+UPDATE WRITETEST SET B = "CraftCommons rule!" [42122-169]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:138)
+	at org.h2.command.dml.Update.prepare(Update.java:184)
+	at org.h2.command.Parser.prepareCommand(Parser.java:218)
+	at org.h2.engine.Session.prepareLocal(Session.java:415)
+	at org.h2.engine.Session.prepareCommand(Session.java:364)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1114)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:164)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:152)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1311)
+	at org.h2.server.web.WebApp.query(WebApp.java:1001)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:964)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:953)
+	at org.h2.server.web.WebThread.process(WebThread.java:166)
+	at org.h2.server.web.WebThread.run(WebThread.java:93)
+	at java.lang.Thread.run(Thread.java:679)
+11-28 20:34:00 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Hexadecimal string contains non hex character: "CraftCommons rule!"
+Hexadecimal string contains non-hex character: "CraftCommons rule!"; SQL statement:
+UPDATE WRITETEST SET B = 'CraftCommons rule!' [90004-169]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.util.StringUtils.convertHexToBytes(StringUtils.java:1003)
+	at org.h2.value.Value.convertTo(Value.java:837)
+	at org.h2.table.Column.convert(Column.java:143)
+	at org.h2.command.dml.Update.update(Update.java:119)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:75)
+	at org.h2.command.Command.executeUpdate(Command.java:230)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:177)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:152)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1311)
+	at org.h2.server.web.WebApp.query(WebApp.java:1001)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:964)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:953)
+	at org.h2.server.web.WebThread.process(WebThread.java:166)
+	at org.h2.server.web.WebThread.run(WebThread.java:93)
+	at java.lang.Thread.run(Thread.java:679)
