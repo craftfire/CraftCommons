@@ -29,6 +29,9 @@ import static org.junit.Assert.assertTrue;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 
 import org.junit.BeforeClass;
@@ -42,9 +45,11 @@ import com.craftfire.commons.database.FieldType;
 
 public class TestDatabase {
     private static final String table = "typetest";
+    private static final String wrtable = "writetest";
     private static DataManager datamanager;
     private static String user = "sa";
     private static String password = "";
+    private static int randomInt = new Random().nextInt(1000);
 
     @BeforeClass
     public static void init() {
@@ -86,6 +91,48 @@ public class TestDatabase {
     public void testCount() {
         assertEquals(1, datamanager.getCount(table));
         assertEquals(0, datamanager.getCount(table, "`char` = 'alice has a cat'"));
+    }
+
+    @Test
+    public void testInsert() throws SQLException {
+        int prevId = datamanager.getLastID("id", wrtable);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("TXT", "commons" + randomInt);
+        data.put("x", randomInt + 1);
+        datamanager.insertFields(data, wrtable);
+        int id = datamanager.getLastID("id", wrtable);
+        assertTrue(id > prevId);
+        assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
+        assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
+    }
+
+    @Test
+    public void testUpdate() throws SQLException {
+        String oldString = datamanager.getStringField(wrtable, "txt", "`id` = '1'");
+        String testString = "crafttest" + (randomInt + 2);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("txt", testString);
+        datamanager.updateFields(data, wrtable, "`id` = '1'");
+        assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
+        assertEquals(oldString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+    }
+    
+    @Test
+    public void testIncrease() throws SQLException {
+        int oldValue = datamanager.getIntegerField(wrtable, "x", "`id` = '1'");
+        datamanager.increaseField(wrtable, "x", "`id` = '1'");
+        assertEquals(oldValue + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '1'"));
+    }
+
+    @Test
+    public void testUpdateBlob() {
+        String old = datamanager.getBinaryField(wrtable, "b", "`id` = '1'");
+        String test = "I love JUnit Test Cases!";
+        datamanager.updateBlob(wrtable, "b", "`id` = '1'", test);
+        assertEquals(test, datamanager.getBinaryField(wrtable, "b", "`id` = '1'"));
+        datamanager.updateBlob(wrtable, "b", "`id` = '1'", old);
+        assertEquals(old, datamanager.getBinaryField(wrtable, "b", "`id` = '1'"));
     }
 
     @Test
