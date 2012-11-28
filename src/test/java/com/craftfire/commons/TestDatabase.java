@@ -136,6 +136,17 @@ public class TestDatabase {
     }
 
     @Test
+    public void testGetKindaFieldRawQuery() {
+        assertTrue(datamanager.getBooleanField("SELECT `bool` FROM `" + table + "`"));
+        assertNotNull(datamanager.getBinaryField("SELECT `bin` FROM `" + table + "`"));
+        assertNotNull(datamanager.getBlobField("SELECT `blob` FROM `" + table + "`"));
+        assertNotNull(datamanager.getDateField("SELECT `date` FROM `" + table + "`"));
+        assertThat(datamanager.getDoubleField("SELECT `double` FROM `" + table + "`"), not(equalTo(0d)));
+        assertThat(datamanager.getIntegerField("SELECT `int` FROM `" + table + "`"), not(equalTo(0)));
+        assertNotNull(datamanager.getStringField("SELECT `vchar` FROM `" + table + "`"));
+    }
+
+    @Test
     public void testBInt() throws SQLException {
         final String name = "bint";
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
