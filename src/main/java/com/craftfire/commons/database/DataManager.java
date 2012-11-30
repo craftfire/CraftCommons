@@ -505,7 +505,7 @@ public class DataManager {
                 } else if (field.equals(FieldType.INTEGER)) {
                     value = this.rs.getInt(1);
                 } else if (field.equals(FieldType.DATE)) {
-                    value = this.rs.getDate(1);
+                    value = this.rs.getTimestamp(1);
                 } else if (field.equals(FieldType.BLOB)) {
                     value = this.rs.getBlob(1);
                 } else if (field.equals(FieldType.BINARY)) {

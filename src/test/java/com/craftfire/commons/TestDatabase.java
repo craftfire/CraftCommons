@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -102,26 +103,36 @@ public class TestDatabase {
     @Test
     public void testInsert() throws SQLException {
         int prevId = datamanager.getLastID("id", wrtable);
+        Date now = new Date();
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("TXT", "commons" + randomInt);
         data.put("x", randomInt + 1);
+        data.put("d", now);
+        data.put("b", null);
         datamanager.insertFields(data, wrtable);
         int id = datamanager.getLastID("id", wrtable);
         assertTrue(id > prevId);
         assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
         assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
+        assertEquals(now.getTime(), datamanager.getDateField(wrtable, "d", "`id` = '" + id + "'").getTime());
+        assertNull(datamanager.getBlobField(wrtable, "b", "`id` = '" + id + "'"));
     }
 
     @Test
     public void testUpdate() throws SQLException {
         String oldString = datamanager.getStringField(wrtable, "txt", "`id` = '1'");
         String testString = "crafttest" + (randomInt + 2);
+        Date oldDate = datamanager.getDateField(wrtable, "d", "`id` = '1'");
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("txt", testString);
+        data.put("d", null);
         datamanager.updateFields(data, wrtable, "`id` = '1'");
         assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        assertNull(datamanager.getDateField(wrtable, "d", "`id` = '1'"));
         datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
+        datamanager.updateField(wrtable, "d", oldDate, "`id` = '1'");
         assertEquals(oldString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        assertEquals(oldDate, datamanager.getDateField(wrtable, "d", "`id` = '1'"));
     }
     
     @Test
