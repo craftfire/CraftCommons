@@ -74,6 +74,12 @@ public class TestDatabase {
         assertEquals("", datamanager.getPrefix());
         assertTrue(datamanager.isConnected());
     }
+    
+    @Test
+    public void testReconnect() {
+    	datamanager.reconnect();
+    	assertTrue(datamanager.isConnected());
+    }
 
     @Test
     public void testExist() {

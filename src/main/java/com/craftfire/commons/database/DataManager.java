@@ -693,7 +693,7 @@ public class DataManager {
     private void outputDrivers() {
         if (getLogging().isDebug()) {
             getLogging().debug("Checking DriverManager drivers.");
-            Enumeration driverList = DriverManager.getDrivers();
+            Enumeration<Driver> driverList = DriverManager.getDrivers();
             int count = 0;
             while (driverList.hasMoreElements()) {
                 Driver driverClass = (Driver) driverList.nextElement();
@@ -812,6 +812,7 @@ public class DataManager {
         this.reconnect = true;
         close();
         connect();
+        this.reconnect = false;
     }
 
     private String updateFieldsString(Map<String, Object> data) {
