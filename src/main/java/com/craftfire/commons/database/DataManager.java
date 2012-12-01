@@ -855,7 +855,7 @@ public class DataManager {
                 val = new Timestamp(((Date) val).getTime());
             }
             if (val == null) {
-                valstr = "''";
+                valstr = "NULL";
             } else {
                 valstr = "'" + val.toString().replaceAll("'", "''") + "'";
             }
