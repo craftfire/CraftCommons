@@ -9163,3 +9163,7 @@ Caused by: java.lang.IllegalArgumentException: NOW()
 	at org.h2.value.ValueTimestamp.parseTry(ValueTimestamp.java:105)
 	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:85)
 	... 15 more
+12-01 17:38:56 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Blad skladniowy w wyrazeniu SQL "CREATE TABLE EMPTY ( I INT AUTO_INCREMENT PRIMARY_KEY[*])"; oczekiwano "(, NOT, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, PRIMARY, UNIQUE, NOT, NULL, CHECK, REFERENCES, ,, )"
+Syntax error in SQL statement "CREATE TABLE EMPTY ( I INT AUTO_INCREMENT PRIMARY_KEY[*])"; expected "(, NOT, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, PRIMARY, UNIQUE, NOT, NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+CREATE TABLE EMPTY ( I INT AUTO_INCREMENT PRIMARY_KEY) [42001-170]

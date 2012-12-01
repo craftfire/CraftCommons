@@ -91,6 +91,8 @@ public class TestDatabase {
     @Test
     public void getLastID() {
         assertEquals(1, datamanager.getLastID("ID", table));
+        assertEquals(0, datamanager.getLastID("I", "empty"));
+        assertEquals(1, datamanager.getLastID("ID", table, "`char` = '8.88'"));
         assertEquals(0, datamanager.getLastID("ID", table, "`char` = 'alice has a cat'"));
     }
 
@@ -115,7 +117,6 @@ public class TestDatabase {
         assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
         assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
         assertEquals(now.getTime(), datamanager.getDateField(wrtable, "d", "`id` = '" + id + "'").getTime());
-        //assertNull(datamanager.getBlobField(wrtable, "b", "`id` = '" + id + "'"));
         assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "b", "`id` = '" + id + "'").isNull());
     }
 
@@ -129,7 +130,6 @@ public class TestDatabase {
         data.put("d", null);
         datamanager.updateFields(data, wrtable, "`id` = '1'");
         assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
-        //assertNull(datamanager.getDateField(wrtable, "d", "`id` = '1'"));
         assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "d", "`id` = '1'").isNull());
         datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
         datamanager.updateField(wrtable, "d", oldDate, "`id` = '1'");
