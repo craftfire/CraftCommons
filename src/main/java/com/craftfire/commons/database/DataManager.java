@@ -516,11 +516,11 @@ public class DataManager {
                     value = this.rs.getDouble(1);
                 } else if (field.equals(FieldType.UNKNOWN)) {
                     return new DataField(1, this.rs);
+                } else {
+                	close();
+                	return null;
                 }
                 close();
-                if (value == null) {
-                    return null;
-                }
                 return new DataField(field, this.rs.getMetaData()
                         .getColumnDisplaySize(1), value);
             }
