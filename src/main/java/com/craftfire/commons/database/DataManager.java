@@ -493,10 +493,7 @@ public class DataManager {
     public DataField getField(FieldType field, String query)
             throws SQLException {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             if (this.rs.next()) {
                 Object value = null;
                 if (field.equals(FieldType.STRING)) {
@@ -539,11 +536,7 @@ public class DataManager {
 
     public void executeQueryVoid(String query) {
         try {
-            connect();
-            this.pStmt = this.con.prepareStatement(query);
-            this.pStmt.executeUpdate();
-            log(query);
-            close();
+            executeQuery(query);
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
@@ -584,10 +577,7 @@ public class DataManager {
     @Deprecated
     public TableModel resultSetToTableModel(String query) {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
@@ -613,10 +603,7 @@ public class DataManager {
 
     public Results getResults(String query) throws SQLException {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             Results results = new Results(query, this.rs);
             close();
             return results;
@@ -628,10 +615,7 @@ public class DataManager {
     @Deprecated
     public Map<String, Object> getArray(String query) {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Map<String, Object> data = new HashMap<String, Object>();
@@ -652,11 +636,8 @@ public class DataManager {
     @Deprecated
     public List<HashMap<String, Object>> getArrayList(String query) {
         try {
-            connect();
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while (this.rs.next()) {
