@@ -70,7 +70,6 @@ public class DataManager {
         this.datatype = type;
         this.username = username;
         this.password = password;
-        this.startup = System.currentTimeMillis() / 1000;
         if (!getLogging().isLogging()) {
             getLogging().setDirectory(this.directory);
             getLogging().setLogging(true);
@@ -494,10 +493,7 @@ public class DataManager {
     public DataField getField(FieldType field, String query)
             throws SQLException {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             if (this.rs.next()) {
                 Object value = null;
                 if (field.equals(FieldType.STRING)) {
@@ -505,7 +501,7 @@ public class DataManager {
                 } else if (field.equals(FieldType.INTEGER)) {
                     value = this.rs.getInt(1);
                 } else if (field.equals(FieldType.DATE)) {
-                    value = this.rs.getDate(1);
+                    value = this.rs.getTimestamp(1);
                 } else if (field.equals(FieldType.BLOB)) {
                     value = this.rs.getBlob(1);
                 } else if (field.equals(FieldType.BINARY)) {
@@ -516,11 +512,11 @@ public class DataManager {
                     value = this.rs.getDouble(1);
                 } else if (field.equals(FieldType.UNKNOWN)) {
                     return new DataField(1, this.rs);
+                } else {
+                	close();
+                	return null;
                 }
                 close();
-                if (value == null) {
-                    return null;
-                }
                 return new DataField(field, this.rs.getMetaData()
                         .getColumnDisplaySize(1), value);
             }
@@ -540,11 +536,7 @@ public class DataManager {
 
     public void executeQueryVoid(String query) {
         try {
-            connect();
-            this.pStmt = this.con.prepareStatement(query);
-            this.pStmt.executeUpdate();
-            log(query);
-            close();
+            executeQuery(query);
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
@@ -585,10 +577,7 @@ public class DataManager {
     @Deprecated
     public TableModel resultSetToTableModel(String query) {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Vector<String> columnNames = new Vector<String>();
@@ -614,10 +603,7 @@ public class DataManager {
 
     public Results getResults(String query) throws SQLException {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             Results results = new Results(query, this.rs);
             close();
             return results;
@@ -629,10 +615,7 @@ public class DataManager {
     @Deprecated
     public Map<String, Object> getArray(String query) {
         try {
-            connect();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             Map<String, Object> data = new HashMap<String, Object>();
@@ -653,11 +636,8 @@ public class DataManager {
     @Deprecated
     public List<HashMap<String, Object>> getArrayList(String query) {
         try {
-            connect();
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-            this.stmt = this.con.createStatement();
-            this.rs = this.stmt.executeQuery(query);
-            log(query);
+            this.rs = getResultSet(query);
             ResultSetMetaData metaData = this.rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while (this.rs.next()) {
@@ -693,10 +673,10 @@ public class DataManager {
     private void outputDrivers() {
         if (getLogging().isDebug()) {
             getLogging().debug("Checking DriverManager drivers.");
-            Enumeration driverList = DriverManager.getDrivers();
+            Enumeration<Driver> driverList = DriverManager.getDrivers();
             int count = 0;
             while (driverList.hasMoreElements()) {
-                Driver driverClass = (Driver) driverList.nextElement();
+                Driver driverClass = driverList.nextElement();
                 getLogging().debug("Found driver #" + (count + 1) + ": " + driverClass.getClass().getName());
                 count++;
             }
@@ -765,6 +745,7 @@ public class DataManager {
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
             }
+            this.startup = System.currentTimeMillis() / 1000;
         } catch (ClassNotFoundException e) {
             getLogging().stackTrace(e);
         } catch (SQLException e) {
@@ -812,6 +793,7 @@ public class DataManager {
         this.reconnect = true;
         close();
         connect();
+        this.reconnect = false;
     }
 
     private String updateFieldsString(Map<String, Object> data) {
@@ -854,7 +836,7 @@ public class DataManager {
                 val = new Timestamp(((Date) val).getTime());
             }
             if (val == null) {
-                valstr = "''";
+                valstr = "NULL";
             } else {
                 valstr = "'" + val.toString().replaceAll("'", "''") + "'";
             }

@@ -64,7 +64,6 @@ public class TestDatabase {
 
     @Test
     public void testSettings() {
-        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
         assertEquals(user, datamanager.getUsername());
         assertEquals(password, datamanager.getPassword());
         assertEquals("test", datamanager.getDatabase());
@@ -72,6 +71,13 @@ public class TestDatabase {
         assertEquals(0, datamanager.getTimeout());
         assertTrue(datamanager.isKeepAlive());
         assertEquals("", datamanager.getPrefix());
+        assertTrue(datamanager.hasConnection());
+        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
+    }
+
+    @Test
+    public void testReconnect() {
+        datamanager.reconnect();
         assertTrue(datamanager.isConnected());
     }
 
@@ -84,6 +90,8 @@ public class TestDatabase {
     @Test
     public void getLastID() {
         assertEquals(1, datamanager.getLastID("ID", table));
+        assertEquals(0, datamanager.getLastID("I", "empty"));
+        assertEquals(1, datamanager.getLastID("ID", table, "`char` = '8.88'"));
         assertEquals(0, datamanager.getLastID("ID", table, "`char` = 'alice has a cat'"));
     }
 
@@ -96,28 +104,39 @@ public class TestDatabase {
     @Test
     public void testInsert() throws SQLException {
         int prevId = datamanager.getLastID("id", wrtable);
+        Date now = new Date();
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("TXT", "commons" + randomInt);
         data.put("x", randomInt + 1);
+        data.put("d", now);
+        data.put("b", null);
         datamanager.insertFields(data, wrtable);
         int id = datamanager.getLastID("id", wrtable);
         assertTrue(id > prevId);
         assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
         assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
+        assertEquals(now.getTime(), datamanager.getDateField(wrtable, "d", "`id` = '" + id + "'").getTime());
+        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "b", "`id` = '" + id + "'").isNull());
     }
 
     @Test
     public void testUpdate() throws SQLException {
         String oldString = datamanager.getStringField(wrtable, "txt", "`id` = '1'");
         String testString = "crafttest" + (randomInt + 2);
+        Date oldDate = datamanager.getDateField(wrtable, "d", "`id` = '1'");
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("txt", testString);
+        data.put("d", null);
         datamanager.updateFields(data, wrtable, "`id` = '1'");
         assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "d", "`id` = '1'").isNull());
         datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
+        datamanager.updateField(wrtable, "d", oldDate, "`id` = '1'");
+        datamanager.executeQueryVoid("UPDATE `" + wrtable + "` SET `d` = '" + oldDate + "' WHERE `id` = '1'");
         assertEquals(oldString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
+        assertEquals(oldDate, datamanager.getDateField(wrtable, "d", "`id` = '1'"));
     }
-    
+
     @Test
     public void testIncrease() throws SQLException {
         int oldValue = datamanager.getIntegerField(wrtable, "x", "`id` = '1'");
@@ -1141,59 +1160,59 @@ public class TestDatabase {
         assertNotNull(row.getStringField(name));
     }
 
-/*    public void testTemplate() throws SQLException {
-        final String name = "";
-        DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
+    /*    public void testTemplate() throws SQLException {
+            final String name = "";
+            DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
-        // DataRow.getField()
-        DataField field = row.get(name);
-        assertNotNull(field.getBigInt());
-        assertNotNull(field.getBlob());
-        assertTrue(field.getBool());
-        assertNotNull(field.getBytes());
-        assertNotNull(field.getDate());
-        assertNotNull(field.getDecimal());
-        assertThat(field.getDouble(), not(equalTo(0d)));
-        assertThat(field.getFloat(), not(equalTo(0f)));
-        assertThat(field.getInt(), not(equalTo(0)));
-        assertThat(field.getLong(), not(equalTo(0L)));
-        assertNotNull(field.getString());
+            // DataRow.getField()
+            DataField field = row.get(name);
+            assertNotNull(field.getBigInt());
+            assertNotNull(field.getBlob());
+            assertTrue(field.getBool());
+            assertNotNull(field.getBytes());
+            assertNotNull(field.getDate());
+            assertNotNull(field.getDecimal());
+            assertThat(field.getDouble(), not(equalTo(0d)));
+            assertThat(field.getFloat(), not(equalTo(0f)));
+            assertThat(field.getInt(), not(equalTo(0)));
+            assertThat(field.getLong(), not(equalTo(0L)));
+            assertNotNull(field.getString());
 
-        // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
-        assertNotNull(field.getBigInt());
-        assertNotNull(field.getBlob());
-        assertTrue(field.getBool());
-        assertNotNull(field.getBytes());
-        assertNotNull(field.getDate());
-        assertNotNull(field.getDecimal());
-        assertThat(field.getDouble(), not(equalTo(0d)));
-        assertThat(field.getFloat(), not(equalTo(0f)));
-        assertThat(field.getInt(), not(equalTo(0)));
-        assertThat(field.getLong(), not(equalTo(0L)));
-        assertNotNull(field.getString());
+            // DataManager.getField()
+            field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+            assertNotNull(field.getBigInt());
+            assertNotNull(field.getBlob());
+            assertTrue(field.getBool());
+            assertNotNull(field.getBytes());
+            assertNotNull(field.getDate());
+            assertNotNull(field.getDecimal());
+            assertThat(field.getDouble(), not(equalTo(0d)));
+            assertThat(field.getFloat(), not(equalTo(0f)));
+            assertThat(field.getInt(), not(equalTo(0)));
+            assertThat(field.getLong(), not(equalTo(0L)));
+            assertNotNull(field.getString());
 
-        // DataManager.get<Kinda>Field()
-        assertTrue(datamanager.getBooleanField(table, name, "1"));
-        assertNotNull(datamanager.getBinaryField(table, name, "1"));
-        assertNotNull(datamanager.getBlobField(table, name, "1"));
-        assertNotNull(datamanager.getDateField(table, name, "1"));
-        assertThat(datamanager.getDoubleField(table, name, "1"), not(equalTo(0d)));
-        assertThat(datamanager.getIntegerField(table, name, "1"), not(equalTo(0)));
-        assertNotNull(datamanager.getStringField(table, name, "1"));
+            // DataManager.get<Kinda>Field()
+            assertTrue(datamanager.getBooleanField(table, name, "1"));
+            assertNotNull(datamanager.getBinaryField(table, name, "1"));
+            assertNotNull(datamanager.getBlobField(table, name, "1"));
+            assertNotNull(datamanager.getDateField(table, name, "1"));
+            assertThat(datamanager.getDoubleField(table, name, "1"), not(equalTo(0d)));
+            assertThat(datamanager.getIntegerField(table, name, "1"), not(equalTo(0)));
+            assertNotNull(datamanager.getStringField(table, name, "1"));
 
-        // DataRow.get<Kinda>Field()
-        assertNotNull(row.getBigIntField(name));
-        assertNotNull(row.getBlobField(name));
-        assertTrue(row.getBoolField(name));
-        assertNotNull(row.getBinaryField(name));
-        assertNotNull(row.getDateField(name));
-        assertNotNull(row.getDecimalField(name));
-        assertThat(row.getDoubleField(name), not(equalTo(0d)));
-        assertThat(row.getFloatField(name), not(equalTo(0f)));
-        assertThat(row.getIntField(name), not(equalTo(0)));
-        assertThat(row.getLongField(name), not(equalTo(0L)));
-        assertNotNull(row.getStringField(name));
-    }
-*/
+            // DataRow.get<Kinda>Field()
+            assertNotNull(row.getBigIntField(name));
+            assertNotNull(row.getBlobField(name));
+            assertTrue(row.getBoolField(name));
+            assertNotNull(row.getBinaryField(name));
+            assertNotNull(row.getDateField(name));
+            assertNotNull(row.getDecimalField(name));
+            assertThat(row.getDoubleField(name), not(equalTo(0d)));
+            assertThat(row.getFloatField(name), not(equalTo(0f)));
+            assertThat(row.getIntField(name), not(equalTo(0)));
+            assertThat(row.getLongField(name), not(equalTo(0L)));
+            assertNotNull(row.getStringField(name));
+        }
+    */
 }
