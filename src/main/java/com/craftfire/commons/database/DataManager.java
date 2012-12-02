@@ -70,7 +70,6 @@ public class DataManager {
         this.datatype = type;
         this.username = username;
         this.password = password;
-        this.startup = System.currentTimeMillis() / 1000;
         if (!getLogging().isLogging()) {
             getLogging().setDirectory(this.directory);
             getLogging().setLogging(true);
@@ -696,7 +695,7 @@ public class DataManager {
             Enumeration<Driver> driverList = DriverManager.getDrivers();
             int count = 0;
             while (driverList.hasMoreElements()) {
-                Driver driverClass = (Driver) driverList.nextElement();
+                Driver driverClass = driverList.nextElement();
                 getLogging().debug("Found driver #" + (count + 1) + ": " + driverClass.getClass().getName());
                 count++;
             }
@@ -765,6 +764,7 @@ public class DataManager {
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
             }
+            this.startup = System.currentTimeMillis() / 1000;
         } catch (ClassNotFoundException e) {
             getLogging().stackTrace(e);
         } catch (SQLException e) {

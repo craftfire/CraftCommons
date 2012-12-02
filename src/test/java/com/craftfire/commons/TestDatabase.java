@@ -65,7 +65,6 @@ public class TestDatabase {
 
     @Test
     public void testSettings() {
-        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
         assertEquals(user, datamanager.getUsername());
         assertEquals(password, datamanager.getPassword());
         assertEquals("test", datamanager.getDatabase());
@@ -74,6 +73,7 @@ public class TestDatabase {
         assertTrue(datamanager.isKeepAlive());
         assertEquals("", datamanager.getPrefix());
         assertTrue(datamanager.hasConnection());
+        System.out.println("DataManager started " + (System.currentTimeMillis() / 1000 - datamanager.getStartup()) + " seconds ago.");
     }
     
     @Test
