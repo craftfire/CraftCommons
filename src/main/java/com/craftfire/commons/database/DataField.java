@@ -84,7 +84,11 @@ public class DataField {
     public DataField(FieldType type, String name, String table, int size,
             boolean unsigned, Object data) {
         this.sqltype = Types.NULL;
-        this.ftype = type;
+        if (data == null) {
+        	this.ftype = FieldType.NULL;
+        } else {
+        	this.ftype = type;
+        }
         this.name = name;
         this.table = table;
         this.size = size;
@@ -168,6 +172,9 @@ public class DataField {
     }
 
     private static FieldType sqlTypeParse(int sqltype, int size, Object data) {
+    	if (data == null) {
+    		return FieldType.NULL;
+    	}
         switch (sqltype) {
         case Types.CHAR:
         case Types.VARCHAR:
