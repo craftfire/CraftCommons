@@ -59,7 +59,6 @@ public class DataManager {
     private PreparedStatement pStmt = null;
     private Statement stmt = null;
     private ResultSet rs = null;
-    private ClassLoader classLoader = null;
     private LoggingManager loggingManager = new LoggingManager("CraftFire.DataManager", "[DataManager]");
 
     public DataManager(String username, String password) {
@@ -86,14 +85,6 @@ public class DataManager {
 
     public void setLoggingManager(LoggingManager loggingManager) {
         this.loggingManager = loggingManager;
-    }
-
-    public ClassLoader getClassLoader() {
-        return this.classLoader;
-    }
-
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
     }
 
     public boolean isKeepAlive() {
@@ -711,6 +702,7 @@ public class DataManager {
     public void connect() {
         if (this.url == null) {
             setURL();
+            outputDrivers();
         }
         if (this.con != null && isConnected()) {
             return;
@@ -718,28 +710,13 @@ public class DataManager {
         try {
             switch (this.datatype) {
                 case MYSQL:
-                    if (getClassLoader() != null) {
-                        getLogging().debug("Loading custom class loader for MySQL driver: " + getClassLoader().toString());
-                        Class.forName("com.mysql.jdbc.Driver", true, getClassLoader());
-                    } else {
-                        getLogging().debug("Loading MySQL driver.");
-                        Class.forName("com.mysql.jdbc.Driver");
-                    }
-                    outputDrivers();
+                    getLogging().debug("Loading MySQL driver.");
+                    Class.forName("com.mysql.jdbc.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
                 case H2:
-                    if (getClassLoader() != null) {
-                        getLogging().debug("Loading custom class loader for H2 driver: " + getClassLoader().toString());
-                        Driver driver = (Driver) Class.forName("org.h2.Driver", true, getClassLoader()).newInstance();
-                        getLogging().debug("Loaded H2 driver: " + driver.toString() + " - " +
-                                           driver.getMinorVersion() + " - " + driver.getMajorVersion());
-                        DriverManager.registerDriver(driver);
-                    } else {
-                        getLogging().debug("Loading H2 driver.");
-                        Class.forName("org.h2.Driver");
-                    }
-                    outputDrivers();
+                    getLogging().debug("Loading H2 driver.");
+                    Class.forName("org.h2.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
             }
@@ -747,12 +724,6 @@ public class DataManager {
         } catch (ClassNotFoundException e) {
             getLogging().stackTrace(e);
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
-        } catch (InstantiationException e) {
-            getLogging().error("Could not register driver.");
-            getLogging().stackTrace(e);
-        } catch (IllegalAccessException e) {
-            getLogging().error("Could not register driver.");
             getLogging().stackTrace(e);
         }
     }
