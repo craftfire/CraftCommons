@@ -568,6 +568,10 @@ public class DataManager {
         executeQuery("UPDATE `" + getPrefix() + table + "`" + update + " WHERE " + where);
     }
 
+    public void insertField(String table, String field, Object value) throws SQLException {
+        executeQuery("INSERT INTO `" + getPrefix() + table + "` (`" + field + "`) VALUES ('" + value + "')");
+    }
+
     public void insertFields(Map<String, Object> data, String table) throws SQLException {
         String insert = insertFieldString(data);
         executeQuery("INSERT INTO `" + getPrefix() + table + "` " + insert);
