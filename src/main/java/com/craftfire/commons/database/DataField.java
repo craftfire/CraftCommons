@@ -39,8 +39,7 @@ public class DataField {
     private final int sqltype;
     private final boolean unsigned;
 
-    public DataField(int column, ResultSetMetaData metaData, Object data)
-            throws SQLException {
+    public DataField(int column, ResultSetMetaData metaData, Object data) throws SQLException {
         this.sqltype = metaData.getColumnType(column);
         this.size = metaData.getColumnDisplaySize(column);
         this.data = data;
@@ -102,8 +101,7 @@ public class DataField {
         this.name = metaData.getColumnLabel(column);
         this.table = metaData.getTableName(column);
         this.size = metaData.getColumnDisplaySize(column);
-        if (metaData.getColumnType(column) == Types.BLOB
-                || metaData.getColumnType(column) == Types.LONGVARBINARY) {
+        if (metaData.getColumnType(column) == Types.BLOB || metaData.getColumnType(column) == Types.LONGVARBINARY) {
             this.data = resultset.getBlob(column);
         } else if (metaData.getColumnType(column) == Types.CLOB) {
             this.data = resultset.getString(column);
@@ -123,8 +121,7 @@ public class DataField {
             if (!(this.data instanceof String)) {
                 throw e;
             }
-        } else if (this.ftype.equals(FieldType.INTEGER)
-                || this.ftype.equals(FieldType.REAL)) {
+        } else if (this.ftype.equals(FieldType.INTEGER) || this.ftype.equals(FieldType.REAL)) {
             if (!(this.data instanceof Number)) {
                 throw e;
             }
