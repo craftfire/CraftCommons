@@ -110,7 +110,7 @@ public class DataField {
         }
         this.sqltype = metaData.getColumnType(column);
         this.unsigned = metaData.getColumnTypeName(column).contains("UNSIGNED");
-        this.ftype = sqlTypeParse(this.sqltype, this.size, this.data);
+        this.ftype = sqlTypeParse(this.sqltype, this.size, this.data, resultset.wasNull());
     }
 
     private void typeCheck() {
@@ -168,6 +168,12 @@ public class DataField {
         return FieldType.UNKNOWN;
     }
 
+    private static FieldType sqlTypeParse(int sqltype, int size, Object data, boolean wasNull) {
+    	if (wasNull) {
+    		return FieldType.NULL;
+    	}
+    	return sqlTypeParse(sqltype, size, data);
+    }
     private static FieldType sqlTypeParse(int sqltype, int size, Object data) {
     	if (data == null) {
     		return FieldType.NULL;
