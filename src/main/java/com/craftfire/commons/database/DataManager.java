@@ -195,12 +195,12 @@ public class DataManager {
         return this.con;
     }
 
-    protected void setURL() {
+    protected boolean setURL() {
         switch (this.datatype) {
             case MYSQL:
                 if (this.host == null || this.database == null) {
                     getLogging().debug("Could not set mySQL URL. Host: " + this.host + ", Database: " + this.database);
-                    break;
+                    return false;
                 }
                 this.url = "jdbc:mysql://" + this.host + "/" + this.database
                          + "?zeroDateTimeBehavior=convertToNull"
@@ -209,16 +209,17 @@ public class DataManager {
                          + "&characterEncoding=UTF-8"
                          + "&characterSetResults=UTF-8";
                 outputDrivers();
-                break;
+                return true;
             case H2:
                 if (this.directory == null || this.database == null) {
                     getLogging().debug("Could not set H2 URL. Host: " + this.directory + ", Database: " + this.database);
-                    break;
+                    return false;
                 }
                 this.url = "jdbc:h2:" + this.directory + this.database + ";AUTO_RECONNECT=TRUE";
                 outputDrivers();
-                break;
+                return true;
         }
+        return false;
     }
 
     public boolean exist(String table, String field, Object value) {
@@ -714,8 +715,8 @@ public class DataManager {
     }
 
     public void connect() {
-        if (this.url == null) {
-            setURL();
+        if (this.url == null && !setURL()) {
+            return;
         }
         if (this.con != null && isConnected()) {
             return;
