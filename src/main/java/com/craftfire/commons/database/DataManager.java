@@ -222,9 +222,9 @@ public class DataManager {
 
     public boolean exist(String table, String field, Object value) {
         try {
-            return this.getField(FieldType.STRING, "SELECT `" + field + "` "
-                    + "FROM `" + getPrefix() + table + "` " + "WHERE `"
-                    + field + "` = '" + value + "' " + "LIMIT 1") != null;
+            return getField(FieldType.STRING, "SELECT `" + field + "` " +
+                            "FROM `" + getPrefix() + table + "` " +
+                            "WHERE `" + field + "` = '" + value + "' " + "LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
         }
@@ -232,7 +232,7 @@ public class DataManager {
 
     public boolean tableExist(String table) {
         try {
-            return this.getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1") != null;
+            return getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
         }
@@ -241,7 +241,7 @@ public class DataManager {
     public int getLastID(String field, String table) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, "SELECT `" + field
+            f = getField(FieldType.INTEGER, "SELECT `" + field
                     + "` FROM `" + getPrefix() + table + "` ORDER BY `"
                     + field + "` DESC LIMIT 1");
             if (f != null) {
@@ -256,7 +256,7 @@ public class DataManager {
     public int getLastID(String field, String table, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, "SELECT `" + field + "` "
+            f = getField(FieldType.INTEGER, "SELECT `" + field + "` "
                     + "FROM `" + getPrefix() + table + "` " + "WHERE "
                     + where + " " + "ORDER BY `" + field + "` DESC LIMIT 1");
             if (f != null) {
@@ -271,7 +271,7 @@ public class DataManager {
     public int getCount(String table, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+            f = getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
                     + getPrefix() + table + "` WHERE " + where
                     + " LIMIT 1");
             if (f != null) {
@@ -286,7 +286,7 @@ public class DataManager {
     public int getCount(String table) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
+            f = getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `"
                     + getPrefix() + table + "` LIMIT 1");
             if (f != null) {
                 return f.getInt();
@@ -305,7 +305,7 @@ public class DataManager {
     public String getStringField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.STRING, query);
+            f = getField(FieldType.STRING, query);
             if (f != null) {
                 return f.getString();
             }
@@ -318,7 +318,7 @@ public class DataManager {
     public String getStringField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.STRING, table, field, where);
+            f = getField(FieldType.STRING, table, field, where);
             if (f != null) {
                 return f.getString();
             }
@@ -331,7 +331,7 @@ public class DataManager {
     public int getIntegerField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, query);
+            f = getField(FieldType.INTEGER, query);
             if (f != null) {
                 return f.getInt();
             }
@@ -344,7 +344,7 @@ public class DataManager {
     public int getIntegerField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.INTEGER, table, field, where);
+            f = getField(FieldType.INTEGER, table, field, where);
             if (f != null) {
                 return f.getInt();
             }
@@ -357,7 +357,7 @@ public class DataManager {
     public Date getDateField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.DATE, query);
+            f = getField(FieldType.DATE, query);
             if (f != null) {
                 return f.getDate();
             }
@@ -370,7 +370,7 @@ public class DataManager {
     public Date getDateField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.DATE, table, field, where);
+            f = getField(FieldType.DATE, table, field, where);
             if (f != null) {
                 return f.getDate();
             }
@@ -383,7 +383,7 @@ public class DataManager {
     public Blob getBlobField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.BLOB, query);
+            f = getField(FieldType.BLOB, query);
             if (f != null) {
                 return f.getBlob();
             }
@@ -396,7 +396,7 @@ public class DataManager {
     public Blob getBlobField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.BLOB, table, field, where);
+            f = getField(FieldType.BLOB, table, field, where);
             if (f != null) {
                 return f.getBlob();
             }
@@ -409,7 +409,7 @@ public class DataManager {
     public boolean getBooleanField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.BOOLEAN, query);
+            f = getField(FieldType.BOOLEAN, query);
             if (f != null) {
                 return f.getBool();
             }
@@ -422,7 +422,7 @@ public class DataManager {
     public boolean getBooleanField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.BOOLEAN, table, field, where);
+            f = getField(FieldType.BOOLEAN, table, field, where);
             if (f != null) {
                 return f.getBool();
             }
@@ -435,7 +435,7 @@ public class DataManager {
     public double getDoubleField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.REAL, query);
+            f = getField(FieldType.REAL, query);
             if (f != null) {
                 return f.getDouble();
             }
@@ -448,7 +448,7 @@ public class DataManager {
     public double getDoubleField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.REAL, table, field, where);
+            f = getField(FieldType.REAL, table, field, where);
             if (f != null) {
                 return f.getDouble();
             }
@@ -461,7 +461,7 @@ public class DataManager {
     public String getBinaryField(String query) {
         DataField f;
         try {
-            f = this.getField(FieldType.BINARY, query);
+            f = getField(FieldType.BINARY, query);
             if (f != null) {
                 return f.getString();
             }
@@ -474,7 +474,7 @@ public class DataManager {
     public String getBinaryField(String table, String field, String where) {
         DataField f;
         try {
-            f = this.getField(FieldType.BINARY, table, field, where);
+            f = getField(FieldType.BINARY, table, field, where);
             if (f != null) {
                 return f.getString();
             }
@@ -484,41 +484,37 @@ public class DataManager {
         return null;
     }
 
-    public DataField getField(FieldType fieldType, String table, String field,
-            String where) throws SQLException {
-        return this.getField(fieldType, "SELECT `" + field + "` FROM `"
-                + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
+    public DataField getField(FieldType type, String table, String field, String where) throws SQLException {
+        return getField(type, "SELECT `" + field + "` FROM `" + getPrefix() + table + "` WHERE " + where + " LIMIT 1");
     }
 
-    public DataField getField(FieldType field, String query)
-            throws SQLException {
+    public DataField getField(FieldType type, String query) throws SQLException {
         try {
             this.rs = getResultSet(query);
             if (this.rs.next()) {
-                Object value = null;
-                if (field.equals(FieldType.STRING)) {
+                Object value;
+                if (type.equals(FieldType.STRING)) {
                     value = this.rs.getString(1);
-                } else if (field.equals(FieldType.INTEGER)) {
+                } else if (type.equals(FieldType.INTEGER)) {
                     value = this.rs.getInt(1);
-                } else if (field.equals(FieldType.DATE)) {
+                } else if (type.equals(FieldType.DATE)) {
                     value = this.rs.getTimestamp(1);
-                } else if (field.equals(FieldType.BLOB)) {
+                } else if (type.equals(FieldType.BLOB)) {
                     value = this.rs.getBlob(1);
-                } else if (field.equals(FieldType.BINARY)) {
+                } else if (type.equals(FieldType.BINARY)) {
                     value = this.rs.getBytes(1);
-                } else if (field.equals(FieldType.BOOLEAN)) {
+                } else if (type.equals(FieldType.BOOLEAN)) {
                     value = this.rs.getBoolean(1);
-                } else if (field.equals(FieldType.REAL)) {
+                } else if (type.equals(FieldType.REAL)) {
                     value = this.rs.getDouble(1);
-                } else if (field.equals(FieldType.UNKNOWN)) {
+                } else if (type.equals(FieldType.UNKNOWN)) {
                     return new DataField(1, this.rs);
                 } else {
                 	close();
                 	return null;
                 }
                 close();
-                return new DataField(field, this.rs.getMetaData()
-                        .getColumnDisplaySize(1), value);
+                return new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
             }
         } finally {
             close();
