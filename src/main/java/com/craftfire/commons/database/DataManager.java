@@ -48,7 +48,7 @@ import com.craftfire.commons.util.LoggingManager;
 
 public class DataManager {
     private boolean keepAlive, reconnect;
-    private String host, username, password, database, prefix, lastQuery,
+    private String host, username, password, database, prefix = "", lastQuery,
             directory;
     private String url = null;
     private Map<Long, String> queries = new HashMap<Long, String>();
