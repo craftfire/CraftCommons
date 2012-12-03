@@ -508,19 +508,16 @@ public class DataManager {
                 } else if (type.equals(FieldType.REAL)) {
                     value = this.rs.getDouble(1);
                 } else if (type.equals(FieldType.UNKNOWN)) {
-                    return new DataField(1, this.rs);
+                    DataField dataField = new DataField(1, this.rs);
+                    close();
+                    return dataField;
                 } else {
                 	close();
                 	return null;
                 }
-                getLogging().debug("Meta: " + this.rs.getMetaData() + "\nValue: " + value + "\nColumn: " + this.rs.getMetaData().getColumnDisplaySize(1));
-                if (value == null) {
-                    close();
-                    return null;
-                }
+                DataField dataField = new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
                 close();
-                getLogging().debug("Meta: " + this.rs.getMetaData() + "\nValue: " + value + "\nColumn: " + this.rs.getMetaData().getColumnDisplaySize(1));
-                return new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
+                return dataField;
             }
         } finally {
             close();
