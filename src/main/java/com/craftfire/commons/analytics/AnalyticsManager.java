@@ -35,9 +35,40 @@ public class AnalyticsManager {
         this.data = new AnalyticsData(name, version);
     }
 
-    public AnalyticsManager(String url, String name, String version) throws MalformedURLException {
-        this.url = new URL(url);
+    public AnalyticsManager(String url, String name, String version) {
+        try {
+            this.url = new URL(url);
+        } catch (MalformedURLException e) {
+            getLogging().stackTrace(e);
+        }
         this.data = new AnalyticsData(name, version);
+    }
+
+    public void submitVoid() {
+        if (Util.isURLOnline(getURL())) {
+            try {
+                String dataString = getParameters();
+                HttpURLConnection connection = (HttpURLConnection) getURL().openConnection();
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setRequestProperty("charset", "utf-8");
+                connection.setRequestProperty("Content-Length", "" + Integer.toString(dataString.getBytes().length));
+                connection.setUseCaches(false);
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream ());
+                wr.writeBytes(dataString);
+                wr.flush();
+                wr.close();
+                connection.disconnect();
+            } catch (IOException e) {
+                getLogging().stackTrace(e);
+            }
+        }
+        String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
+                       Util.getResponseCode(getURL()) + ".";
+        getLogging().error(error);
     }
 
     public void submit() throws AnalyticsException, IOException {
@@ -59,7 +90,7 @@ public class AnalyticsManager {
             connection.disconnect();
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
-                       Util.getResponseCode(getURL()) + ".";
+                Util.getResponseCode(getURL()) + ".";
         getLogging().error(error);
         throw new AnalyticsException(this, error);
     }
