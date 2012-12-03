@@ -513,6 +513,11 @@ public class DataManager {
                 	close();
                 	return null;
                 }
+                getLogging().debug("Meta: " + this.rs.getMetaData() + "\nValue: " + value + "\nColumn: " + this.rs.getMetaData().getColumnDisplaySize(1));
+                if (value == null) {
+                    close();
+                    return null;
+                }
                 close();
                 return new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
             }
