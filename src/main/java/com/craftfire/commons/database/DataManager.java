@@ -232,7 +232,7 @@ public class DataManager {
 
     public boolean tableExist(String table) {
         try {
-            return getField(FieldType.STRING, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1") != null;
+            return getField(FieldType.INTEGER, "SELECT COUNT(*) FROM `" + getPrefix() + table + "` LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
         }
@@ -241,9 +241,9 @@ public class DataManager {
     public int getLastID(String field, String table) {
         DataField f;
         try {
-            f = getField(FieldType.INTEGER, "SELECT `" + field
-                    + "` FROM `" + getPrefix() + table + "` ORDER BY `"
-                    + field + "` DESC LIMIT 1");
+            f = getField(FieldType.INTEGER, "SELECT `" + field +
+                         "` FROM `" + getPrefix() + table +
+                         "` ORDER BY `" + field + "` DESC LIMIT 1");
             if (f != null) {
                 return f.getInt();
             }
@@ -519,6 +519,7 @@ public class DataManager {
                     return null;
                 }
                 close();
+                getLogging().debug("Meta: " + this.rs.getMetaData() + "\nValue: " + value + "\nColumn: " + this.rs.getMetaData().getColumnDisplaySize(1));
                 return new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
             }
         } finally {
@@ -545,8 +546,7 @@ public class DataManager {
 
     public void updateBlob(String table, String field, String where, String data) {
         try {
-            String query = "UPDATE `" + getPrefix() + table + "` " + "SET `"
-                    + field + "` = ? " + "WHERE " + where;
+            String query = "UPDATE `" + getPrefix() + table + "` " + "SET `" + field + "` = ? " + "WHERE " + where;
             byte[] array = data.getBytes();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
             connect();
