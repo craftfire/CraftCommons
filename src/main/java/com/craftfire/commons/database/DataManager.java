@@ -748,7 +748,11 @@ public class DataManager {
     }
 
     public void close() {
-        if (this.keepAlive && !this.reconnect) {
+        close(false);
+    }
+
+    public void close(boolean force) {
+        if (this.keepAlive && !this.reconnect && !force) {
             if (this.timeout == 0) {
                 return;
             } else if ((System.currentTimeMillis() / 1000) < (this.startup + this.timeout)) {
