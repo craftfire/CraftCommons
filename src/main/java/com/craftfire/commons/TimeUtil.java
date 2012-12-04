@@ -35,6 +35,7 @@ public class TimeUtil {
         private String[] aliases;
         private int seconds;
         private int ticks;
+
         TimeUnit(String[] aliases, int seconds, int ticks) {
             this.aliases = aliases.clone();
             this.seconds = seconds;
@@ -76,6 +77,10 @@ public class TimeUtil {
         this.amount = seconds;
     }
 
+    public TimeUtil(long seconds) {
+        this((int) seconds);
+    }
+
     public TimeUtil(String timeString) {
         String[] split = timeString.split(" ");
         this.amount = Integer.parseInt(split[0]);
@@ -112,7 +117,7 @@ public class TimeUtil {
     public String toString() {
         if (getUnit().equals(TimeUnit.SECOND) && getAmount() > 60) {
             /*TODO: Create a seconds to string converter*/
-            return null;
+            return getAmount() + " " + getUnit().getPlural();
         } else if (getAmount() > 1) {
             return getAmount() + " " + getUnit().getPlural();
         } else {
