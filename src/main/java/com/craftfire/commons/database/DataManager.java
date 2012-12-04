@@ -743,9 +743,15 @@ public class DataManager {
             }
             this.startup = System.currentTimeMillis() / 1000;
         } catch (ClassNotFoundException e) {
+            getLogging().error("Could not connect to the database due to no driver could be found for '" + this.datatype + "'.");
+            getLogging().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
             getLogging().stackTrace(e);
+            return;
         } catch (SQLException e) {
+            getLogging().error("Could not connect to the database for '" + this.datatype + "' due to a SQL Exception.");
+            getLogging().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
             getLogging().stackTrace(e);
+            return;
         }
         getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
                            " to establish a connection for '" + this.datatype + "'.");
@@ -786,7 +792,10 @@ public class DataManager {
                 connect();
             }
         } catch (SQLException e) {
+            getLogging().error("Could not close the connection to the database for '" + this.datatype + "' due to a SQL Exception.");
+            getLogging().debug("Closing connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
             getLogging().stackTrace(e);
+            return;
         }
         getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
                            " to CLOSE connection for '" + this.datatype + "'.");
@@ -800,7 +809,7 @@ public class DataManager {
         connect();
         this.reconnect = false;
         getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
-                           " to RECONNECT connection for '" + this.datatype + "'.");
+                           " to attempt a reconnection connection for '" + this.datatype + "'.");
     }
 
     private String updateFieldsString(Map<String, Object> data) {
