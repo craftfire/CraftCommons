@@ -727,6 +727,7 @@ public class DataManager {
         if (this.con != null && isConnected()) {
             return;
         }
+        long start = System.currentTimeMillis();
         try {
             switch (this.datatype) {
                 case MYSQL:
@@ -746,6 +747,8 @@ public class DataManager {
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
+        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                          " to establish a connection for '" + this.datatype + "'");
     }
 
     public void close() {
@@ -760,6 +763,7 @@ public class DataManager {
                 return;
             }
         }
+        long start = System.currentTimeMillis();
         try {
             getLogging().debug("Closing connection for '" + this.datatype + "'. Uptime: " + new TimeUtil(getUptime()).toString() + ". Queries: " + getQueriesCount());
             this.con.close();
@@ -781,13 +785,19 @@ public class DataManager {
         } catch (SQLException e) {
             getLogging().stackTrace(e);
         }
+        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                           " to CLOSE connection for '" + this.datatype + "'");
     }
 
     public void reconnect() {
+        getLogging().debug("Attempting to reconnect connection for '" + this.datatype + "'");
+        long start = System.currentTimeMillis();
         this.reconnect = true;
         close();
         connect();
         this.reconnect = false;
+        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                           " to RECONNECT connection for '" + this.datatype + "'");
     }
 
     private String updateFieldsString(Map<String, Object> data) {
