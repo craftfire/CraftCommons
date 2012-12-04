@@ -674,6 +674,7 @@ public class DataManager {
     }
 
     private void log(String query) {
+        getLogging().debug("Executing " + this.datatype + " query: '" + query + "'");
         this.lastQuery = query;
         this.queries.put(System.currentTimeMillis(), query);
         this.queriesCount++;
@@ -774,7 +775,7 @@ public class DataManager {
                 this.stmt.close();
                 this.stmt = null;
             }
-            if (this.keepAlive) {
+            if (this.keepAlive && !force) {
                 connect();
             }
         } catch (SQLException e) {
