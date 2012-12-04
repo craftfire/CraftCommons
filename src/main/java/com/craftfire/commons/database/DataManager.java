@@ -766,7 +766,10 @@ public class DataManager {
         long start = System.currentTimeMillis();
         try {
             getLogging().debug("Closing connection for '" + this.datatype + "'. Uptime: " + new TimeUtil(getUptime()).toString() + ". Queries: " + getQueriesCount() + ".");
-            this.con.close();
+            if (this.con != null) {
+                this.con.close();
+                this.con = null;
+            }
             if (this.rs != null) {
                 this.rs.close();
                 this.rs = null;
