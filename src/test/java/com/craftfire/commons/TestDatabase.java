@@ -124,15 +124,19 @@ public class TestDatabase {
         String oldString = datamanager.getStringField(wrtable, "txt", "`id` = '1'");
         String testString = "crafttest" + (randomInt + 2);
         Date oldDate = datamanager.getDateField(wrtable, "d", "`id` = '1'");
+        Date testDate = new Date(1356120741);
+        int oldX = datamanager.getIntegerField(wrtable, "x", "`id` = '1'");
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("txt", testString);
-        data.put("d", null);
+        data.put("d", testDate);
+        data.put("x", null);
         datamanager.updateFields(data, wrtable, "`id` = '1'");
         assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
-        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "d", "`id` = '1'").isNull());
+        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "x", "`id` = '1'").isNull());
+        assertEquals(testDate, datamanager.getDateField(wrtable, "d", "`id` = '1'"));
         datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
         datamanager.updateField(wrtable, "d", oldDate, "`id` = '1'");
-        datamanager.executeQueryVoid("UPDATE `" + wrtable + "` SET `d` = '" + oldDate + "' WHERE `id` = '1'");
+        datamanager.executeQueryVoid("UPDATE `" + wrtable + "` SET `x` = '" + oldX + "' WHERE `id` = '1'");
         assertEquals(oldString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
         assertEquals(oldDate, datamanager.getDateField(wrtable, "d", "`id` = '1'"));
     }
