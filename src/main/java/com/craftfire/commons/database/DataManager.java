@@ -44,6 +44,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.craftfire.commons.TimeUtil;
 import com.craftfire.commons.util.LoggingManager;
 
 public class DataManager {
@@ -108,6 +109,10 @@ public class DataManager {
 
     public Long getStartup() {
         return this.startup;
+    }
+
+    public Long getUptime() {
+        return (System.currentTimeMillis() / 1000) - getStartup();
     }
 
     public String getHost() {
@@ -724,12 +729,12 @@ public class DataManager {
         try {
             switch (this.datatype) {
                 case MYSQL:
-                    getLogging().debug("Loading MySQL driver.");
+                    getLogging().debug("Connecting to MYSQL with URL '" + this.url + "'.");
                     Class.forName("com.mysql.jdbc.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
                 case H2:
-                    getLogging().debug("Loading H2 driver.");
+                    getLogging().debug("Connecting to H2 with URL '" + this.url + "'.");
                     Class.forName("org.h2.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
@@ -751,6 +756,7 @@ public class DataManager {
             }
         }
         try {
+            getLogging().debug("Closing connection for '" + this.datatype + "'. Uptime: " + new TimeUtil(getUptime()).toString() + ". Queries: " + getQueriesCount());
             this.con.close();
             if (this.rs != null) {
                 this.rs.close();
