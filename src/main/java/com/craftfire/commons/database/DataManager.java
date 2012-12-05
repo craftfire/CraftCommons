@@ -679,7 +679,7 @@ public class DataManager {
         return this.rs;
     }
 
-    private void log(String query) {
+    protected void log(String query) {
         getLogger().debug("Executing " + this.datatype + " query: '" + query + "'");
         this.lastQuery = query;
         this.queries.put(System.currentTimeMillis(), query);
@@ -822,7 +822,7 @@ public class DataManager {
                 " to attempt a reconnection connection for '" + this.datatype + "'.");
     }
 
-    private String updateFieldsString(Map<String, Object> data) {
+    protected String updateFieldsString(Map<String, Object> data) {
         String query = " SET", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
@@ -837,7 +837,7 @@ public class DataManager {
         return query;
     }
 
-    private String insertFieldString(Map<String, Object> data) {
+    protected String insertFieldString(Map<String, Object> data) {
         String fields = "", values = "", query = "", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
@@ -854,7 +854,7 @@ public class DataManager {
         return query;
     }
 
-    private String fieldValueToString(Object value) {
+    protected String fieldValueToString(Object value) {
         Object val = value;
         if (val instanceof Date) {
             val = new Timestamp(((Date) val).getTime());
