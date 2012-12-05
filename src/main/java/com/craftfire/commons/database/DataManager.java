@@ -572,7 +572,7 @@ public class DataManager {
     }
 
     public void updateField(String table, String field, Object value, String where) throws SQLException {
-        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
+        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` = " + fieldValueToString(value) + " WHERE " + where);
     }
 
     public void updateFields(Map<String, Object> data, String table, String where) throws SQLException {
@@ -581,7 +581,7 @@ public class DataManager {
     }
 
     public void insertField(String table, String field, Object value) throws SQLException {
-        executeQuery("INSERT INTO `" + getPrefix() + table + "` (`" + field + "`) VALUES ('" + value + "')");
+        executeQuery("INSERT INTO `" + getPrefix() + table + "` (`" + field + "`) VALUES (" + fieldValueToString(value) + ")");
     }
 
     public void insertFields(Map<String, Object> data, String table) throws SQLException {
@@ -831,17 +831,7 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            Object val = pairs.getValue();
-            String valstr = null;
-            if (val instanceof Date) {
-                val = new Timestamp(((Date) val).getTime());
-            }
-            if (val == null) {
-                valstr = "NULL";
-            } else {
-                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
-            }
-            query += " `" + pairs.getKey() + "` =  " + valstr + suffix;
+            query += " `" + pairs.getKey() + "` =  " + fieldValueToString(pairs.getValue()) + suffix;
             i++;
         }
         return query;
@@ -856,21 +846,23 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            Object val = pairs.getValue();
-            String valstr = null;
-            if (val instanceof Date) {
-                val = new Timestamp(((Date) val).getTime());
-            }
-            if (val == null) {
-                valstr = "NULL";
-            } else {
-                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
-            }
             fields += " `" + pairs.getKey() + "`" + suffix;
-            values += valstr + suffix;
+            values += fieldValueToString(pairs.getValue()) + suffix;
             i++;
         }
         query = "(" + fields + ") VALUES (" + values + ")";
         return query;
+    }
+
+    private String fieldValueToString(Object value) {
+        Object val = value;
+        if (val instanceof Date) {
+            val = new Timestamp(((Date) val).getTime());
+        }
+        if (val == null) {
+            return "NULL";
+        } else {
+            return "'" + val.toString().replaceAll("'", "''") + "'";
+        }
     }
 }
