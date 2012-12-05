@@ -19,17 +19,58 @@
  */
 package com.craftfire.commons;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.craftfire.commons.database.DataManager;
+import com.craftfire.commons.database.DataType;
 
 public class TestDataManager {
-    private static DataManager datamanager;
+    private static TestingDataManager datamanager;
 
     @BeforeClass
-    public void init() {
-        datamanager = new DataManager("usr", "pss");
+    public static void init() {
+        datamanager = new TestingDataManager("usr", "pss");
     }
 
-    //TODO: Add some tests here.
+    @Test
+    public void testURL() {
+        TestingDataManager dmH2 = new TestingDataManager(DataType.H2, null, null);
+        assertFalse(dmH2.setURL());
+        assertNull(dmH2.getURL());
+        dmH2.setDirectory("../blah/meh/");
+        dmH2.setDatabase("db");
+        assertTrue(dmH2.setURL());
+        assertEquals("jdbc:h2:../blah/meh/db;AUTO_RECONNECT=TRUE", dmH2.getURL());
+        datamanager.setHost(null);
+        datamanager.setDatabase(null);
+        assertFalse(datamanager.setURL());
+        assertNull(datamanager.getURL());
+        datamanager.setHost("localhost");
+        datamanager.setDatabase("db");
+        assertTrue(datamanager.setURL());
+        assertEquals("jdbc:mysql://localhost/db?zeroDateTimeBehavior=convertToNull&jdbcCompliantTruncation=false&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8",
+                datamanager.getURL());
+    }
+
+    static class TestingDataManager extends DataManager {
+
+        public TestingDataManager(DataType type, String username, String password) {
+            super(type, username, password);
+        }
+
+        public TestingDataManager(String username, String password) {
+            super(username, password);
+        }
+
+        @Override
+        public boolean setURL() {
+            return super.setURL();
+        }
+    }
 }
