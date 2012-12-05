@@ -768,6 +768,22 @@ public class DataManager {
     }
 
     public void close(boolean force) {
+        try {
+            if (this.rs != null) {
+                this.rs.close();
+                this.rs = null;
+            }
+            if (this.pStmt != null) {
+                this.pStmt.close();
+                this.pStmt = null;
+            }
+            if (this.stmt != null) {
+                this.stmt.close();
+                this.stmt = null;
+            }
+        } catch (SQLException e) {
+            getLogger().stackTrace(e);
+        }
         if (this.keepAlive && !this.reconnect && !force) {
             if (this.timeout == 0) {
                 return;
@@ -781,18 +797,6 @@ public class DataManager {
             if (this.con != null) {
                 this.con.close();
                 this.con = null;
-            }
-            if (this.rs != null) {
-                this.rs.close();
-                this.rs = null;
-            }
-            if (this.pStmt != null) {
-                this.pStmt.close();
-                this.pStmt = null;
-            }
-            if (this.stmt != null) {
-                this.stmt.close();
-                this.stmt = null;
             }
             if (this.keepAlive && !force) {
                 connect();
