@@ -42,6 +42,13 @@ public class YamlManager {
     }
 
     public YamlManager(File file) throws IOException {
+        if (file == null) {
+            getLogger().error("File '" + file + "' is null, nodes could not be loaded from the yaml file.");
+            return;
+        } else if (!file.exists()) {
+            getLogger().error("File '" + file.toString() + "' could not be found, nodes could not be loaded from the yaml file.");
+            return;
+        }
         getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
         this.file = file;
         load(new FileInputStream(file));
@@ -183,6 +190,13 @@ public class YamlManager {
     }
 
     public void load(File file) throws IOException {
+        if (file == null) {
+            getLogger().error("File '" + file + "' is null, nodes could not be loaded from the yaml file.");
+            return;
+        } else if (!file.exists()) {
+            getLogger().error("File '" + file.toString() + "' could not be found, nodes could not be loaded from the yaml file.");
+            return;
+        }
         getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
         this.file = file;
         load(new FileInputStream(file));
@@ -190,7 +204,7 @@ public class YamlManager {
 
     public void load(String path) throws IOException {
         getLogger().debug("Loading nodes from local file '" + path + "'.");
-        this.load(getClass().getClassLoader().getResourceAsStream(path));
+        load(getClass().getClassLoader().getResourceAsStream(path));
     }
 
     private void load(InputStream yamlStream) throws IOException {
