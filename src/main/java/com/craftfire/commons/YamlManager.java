@@ -37,15 +37,20 @@ public class YamlManager {
     private Map<String, Object> yaml = new HashMap<String, Object>();
     private File file;
 
+    public YamlManager () {
+        //TODO: Nothing?
+    }
+
     public YamlManager(File file) throws IOException {
         getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
         this.file = file;
-        this.load(new FileInputStream(file));
+        load(new FileInputStream(file));
     }
 
     public YamlManager(String path) throws IOException {
-        getLogger().debug("Loading nodes from local file '" + path + "'.");
-        this.load(getClass().getClassLoader().getResourceAsStream(path));
+        InputStream yaml = getClass().getClassLoader().getResourceAsStream(path);
+        getLogger().debug("Loading nodes from local file '" + path + "' = '" + yaml + "'.");
+        load(yaml);
     }
 
     public File getFile() {
@@ -175,6 +180,17 @@ public class YamlManager {
 
     public void save() {
         //TODO: save
+    }
+
+    public void load(File file) throws IOException {
+        getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
+        this.file = file;
+        load(new FileInputStream(file));
+    }
+
+    public void load(String path) throws IOException {
+        getLogger().debug("Loading nodes from local file '" + path + "'.");
+        this.load(getClass().getClassLoader().getResourceAsStream(path));
     }
 
     private void load(InputStream yamlStream) throws IOException {
