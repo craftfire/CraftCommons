@@ -77,6 +77,69 @@ public class TestDataManager {
         }
     }
 
+    @Test
+    public void testTimeout() {
+        assertEquals(0, datamanager.getTimeout());
+        datamanager.setTimeout(1000);
+        assertEquals(1000, datamanager.getTimeout());
+    }
+
+    @Test
+    public void testHost() {
+        assertNull(datamanager.getHost());
+        datamanager.setHost("localhost");
+        assertEquals("localhost", datamanager.getHost());
+    }
+
+    @Test
+    public void testPort() {
+        assertEquals(3306, datamanager.getPort());
+        datamanager.setPort(1234);
+        assertEquals(1234, datamanager.getPort());
+    }
+
+    @Test
+    public void testDatabase() {
+        assertNull(datamanager.getDatabase());
+        datamanager.setDatabase("fancydb");
+        assertEquals("fancydb", datamanager.getDatabase());
+    }
+
+    @Test
+    public void testUsername() {
+        assertEquals("usr", datamanager.getUsername());
+        datamanager.setUsername("wolf480pl");
+        assertEquals("wolf480pl", datamanager.getUsername());
+    }
+
+    @Test
+    public void testPassword() {
+        assertEquals("pss", datamanager.getPassword());
+        datamanager.setPassword("shh...it's secret");
+        assertEquals("shh...it's secret", datamanager.getPassword());
+    }
+
+    @Test
+    public void testDirectory() {
+        assertNull(datamanager.getDirectory());
+        datamanager.setDirectory("../blah/i/love/craftfire/");
+        assertEquals("../blah/i/love/craftfire/", datamanager.getDirectory());
+    }
+
+    @Test
+    public void testPrefix() {
+        assertEquals("", datamanager.getPrefix());
+        datamanager.setPrefix("test_");
+        assertEquals("test_", datamanager.getPrefix());
+    }
+
+    @Test
+    public void testDataType() {
+        DataManager dmH2 = new DataManager(DataType.H2, null, null);
+        assertEquals(DataType.MYSQL, datamanager.getDataType());
+        assertEquals(DataType.H2, dmH2.getDataType());
+    }
+
     static class DummyDataManager extends DataManager {
 
         public DummyDataManager(DataType type, String username, String password) {

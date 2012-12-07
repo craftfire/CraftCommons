@@ -77,9 +77,10 @@ public class TestDatabase {
     }
 
     @Test
-    public void testReconnect() {
+    public void testReconnect() throws SQLException {
         datamanager.reconnect();
         assertTrue(datamanager.isConnected());
+        assertTrue(datamanager.getConnection().isValid(1));
     }
 
     @Test
@@ -102,6 +103,9 @@ public class TestDatabase {
     public void testCount() {
         assertEquals(1, datamanager.getCount(table));
         assertEquals(0, datamanager.getCount(table, "`char` = 'alice has a cat'"));
+        assertEquals("SELECT COUNT(*) FROM `" + table + "` WHERE `char` = 'alice has a cat' LIMIT 1", datamanager.getLastQuery());
+        assertTrue(datamanager.getQueriesCount() >= 2);
+        assertTrue(datamanager.getQueries().containsValue("SELECT COUNT(*) FROM `" + table + "` WHERE `char` = 'alice has a cat' LIMIT 1"));
     }
 
     @Test
