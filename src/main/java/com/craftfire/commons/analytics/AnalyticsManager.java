@@ -39,7 +39,7 @@ public class AnalyticsManager {
         try {
             this.url = new URL(url);
         } catch (MalformedURLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         this.data = new AnalyticsData(name, version);
     }
@@ -63,12 +63,12 @@ public class AnalyticsManager {
                 wr.close();
                 connection.disconnect();
             } catch (IOException e) {
-                getLogging().stackTrace(e);
+                getLogger().stackTrace(e);
             }
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
                        Util.getResponseCode(getURL()) + ".";
-        getLogging().error(error);
+        getLogger().error(error);
     }
 
     public void submit() throws AnalyticsException, IOException {
@@ -91,7 +91,7 @@ public class AnalyticsManager {
         }
         String error = getURL().toString() + " did not return HTTP Status 200, status returned was: " +
                 Util.getResponseCode(getURL()) + ".";
-        getLogging().error(error);
+        getLogger().error(error);
         throw new AnalyticsException(this, error);
     }
 
@@ -110,11 +110,17 @@ public class AnalyticsManager {
         return dataString.substring(0, dataString.length() - 1);
     }
 
-    public LoggingManager getLogging() {
+    public LoggingManager getLogger() {
+        if (this.loggingManager == null) {
+            this.loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
+        }
         return this.loggingManager;
     }
 
     public void setLoggingManager(LoggingManager loggingManager) {
+        if (loggingManager == null) {
+            throw new IllegalArgumentException("Parameter 'loggingManager' cannot be null.");
+        }
         this.loggingManager = loggingManager;
     }
 

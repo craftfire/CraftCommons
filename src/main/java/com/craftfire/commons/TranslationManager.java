@@ -88,10 +88,16 @@ public class TranslationManager {
     }
 
     public LoggingManager getLogger() {
+        if (this.loggingManager == null) {
+            this.loggingManager = new LoggingManager("CraftFire.TranslationManager", "[TranslationManager]");
+        }
         return this.loggingManager;
     }
 
     public void setLoggingManager(LoggingManager loggingManager) {
+        if (loggingManager == null) {
+            throw new IllegalArgumentException("Parameter 'loggingManager' cannot be null.");
+        }
         this.loggingManager = loggingManager;
     }
 

@@ -33,7 +33,7 @@ import com.craftfire.commons.util.Util;
 
 public class YamlManager {
     //TODO: Make it possible to save to a file
-    private LoggingManager loggingManager = new LoggingManager("Craftfire.YamlManager", "[YamlManager]");
+    private LoggingManager loggingManager = new LoggingManager("CraftFire.YamlManager", "[YamlManager]");
     private Map<String, Object> yaml = new HashMap<String, Object>();
     private File file;
 
@@ -65,10 +65,16 @@ public class YamlManager {
     }
 
     public LoggingManager getLogger() {
+        if (this.loggingManager == null) {
+            this.loggingManager = new LoggingManager("CraftFire.YamlManager", "[YamlManager]");
+        }
         return this.loggingManager;
     }
 
     public void setLoggingManager(LoggingManager loggingManager) {
+        if (loggingManager == null) {
+            throw new IllegalArgumentException("Parameter 'loggingManager' cannot be null.");
+        }
         this.loggingManager = loggingManager;
     }
 

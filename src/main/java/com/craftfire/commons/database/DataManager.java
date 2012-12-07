@@ -70,9 +70,9 @@ public class DataManager {
         this.datatype = type;
         this.username = username;
         this.password = password;
-        if (!getLogging().isLogging()) {
-            getLogging().setDirectory(this.directory);
-            getLogging().setLogging(true);
+        if (!getLogger().isLogging()) {
+            getLogger().setDirectory(this.directory);
+            getLogger().setLogging(true);
         }
     }
 
@@ -80,11 +80,17 @@ public class DataManager {
         return this.url;
     }
 
-    public LoggingManager getLogging() {
+    public LoggingManager getLogger() {
+        if (this.loggingManager == null) {
+            this.loggingManager = new LoggingManager("CraftFire.DataManager", "[DataManager]");
+        }
         return this.loggingManager;
     }
 
     public void setLoggingManager(LoggingManager loggingManager) {
+        if (loggingManager == null) {
+            throw new IllegalArgumentException("Parameter 'loggingManager' cannot be null.");
+        }
         this.loggingManager = loggingManager;
     }
 
@@ -162,11 +168,11 @@ public class DataManager {
     public void setDirectory(String directory) {
         File file = new File(directory);
         if (!file.exists()) {
-            getLogging().debug(directory + " does not exist, attempting to create it.");
+            getLogger().debug(directory + " does not exist, attempting to create it.");
             if (file.mkdirs()) {
-                getLogging().debug("Successfully created directory: " + directory);
+                getLogger().debug("Successfully created directory: " + directory);
             } else {
-                getLogging().error("Could not create directory: " + directory);
+                getLogger().error("Could not create directory: " + directory);
             }
         }
         this.directory = directory;
@@ -204,20 +210,20 @@ public class DataManager {
         switch (this.datatype) {
             case MYSQL:
                 if (this.host == null || this.database == null) {
-                    getLogging().debug("Could not set mySQL URL. Host: " + this.host + ", Database: " + this.database);
+                    getLogger().debug("Could not set mySQL URL. Host: " + this.host + ", Database: " + this.database);
                     return false;
                 }
                 this.url = "jdbc:mysql://" + this.host + "/" + this.database
-                         + "?zeroDateTimeBehavior=convertToNull"
-                         + "&jdbcCompliantTruncation=false"
-                         + "&autoReconnect=true"
-                         + "&characterEncoding=UTF-8"
-                         + "&characterSetResults=UTF-8";
+                        + "?zeroDateTimeBehavior=convertToNull"
+                        + "&jdbcCompliantTruncation=false"
+                        + "&autoReconnect=true"
+                        + "&characterEncoding=UTF-8"
+                        + "&characterSetResults=UTF-8";
                 outputDrivers();
                 return true;
             case H2:
                 if (this.directory == null || this.database == null) {
-                    getLogging().debug("Could not set H2 URL. Host: " + this.directory + ", Database: " + this.database);
+                    getLogger().debug("Could not set H2 URL. Host: " + this.directory + ", Database: " + this.database);
                     return false;
                 }
                 this.url = "jdbc:h2:" + this.directory + this.database + ";AUTO_RECONNECT=TRUE";
@@ -230,8 +236,8 @@ public class DataManager {
     public boolean exist(String table, String field, Object value) {
         try {
             return getField(FieldType.STRING, "SELECT `" + field + "` " +
-                            "FROM `" + getPrefix() + table + "` " +
-                            "WHERE `" + field + "` = '" + value + "' " + "LIMIT 1") != null;
+                    "FROM `" + getPrefix() + table + "` " +
+                    "WHERE `" + field + "` = '" + value + "' " + "LIMIT 1") != null;
         } catch (SQLException e) {
             return false;
         }
@@ -249,13 +255,13 @@ public class DataManager {
         DataField f;
         try {
             f = getField(FieldType.INTEGER, "SELECT `" + field +
-                         "` FROM `" + getPrefix() + table +
-                         "` ORDER BY `" + field + "` DESC LIMIT 1");
+                    "` FROM `" + getPrefix() + table +
+                    "` ORDER BY `" + field + "` DESC LIMIT 1");
             if (f != null) {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -270,7 +276,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -285,7 +291,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -299,14 +305,14 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
 
     public void increaseField(String table, String field, String where) throws SQLException {
         executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field
-                          + "` = " + field + " + 1 WHERE " + where);
+                + "` = " + field + " + 1 WHERE " + where);
     }
 
     public String getStringField(String query) {
@@ -317,7 +323,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -330,7 +336,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -343,7 +349,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -356,7 +362,7 @@ public class DataManager {
                 return f.getInt();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -369,7 +375,7 @@ public class DataManager {
                 return f.getDate();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -382,7 +388,7 @@ public class DataManager {
                 return f.getDate();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -395,7 +401,7 @@ public class DataManager {
                 return f.getBlob();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -408,7 +414,7 @@ public class DataManager {
                 return f.getBlob();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -421,7 +427,7 @@ public class DataManager {
                 return f.getBool();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return false;
     }
@@ -434,7 +440,7 @@ public class DataManager {
                 return f.getBool();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return false;
     }
@@ -447,7 +453,7 @@ public class DataManager {
                 return f.getDouble();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -460,7 +466,7 @@ public class DataManager {
                 return f.getDouble();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return 0;
     }
@@ -473,7 +479,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -486,7 +492,7 @@ public class DataManager {
                 return f.getString();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -519,8 +525,8 @@ public class DataManager {
                     close();
                     return dataField;
                 } else {
-                	close();
-                	return null;
+                    close();
+                    return null;
                 }
                 DataField dataField = new DataField(type, this.rs.getMetaData().getColumnDisplaySize(1), value);
                 close();
@@ -544,7 +550,7 @@ public class DataManager {
         try {
             executeQuery(query);
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
     }
 
@@ -561,7 +567,7 @@ public class DataManager {
             this.pStmt.executeUpdate();
             close();
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
     }
 
@@ -604,7 +610,7 @@ public class DataManager {
             close();
             return new DefaultTableModel(rows, columnNames);
         } catch (Exception e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
             close();
             return null;
         }
@@ -637,7 +643,7 @@ public class DataManager {
             return data;
         } catch (SQLException e) {
             close();
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -660,7 +666,7 @@ public class DataManager {
             return list;
         } catch (SQLException e) {
             close();
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return null;
     }
@@ -674,23 +680,23 @@ public class DataManager {
     }
 
     private void log(String query) {
-        getLogging().debug("Executing " + this.datatype + " query: '" + query + "'");
+        getLogger().debug("Executing " + this.datatype + " query: '" + query + "'");
         this.lastQuery = query;
         this.queries.put(System.currentTimeMillis(), query);
         this.queriesCount++;
     }
 
     private void outputDrivers() {
-        if (getLogging().isDebug()) {
-            getLogging().debug("Checking DriverManager drivers.");
+        if (getLogger().isDebug()) {
+            getLogger().debug("Checking DriverManager drivers.");
             Enumeration<Driver> driverList = DriverManager.getDrivers();
             int count = 0;
             while (driverList.hasMoreElements()) {
                 Driver driverClass = driverList.nextElement();
-                getLogging().debug("Found driver #" + (count + 1) + ": " + driverClass.getClass().getName());
+                getLogger().debug("Found driver #" + (count + 1) + ": " + driverClass.getClass().getName());
                 count++;
             }
-            getLogging().debug("Found " + count + " drivers in DriverManager.");
+            getLogger().debug("Found " + count + " drivers in DriverManager.");
         }
     }
 
@@ -700,7 +706,7 @@ public class DataManager {
                 return !this.con.isClosed();
             }
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return false;
     }
@@ -715,7 +721,7 @@ public class DataManager {
             close();
             return result;
         } catch (SQLException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
         return false;
     }
@@ -731,30 +737,30 @@ public class DataManager {
         try {
             switch (this.datatype) {
                 case MYSQL:
-                    getLogging().debug("Connecting to MYSQL with URL '" + this.url + "'.");
+                    getLogger().debug("Connecting to MYSQL with URL '" + this.url + "'.");
                     Class.forName("com.mysql.jdbc.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
                 case H2:
-                    getLogging().debug("Connecting to H2 with URL '" + this.url + "'.");
+                    getLogger().debug("Connecting to H2 with URL '" + this.url + "'.");
                     Class.forName("org.h2.Driver");
                     this.con = DriverManager.getConnection(this.url, this.username, this.password);
                     break;
             }
             this.startup = System.currentTimeMillis() / 1000;
         } catch (ClassNotFoundException e) {
-            getLogging().error("Could not connect to the database due to no driver could be found for '" + this.datatype + "'.");
-            getLogging().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
-            getLogging().stackTrace(e);
+            getLogger().error("Could not connect to the database due to no driver could be found for '" + this.datatype + "'.");
+            getLogger().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
+            getLogger().stackTrace(e);
             return;
         } catch (SQLException e) {
-            getLogging().error("Could not connect to the database for '" + this.datatype + "' due to a SQL Exception.");
-            getLogging().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
-            getLogging().stackTrace(e);
+            getLogger().error("Could not connect to the database for '" + this.datatype + "' due to a SQL Exception.");
+            getLogger().debug("Connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
+            getLogger().stackTrace(e);
             return;
         }
-        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
-                           " to establish a connection for '" + this.datatype + "'.");
+        getLogger().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                " to establish a connection for '" + this.datatype + "'.");
     }
 
     public void close() {
@@ -771,7 +777,7 @@ public class DataManager {
         }
         long start = System.currentTimeMillis();
         try {
-            getLogging().debug("Closing connection for '" + this.datatype + "'. Uptime: " + new TimeUtil(getUptime()).toString() + ". Queries: " + getQueriesCount() + ".");
+            getLogger().debug("Closing connection for '" + this.datatype + "'. Uptime: " + new TimeUtil(getUptime()).toString() + ". Queries: " + getQueriesCount() + ".");
             if (this.con != null) {
                 this.con.close();
                 this.con = null;
@@ -792,24 +798,24 @@ public class DataManager {
                 connect();
             }
         } catch (SQLException e) {
-            getLogging().error("Could not close the connection to the database for '" + this.datatype + "' due to a SQL Exception.");
-            getLogging().debug("Closing connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
-            getLogging().stackTrace(e);
+            getLogger().error("Could not close the connection to the database for '" + this.datatype + "' due to a SQL Exception.");
+            getLogger().debug("Closing connection attempt took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() + ".");
+            getLogger().stackTrace(e);
             return;
         }
-        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
-                           " to CLOSE connection for '" + this.datatype + "'.");
+        getLogger().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                " to CLOSE connection for '" + this.datatype + "'.");
     }
 
     public void reconnect() {
-        getLogging().debug("Attempting to reconnect connection for '" + this.datatype + "'.");
+        getLogger().debug("Attempting to reconnect connection for '" + this.datatype + "'.");
         long start = System.currentTimeMillis();
         this.reconnect = true;
         close();
         connect();
         this.reconnect = false;
-        getLogging().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
-                           " to attempt a reconnection connection for '" + this.datatype + "'.");
+        getLogger().debug("Took " + new TimeUtil((System.currentTimeMillis() - start) / 1000).toString() +
+                " to attempt a reconnection connection for '" + this.datatype + "'.");
     }
 
     private String updateFieldsString(Map<String, Object> data) {
