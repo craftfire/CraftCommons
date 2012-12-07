@@ -54,7 +54,7 @@ public class TestDatabase {
     @BeforeClass
     public static void init() {
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogging().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
+        datamanager.getLogger().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);

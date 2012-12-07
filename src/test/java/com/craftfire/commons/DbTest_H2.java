@@ -57,7 +57,7 @@ public class DbTest_H2 {
         String user = "sa";
         String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogging().getLogger().setLevel(Level.OFF);	//Turn off logging temporarily so we won't be spammed with red warnings. 
+        datamanager.getLogger().getLogger().setLevel(Level.OFF);	//Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
