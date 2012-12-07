@@ -572,7 +572,7 @@ public class DataManager {
     }
 
     public void updateField(String table, String field, Object value, String where) throws SQLException {
-        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` = '" + value + "' WHERE " + where);
+        executeQuery("UPDATE `" + getPrefix() + table + "` SET `" + field + "` = " + fieldValueToString(value) + " WHERE " + where);
     }
 
     public void updateFields(Map<String, Object> data, String table, String where) throws SQLException {
@@ -581,7 +581,7 @@ public class DataManager {
     }
 
     public void insertField(String table, String field, Object value) throws SQLException {
-        executeQuery("INSERT INTO `" + getPrefix() + table + "` (`" + field + "`) VALUES ('" + value + "')");
+        executeQuery("INSERT INTO `" + getPrefix() + table + "` (`" + field + "`) VALUES (" + fieldValueToString(value) + ")");
     }
 
     public void insertFields(Map<String, Object> data, String table) throws SQLException {
@@ -679,7 +679,7 @@ public class DataManager {
         return this.rs;
     }
 
-    private void log(String query) {
+    protected void log(String query) {
         getLogger().debug("Executing " + this.datatype + " query: '" + query + "'");
         this.lastQuery = query;
         this.queries.put(System.currentTimeMillis(), query);
@@ -768,6 +768,22 @@ public class DataManager {
     }
 
     public void close(boolean force) {
+        try {
+            if (this.rs != null) {
+                this.rs.close();
+                this.rs = null;
+            }
+            if (this.pStmt != null) {
+                this.pStmt.close();
+                this.pStmt = null;
+            }
+            if (this.stmt != null) {
+                this.stmt.close();
+                this.stmt = null;
+            }
+        } catch (SQLException e) {
+            getLogger().stackTrace(e);
+        }
         if (this.keepAlive && !this.reconnect && !force) {
             if (this.timeout == 0) {
                 return;
@@ -781,18 +797,6 @@ public class DataManager {
             if (this.con != null) {
                 this.con.close();
                 this.con = null;
-            }
-            if (this.rs != null) {
-                this.rs.close();
-                this.rs = null;
-            }
-            if (this.pStmt != null) {
-                this.pStmt.close();
-                this.pStmt = null;
-            }
-            if (this.stmt != null) {
-                this.stmt.close();
-                this.stmt = null;
             }
             if (this.keepAlive && !force) {
                 connect();
@@ -818,7 +822,7 @@ public class DataManager {
                 " to attempt a reconnection connection for '" + this.datatype + "'.");
     }
 
-    private String updateFieldsString(Map<String, Object> data) {
+    protected String updateFieldsString(Map<String, Object> data) {
         String query = " SET", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
@@ -827,23 +831,13 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            Object val = pairs.getValue();
-            String valstr = null;
-            if (val instanceof Date) {
-                val = new Timestamp(((Date) val).getTime());
-            }
-            if (val == null) {
-                valstr = "NULL";
-            } else {
-                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
-            }
-            query += " `" + pairs.getKey() + "` =  " + valstr + suffix;
+            query += " `" + pairs.getKey() + "` =  " + fieldValueToString(pairs.getValue()) + suffix;
             i++;
         }
         return query;
     }
 
-    private String insertFieldString(Map<String, Object> data) {
+    protected String insertFieldString(Map<String, Object> data) {
         String fields = "", values = "", query = "", suffix = ",";
         int i = 1;
         Iterator<Entry<String, Object>> it = data.entrySet().iterator();
@@ -852,21 +846,23 @@ public class DataManager {
             if (i == data.size()) {
                 suffix = "";
             }
-            Object val = pairs.getValue();
-            String valstr = null;
-            if (val instanceof Date) {
-                val = new Timestamp(((Date) val).getTime());
-            }
-            if (val == null) {
-                valstr = "NULL";
-            } else {
-                valstr = "'" + val.toString().replaceAll("'", "''") + "'";
-            }
             fields += " `" + pairs.getKey() + "`" + suffix;
-            values += valstr + suffix;
+            values += fieldValueToString(pairs.getValue()) + suffix;
             i++;
         }
         query = "(" + fields + ") VALUES (" + values + ")";
         return query;
+    }
+
+    protected String fieldValueToString(Object value) {
+        Object val = value;
+        if (val instanceof Date) {
+            val = new Timestamp(((Date) val).getTime());
+        }
+        if (val == null) {
+            return "NULL";
+        } else {
+            return "'" + val.toString().replaceAll("'", "''") + "'";
+        }
     }
 }

@@ -8,7 +8,7 @@ Copyright (c) 2011-2012, CraftFire <<http://www.craftfire.com/>>
 Who is CraftFire?
 -----------------
 CraftFire is the team behind the AuthAPI, AuthDB, BabelCraft, CraftCommons, and TextWrap projects.  
-[![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider/) [![Contex](https://secure.gravatar.com/avatar/ab34f58825a956a975f1a3dcdf97a173?d=mm&r=pg&s=48)](http://forums.spout.org/members/contex/) 
+[![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider/) [![Contex](https://secure.gravatar.com/avatar/ab34f58825a956a975f1a3dcdf97a173?d=mm&r=pg&s=48)](http://forums.spout.org/members/contex/)[![Wolf480pl](https://gravatar.com/avatar/816b19ee786208f3216fe146d7733086?d=mm&r=pg&s=48)](http://forums.spout.org/members/wolf480pl.18863/) 
 
 Visit our [website][Website] or get support on our [forum thread][Forums].  
 Track and submit issues and bugs on our [issue tracker][Issues].
