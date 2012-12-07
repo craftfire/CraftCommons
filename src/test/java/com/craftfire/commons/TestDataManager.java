@@ -23,24 +23,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataType;
+import com.craftfire.commons.util.LoggingManager;
 
 public class TestDataManager {
-    private static TestingDataManager datamanager;
+    private static DummyDataManager datamanager;
+    private boolean logged = false;
 
-    @BeforeClass
-    public static void init() {
-        datamanager = new TestingDataManager("usr", "pss");
+    @Before
+    public void init() {
+        datamanager = new DummyDataManager("usr", "pss");
     }
 
     @Test
     public void testURL() {
-        TestingDataManager dmH2 = new TestingDataManager(DataType.H2, null, null);
+        DummyDataManager dmH2 = new DummyDataManager(DataType.H2, null, null);
         assertFalse(dmH2.setURL());
         assertNull(dmH2.getURL());
         dmH2.setDirectory("../blah/meh/");
@@ -58,13 +61,29 @@ public class TestDataManager {
                 datamanager.getURL());
     }
 
-    static class TestingDataManager extends DataManager {
+    @Test
+    public void testLogging() {
+        datamanager.close();
+        assertFalse(this.logged);
+        LoggingManager lm = new DummyLogger("CraftFire.DataManager", "[DummyDataManager]");
+        datamanager.setLoggingManager(lm);
+        assertTrue(datamanager.getLogger() == lm);
+        datamanager.close();
+        assertTrue(this.logged);
+        try {
+            datamanager.setLoggingManager(null);
+            fail("Expected IllegalArgumentException when ttying setLoggingManager(null)");
+        } catch (Exception youBetterBeThrown) {
+        }
+    }
 
-        public TestingDataManager(DataType type, String username, String password) {
+    static class DummyDataManager extends DataManager {
+
+        public DummyDataManager(DataType type, String username, String password) {
             super(type, username, password);
         }
 
-        public TestingDataManager(String username, String password) {
+        public DummyDataManager(String username, String password) {
             super(username, password);
         }
 
@@ -72,5 +91,44 @@ public class TestDataManager {
         public boolean setURL() {
             return super.setURL();
         }
+    }
+
+    class DummyLogger extends LoggingManager {
+
+        public DummyLogger(String logger, String prefix) {
+            super(logger, prefix);
+        }
+
+        @Override
+        public void debug(String line) {
+            super.debug(line);
+            TestDataManager.this.logged = true;
+        }
+
+        /*
+        @Override
+        public void info(String line) {
+            super.info(line);
+            TestDataManager.this.logged = true;
+        }
+
+        @Override
+        public void severe(String line) {
+            super.severe(line);
+            TestDataManager.this.logged = true;
+        }
+
+        @Override
+        public void warning(String line) {
+            super.warning(line);
+            TestDataManager.this.logged = true;
+        }
+
+        @Override
+        public void logError(String line) {
+            super.logError(line);
+            TestDataManager.this.logged = true;
+        }
+        */
     }
 }
