@@ -27,18 +27,19 @@ public class TimeUtil {
     private final int amount;
 
     public enum TimeUnit {
-        SECOND(new String[]{"seconds", "sec", "secs", "s"}, 1, 20),
-        MINUTE(new String[]{"minutes", "min", "mins", "m"}, 60, 1200),
-        HOUR(new String[]{"hours", "hr", "hrs", "h"}, 3600, 72000),
-        DAY(new String[]{"days", "d"}, 86400, 1728000);
+        MILLISECOND(new String[]{"milliseconds", "milli", "millis", "ms"}, 1, 0.02),
+        SECOND(new String[]{"seconds", "sec", "secs", "s"}, 1000, 20),
+        MINUTE(new String[]{"minutes", "min", "mins", "m"}, 60000, 1200),
+        HOUR(new String[]{"hours", "hr", "hrs", "h"}, 3600000, 72000),
+        DAY(new String[]{"days", "d"}, 86400000, 1728000);
 
         private String[] aliases;
-        private int seconds;
-        private int ticks;
+        private int milliseconds;
+        private double ticks;
 
-        TimeUnit(String[] aliases, int seconds, int ticks) {
+        TimeUnit(String[] aliases, int milliseconds, double ticks) {
             this.aliases = aliases.clone();
-            this.seconds = seconds;
+            this.milliseconds = milliseconds;
             this.ticks = ticks;
         }
 
@@ -54,12 +55,16 @@ public class TimeUtil {
             return getAliases().get(0).toLowerCase();
         }
 
+        public int getMilliseconds() {
+            return this.milliseconds;
+        }
+
         public int getSeconds() {
-            return this.seconds;
+            return this.milliseconds / 1000;
         }
 
         public int getTicks() {
-            return this.ticks;
+            return (int) this.ticks;
         }
 
         public static TimeUnit getUnit(String name) {
