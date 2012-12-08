@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons;
+package com.craftfire.commons.yaml;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,7 +36,7 @@ import com.craftfire.commons.util.Util;
 public class YamlManager {
     //TODO: Make it possible to save to a file
     private LoggingManager loggingManager = new LoggingManager("CraftFire.YamlManager", "[YamlManager]");
-    private Map<String, Object> yaml = new HashMap<String, Object>();
+    private Map<String, YamlNode> yaml = new HashMap<String, YamlNode>();
     private Set<File> files = new HashSet<File>();
 
     public YamlManager () {
@@ -81,11 +81,11 @@ public class YamlManager {
     public boolean getBoolean(String node, boolean defaultValue) {
         String newNode = node.toLowerCase();
         if (exist(newNode)) {
-            Object value = this.yaml.get(newNode);
-            if (value instanceof Boolean) {
+            YamlNode value = this.yaml.get(newNode);
+            if (value.getObject() instanceof Boolean) {
                 getLogger().debug("Found node '" + newNode + "' with Boolean value '" + value +
                                   "', default value is '" + defaultValue + "'.");
-                return (Boolean) value;
+                return value.getBoolean();
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a Boolean '" + value +
                                   "', returning default value instead '" + defaultValue + "'.");
@@ -103,11 +103,11 @@ public class YamlManager {
     public String getString(String node, String defaultValue) {
         String newNode = node.toLowerCase();
         if (exist(newNode)) {
-            Object value = this.yaml.get(newNode);
-            if (value instanceof String) {
+            YamlNode value = this.yaml.get(newNode);
+            if (value.getObject() instanceof String) {
                 getLogger().debug("Found node '" + newNode + "' with String value '" + value +
                                   "', default value is '" + defaultValue + "'.");
-                return (String) value;
+                return value.getString();
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a String '" + value +
                                   "', returning default value instead '" + defaultValue + "'.");
@@ -119,17 +119,17 @@ public class YamlManager {
     }
 
     public int getInt(String node) {
-        return getInt(node, 1);
+        return getInt(node, 0);
     }
 
     public int getInt(String node, int defaultValue) {
         String newNode = node.toLowerCase();
         if (exist(newNode)) {
-            Object value = this.yaml.get(newNode);
-            if (value instanceof Integer) {
+            YamlNode value = this.yaml.get(newNode);
+            if (value.getObject() instanceof Integer) {
                 getLogger().debug("Found node '" + newNode + "' with Integer value '" + value +
                                   "', default value is '" + defaultValue + "'.");
-                return (Integer) value;
+                return value.getInt();
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not an Integer '" + value +
                                   "', returning default value instead '" + defaultValue + "'.");
@@ -147,11 +147,11 @@ public class YamlManager {
     public Long getLong(String node, Long defaultValue) {
         String newNode = node.toLowerCase();
         if (exist(newNode)) {
-            Object value = this.yaml.get(newNode);
-            if (value instanceof Long) {
+            YamlNode value = this.yaml.get(newNode);
+            if (value.getObject() instanceof Long) {
                 getLogger().debug("Found node '" + newNode + "' with Long value '" + value +
                                   "', default value is '" + defaultValue + "'");
-                return (Long) value;
+                return value.getLong();
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a Long '" + value +
                                   "', returning default value instead '" + defaultValue + "'.");
@@ -162,8 +162,16 @@ public class YamlManager {
         return defaultValue;
     }
 
-    public Map<String, Object> getNodes() {
+    public Map<String, YamlNode> getNodes() {
         return this.yaml;
+    }
+
+    public YamlNode getNode(String node) {
+        if (exist(node)) {
+            return this.yaml.get(node);
+        } else {
+            return null;
+        }
     }
 
     public void addNodes(YamlManager yamlManager) {
@@ -171,14 +179,19 @@ public class YamlManager {
         this.yaml.putAll(yamlManager.getNodes());
     }
 
-    public void addNodes(Map<String, Object> map) {
+    public void addNodes(Map<String, YamlNode> map) {
         getLogger().debug("Adding node list to current node list: '" + map.toString() + "'.");
         this.yaml.putAll(map);
     }
 
-    public void setNode(String node, Object value) {
+    public void setNode(String node, YamlNode value) {
         getLogger().debug("Setting node '" + node + "' to value '" + value + "'.");
         this.yaml.put(node, value);
+    }
+
+    public void setNode(String node, String value) {
+        getLogger().debug("Setting node '" + node + "' to value '" + value + "'.");
+        this.yaml.put(node, new YamlNode(node, value));
     }
 
     public void save() {
@@ -286,23 +299,23 @@ public class YamlManager {
                         if (value.equalsIgnoreCase("true")) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Boolean value 'true'.");
-                            this.yaml.put(node + finalNode, true);
+                            this.yaml.put(node, new YamlNode(node + finalNode, true));
                         } else if (value.equalsIgnoreCase("false")) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Boolean value 'false'.");
-                            this.yaml.put(node + finalNode, false);
+                            this.yaml.put(node, new YamlNode(node + finalNode, false));
                         } else if (Util.isInteger(value)) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Integer value '" + value + "'.");
-                            this.yaml.put(node + finalNode, Integer.parseInt(value));
+                            this.yaml.put(node, new YamlNode(node + finalNode, Integer.parseInt(value)));
                         } else if (Util.isLong(value)) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Long value '" + value + "'.");
-                            this.yaml.put(node + finalNode, Long.parseLong(value));
+                            this.yaml.put(node, new YamlNode(node + finalNode, Long.parseLong(value)));
                         } else if (value instanceof String && value != null && !value.equalsIgnoreCase("null")) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with String value '" + value + "'.");
-                            this.yaml.put(node + finalNode, value);
+                            this.yaml.put(node, new YamlNode(node + finalNode, value));
                         } else {
                             getLogger().error("Could not add node '" + node + finalNode + "' " + "to the node list because the value is '" + value + "'.");
                         }

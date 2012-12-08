@@ -174,6 +174,7 @@ public class DataField {
     	}
     	return sqlTypeParse(sqltype, size, data);
     }
+
     private static FieldType sqlTypeParse(int sqltype, int size, Object data) {
     	if (data == null) {
     		return FieldType.NULL;
