@@ -79,7 +79,7 @@ public class YamlManager {
     }
 
     public boolean exist(String node) {
-        getLogger().debug("Checking if node '" + node.toLowerCase() + "' exists: " + this.yaml.containsKey(node.toLowerCase()));
+        getLogger().debug("Checking if node '" + node.toLowerCase() + "' exists: '" + this.yaml.containsKey(node.toLowerCase()) + "'.");
         return this.yaml.containsKey(node.toLowerCase());
     }
 
@@ -93,15 +93,15 @@ public class YamlManager {
             Object value = this.yaml.get(newNode);
             if (value instanceof Boolean) {
                 getLogger().debug("Found node '" + newNode + "' with Boolean value '" + value +
-                                  "', default value is '" + defaultValue + "'");
+                                  "', default value is '" + defaultValue + "'.");
                 return (Boolean) value;
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a Boolean '" + value +
-                                  "', returning default value instead '" + defaultValue + "'");
+                                  "', returning default value instead '" + defaultValue + "'.");
                 return defaultValue;
             }
         }
-        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'");
+        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'.");
         return defaultValue;
     }
 
@@ -115,15 +115,15 @@ public class YamlManager {
             Object value = this.yaml.get(newNode);
             if (value instanceof String) {
                 getLogger().debug("Found node '" + newNode + "' with String value '" + value +
-                                  "', default value is '" + defaultValue + "'");
+                                  "', default value is '" + defaultValue + "'.");
                 return (String) value;
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a String '" + value +
-                                  "', returning default value instead '" + defaultValue + "'");
+                                  "', returning default value instead '" + defaultValue + "'.");
                 return defaultValue;
             }
         }
-        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'");
+        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'.");
         return defaultValue;
     }
 
@@ -137,15 +137,15 @@ public class YamlManager {
             Object value = this.yaml.get(newNode);
             if (value instanceof Integer) {
                 getLogger().debug("Found node '" + newNode + "' with Integer value '" + value +
-                                  "', default value is '" + defaultValue + "'");
+                                  "', default value is '" + defaultValue + "'.");
                 return (Integer) value;
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not an Integer '" + value +
-                                  "', returning default value instead '" + defaultValue + "'");
+                                  "', returning default value instead '" + defaultValue + "'.");
                 return defaultValue;
             }
         }
-        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'");
+        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'.");
         return defaultValue;
     }
 
@@ -163,11 +163,11 @@ public class YamlManager {
                 return (Long) value;
             } else {
                 getLogger().debug("Found node '" + newNode + "' but value is not a Long '" + value +
-                                  "', returning default value instead '" + defaultValue + "'");
+                                  "', returning default value instead '" + defaultValue + "'.");
                 return defaultValue;
             }
         }
-        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'");
+        getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'.");
         return defaultValue;
     }
 
@@ -176,12 +176,12 @@ public class YamlManager {
     }
 
     public void addNodes(YamlManager yamlManager) {
-        getLogger().debug("Adding node list to current node list: " + yamlManager.getNodes().toString());
+        getLogger().debug("Adding node list to current node list: '" + yamlManager.getNodes().toString() + "'.");
         this.yaml.putAll(yamlManager.getNodes());
     }
 
     public void addNodes(Map<String, Object> map) {
-        getLogger().debug("Adding node list to current node list: " + map.toString());
+        getLogger().debug("Adding node list to current node list: '" + map.toString() + "'.");
         this.yaml.putAll(map);
     }
 
