@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.commons.util.Util;
@@ -35,33 +37,22 @@ public class YamlManager {
     //TODO: Make it possible to save to a file
     private LoggingManager loggingManager = new LoggingManager("CraftFire.YamlManager", "[YamlManager]");
     private Map<String, Object> yaml = new HashMap<String, Object>();
-    private File file;
+    private Set<File> files = new HashSet<File>();
 
     public YamlManager () {
         //TODO: Nothing?
     }
 
     public YamlManager(File file) throws IOException {
-        if (file == null) {
-            getLogger().error("File '" + file + "' is null, nodes could not be loaded from the yaml file.");
-            return;
-        } else if (!file.exists()) {
-            getLogger().error("File '" + file.toString() + "' could not be found, nodes could not be loaded from the yaml file.");
-            return;
-        }
-        getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
-        this.file = file;
-        load(new FileInputStream(file));
+        load(file);
     }
 
     public YamlManager(String path) throws IOException {
-        InputStream yaml = getClass().getClassLoader().getResourceAsStream(path);
-        getLogger().debug("Loading nodes from local file '" + path + "' = '" + yaml + "'.");
-        load(yaml);
+        load(path);
     }
 
-    public File getFile() {
-        return this.file;
+    public Set<File> getFiles() {
+        return this.files;
     }
 
     public LoggingManager getLogger() {
@@ -203,7 +194,7 @@ public class YamlManager {
             return;
         }
         getLogger().debug("Loading nodes from file '" + file.getAbsoluteFile() + "'.");
-        this.file = file;
+        this.files.add(file);
         load(new FileInputStream(file));
     }
 
@@ -213,7 +204,6 @@ public class YamlManager {
     }
 
     private void load(InputStream yamlStream) throws IOException {
-        this.yaml = new HashMap<String, Object>();
         if (yamlStream != null) {
             try {
                 InputStreamReader yamlStreamReader = new InputStreamReader(yamlStream);
