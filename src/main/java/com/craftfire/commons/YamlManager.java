@@ -79,8 +79,7 @@ public class YamlManager {
     }
 
     public boolean exist(String node) {
-        getLogger().debug("Checking if node '" + node.toLowerCase() +
-                          "' exists: " + this.yaml.containsKey(node.toLowerCase()));
+        getLogger().debug("Checking if node '" + node.toLowerCase() + "' exists: " + this.yaml.containsKey(node.toLowerCase()));
         return this.yaml.containsKey(node.toLowerCase());
     }
 
@@ -310,10 +309,12 @@ public class YamlManager {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with Long value '" + value + "'.");
                             this.yaml.put(node + finalNode, Long.parseLong(value));
-                        } else {
+                        } else if (value instanceof String && value != null && !value.equalsIgnoreCase("null")) {
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
                                               "to the node list with String value '" + value + "'.");
                             this.yaml.put(node + finalNode, value);
+                        } else {
+                            getLogger().error("Could not add node '" + node + finalNode + "' " + "to the node list because the value is '" + value + "'.");
                         }
                         isNode = false;
                     }
