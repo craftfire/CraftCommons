@@ -140,6 +140,26 @@ public class TestDataManager {
         assertEquals(DataType.H2, dmH2.getDataType());
     }
 
+    @Test
+    public void testFieldGettersFail() {
+        String table = "tb";
+        String name = "afield";
+        assertFalse(datamanager.getBooleanField(table, name, "1"));
+        assertNull(datamanager.getBinaryField(table, name, "1"));
+        assertNull(datamanager.getBlobField(table, name, "1"));
+        assertNull(datamanager.getDateField(table, name, "1"));
+        assertEquals(0, datamanager.getDoubleField(table, name, "1"), 0);
+        assertEquals(0, datamanager.getIntegerField(table, name, "1"));
+        assertNull(datamanager.getStringField(table, name, "1"));
+        assertFalse(datamanager.getBooleanField("SELECT `bool` FROM `" + table + "`"));
+        assertNull(datamanager.getBinaryField("SELECT `bin` FROM `" + table + "`"));
+        assertNull(datamanager.getBlobField("SELECT `blob` FROM `" + table + "`"));
+        assertNull(datamanager.getDateField("SELECT `date` FROM `" + table + "`"));
+        assertEquals(0, datamanager.getDoubleField("SELECT `double` FROM `" + table + "`"), 0);
+        assertEquals(0, datamanager.getIntegerField("SELECT `int` FROM `" + table + "`"));
+        assertNull(datamanager.getStringField("SELECT `vchar` FROM `" + table + "`"));
+    }
+
     static class DummyDataManager extends DataManager {
 
         public DummyDataManager(DataType type, String username, String password) {
