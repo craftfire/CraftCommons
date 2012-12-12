@@ -21,14 +21,21 @@ package com.craftfire.commons;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -177,54 +184,59 @@ public class TestDatabase {
     }
 
     @Test
-    public void testBInt() throws SQLException {
+    public void testBInt() throws SQLException, ParseException, IOException {
         final String name = "bint";
+        final BigInteger expected = new BigInteger("487250340273948");
+        final Date expectedDate = new SimpleDateFormat("d/M/yy H:mm:ss.SSS").parse("8/5/17410 14:44:33.948");
+        final byte[] expectedBytes = { 0, 1, -69, 38, -49, 114, -33, 28 };
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
         // DataRow.getField()
         DataField field = row.get(name);
-        assertNotNull(field.getBigInt());
+        assertEquals(expected, field.getBigInt());
         assertTrue(field.getBool());
-        assertNotNull(field.getBytes());
-        assertNotNull(field.getDate());
-        assertNotNull(field.getDecimal());
-        assertThat(field.getDouble(), not(equalTo(0d)));
-        assertThat(field.getFloat(), not(equalTo(0f)));
-        assertThat(field.getInt(), not(equalTo(0)));
-        assertThat(field.getLong(), not(equalTo(0L)));
-        assertNotNull(field.getString());
+        assertArrayEquals(expectedBytes, field.getBytes());
+        assertEquals(expectedDate, field.getDate());
+        assertEquals(new BigDecimal(expected), field.getDecimal());
+        assertEquals(expected.doubleValue(), field.getDouble(), 0);
+        assertEquals(expected.floatValue(), field.getFloat(), 0);
+        assertEquals(expected.intValue(), field.getInt());
+        assertEquals(expected.longValue(), field.getLong());
+        assertEquals("487250340273948", field.getString());
 
         // DataManager.getField()
         field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
-        assertNotNull(field.getBigInt());
+        assertEquals(expected, field.getBigInt());
         assertTrue(field.getBool());
-        assertNotNull(field.getBytes());
-        assertNotNull(field.getDate());
-        assertNotNull(field.getDecimal());
-        assertThat(field.getDouble(), not(equalTo(0d)));
-        assertThat(field.getFloat(), not(equalTo(0f)));
-        assertThat(field.getInt(), not(equalTo(0)));
-        assertThat(field.getLong(), not(equalTo(0L)));
-        assertNotNull(field.getString());
+        assertArrayEquals(expectedBytes, field.getBytes());
+        assertEquals(expectedDate, field.getDate());
+        assertEquals(new BigDecimal(expected), field.getDecimal());
+        assertEquals(expected.doubleValue(), field.getDouble(), 0);
+        assertEquals(expected.floatValue(), field.getFloat(), 0);
+        assertEquals(expected.intValue(), field.getInt());
+        assertEquals(expected.longValue(), field.getLong());
+        assertEquals("487250340273948", field.getString());
 
         // DataManager.get<Kinda>Field()
         assertTrue(datamanager.getBooleanField(table, name, "1"));
-        assertNotNull(datamanager.getBinaryField(table, name, "1"));
-        assertNotNull(datamanager.getBlobField(table, name, "1"));
-        assertThat(datamanager.getDoubleField(table, name, "1"), not(equalTo(0d)));
-        assertNotNull(datamanager.getStringField(table, name, "1"));
+        assertEquals(new String(expectedBytes), datamanager.getBinaryField(table, name, "1"));
+        //assertNotNull(datamanager.getBlobField(table, name, "1"));
+        InputStream stream = datamanager.getBlobField(table, name, "1").getBinaryStream();
+        assertEquals(new String(expectedBytes), CraftCommons.convertStreamToString(stream));
+        assertEquals(expected.doubleValue(), datamanager.getDoubleField(table, name, "1"), 0);
+        assertEquals("487250340273948", datamanager.getStringField(table, name, "1"));
 
         // DataRow.get<Kinda>Field()
-        assertNotNull(row.getBigIntField(name));
+        assertEquals(expected, row.getBigIntField(name));
         assertTrue(row.getBoolField(name));
-        assertNotNull(row.getBinaryField(name));
-        assertNotNull(row.getDateField(name));
-        assertNotNull(row.getDecimalField(name));
-        assertThat(row.getDoubleField(name), not(equalTo(0d)));
-        assertThat(row.getFloatField(name), not(equalTo(0f)));
-        assertThat(row.getIntField(name), not(equalTo(0)));
-        assertThat(row.getLongField(name), not(equalTo(0L)));
-        assertNotNull(row.getStringField(name));
+        assertArrayEquals(expectedBytes, row.getBinaryField(name));
+        assertEquals(expectedDate, row.getDateField(name));
+        assertEquals(new BigDecimal(expected), row.getDecimalField(name));
+        assertEquals(expected.doubleValue(), row.getDoubleField(name), 0);
+        assertEquals(expected.floatValue(), row.getFloatField(name), 0);
+        assertEquals(expected.intValue(), row.getIntField(name));
+        assertEquals(expected.longValue(), row.getLongField(name), 0);
+        assertEquals("487250340273948", row.getStringField(name));
     }
 
     @Test
