@@ -673,11 +673,11 @@ public class DataManager {
 
     public ResultSet getResultSet(String query) throws SQLException {
         connect();
+        log(query);
         if (this.con == null) {
             throw new SQLException("Unable to connect to the database");
         }
         this.stmt = this.con.createStatement();
-        log(query);
         this.rs = this.stmt.executeQuery(query);
         return this.rs;
     }
