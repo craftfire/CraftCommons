@@ -25,6 +25,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +37,7 @@ import com.craftfire.commons.util.LoggingManager;
 public class TestDataManager {
     private static DummyDataManager datamanager;
     private boolean logged = false;
+    private static int randomInt = new Random().nextInt(1000);
 
     @Before
     public void init() {
@@ -122,8 +125,10 @@ public class TestDataManager {
     @Test
     public void testDirectory() {
         assertNull(datamanager.getDirectory());
-        datamanager.setDirectory("../blah/i/love/craftfire/");
-        assertEquals("../blah/i/love/craftfire/", datamanager.getDirectory());
+        datamanager.setDirectory("../blah/i/love/craftfire/" + randomInt + "/");
+        assertEquals("../blah/i/love/craftfire/" + randomInt + "/", datamanager.getDirectory());
+        datamanager.setDirectory("../>? |:/"); // You will never be able to create such a file ;) Error should be printed
+        assertEquals("../>? |:/", datamanager.getDirectory());
     }
 
     @Test
