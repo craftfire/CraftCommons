@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.sql.SQLException;
 import java.util.Random;
 
 import org.junit.Before;
@@ -47,6 +48,7 @@ public class TestDataManager {
     @Test
     public void testURL() {
         DummyDataManager dmH2 = new DummyDataManager(DataType.H2, null, null);
+        dmH2.getLogger().setDebug(true);
         assertFalse(dmH2.setURL());
         assertNull(dmH2.getURL());
         dmH2.setDirectory("../blah/meh/");
@@ -62,6 +64,7 @@ public class TestDataManager {
         assertTrue(datamanager.setURL());
         assertEquals("jdbc:mysql://localhost/db?zeroDateTimeBehavior=convertToNull&jdbcCompliantTruncation=false&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8",
                 datamanager.getURL());
+        assertFalse(datamanager.hasConnection());
     }
 
     @Test
@@ -163,6 +166,23 @@ public class TestDataManager {
         assertEquals(0, datamanager.getDoubleField("SELECT `double` FROM `" + table + "`"), 0);
         assertEquals(0, datamanager.getIntegerField("SELECT `int` FROM `" + table + "`"));
         assertNull(datamanager.getStringField("SELECT `vchar` FROM `" + table + "`"));
+    }
+
+    @Test
+    public void testQueriesFail() {
+        datamanager.executeQueryVoid("SELECT `blah` FROOM `pookit` WHERE thisqueryshouldfail");
+        datamanager.updateBlob("a", "b", "1", "alice has a cat");
+        try {
+            datamanager.increaseField("a", "b", "1");
+            fail("Expected SQLException");
+        } catch (SQLException ignore) {
+        }
+
+    }
+
+    @Test
+    public void testStatus() {
+        assertFalse(datamanager.isConnected());
     }
 
     static class DummyDataManager extends DataManager {

@@ -210,6 +210,26 @@ public class TestDatabase {
     }
 
     @Test
+    public void testNonZeroTimeout() {
+        long time;
+        datamanager.close(true);
+        datamanager.setTimeout(1);
+        assertTrue(datamanager.hasConnection());
+        time = System.currentTimeMillis();
+        assertTrue(datamanager.getStartup().longValue() * 1000 < time);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        datamanager.close();
+        assertTrue(datamanager.hasConnection());
+        assertTrue(datamanager.getStartup().longValue() * 1000 > time);
+        datamanager.close(true);
+        datamanager.setTimeout(0);
+    }
+
+    @Test
     public void testBInt() throws SQLException, ParseException, IOException {
         final String name = "bint";
         final BigInteger expected = new BigInteger("487250340273948");
