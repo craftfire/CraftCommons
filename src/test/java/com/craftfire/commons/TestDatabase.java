@@ -63,7 +63,7 @@ public class TestDatabase {
     @BeforeClass
     public static void init() {
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogger().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
+        datamanager.getLogger().getLogger().setLevel(Level.OFF); // Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
@@ -216,7 +216,7 @@ public class TestDatabase {
         datamanager.setTimeout(1);
         assertTrue(datamanager.hasConnection());
         time = System.currentTimeMillis();
-        assertTrue(datamanager.getStartup().longValue() * 1000 < time);
+        assertTrue(datamanager.getStartup() * 1000 < time);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -224,7 +224,7 @@ public class TestDatabase {
         }
         datamanager.close();
         assertTrue(datamanager.hasConnection());
-        assertTrue(datamanager.getStartup().longValue() * 1000 > time);
+        assertTrue(datamanager.getStartup() * 1000 > time);
         datamanager.close(true);
         datamanager.setTimeout(0);
     }
@@ -266,7 +266,7 @@ public class TestDatabase {
         // DataManager.get<Kinda>Field()
         assertTrue(datamanager.getBooleanField(table, name, "1"));
         assertEquals(new String(expectedBytes), datamanager.getBinaryField(table, name, "1"));
-        //assertNotNull(datamanager.getBlobField(table, name, "1"));
+        // assertNotNull(datamanager.getBlobField(table, name, "1"));
         InputStream stream = datamanager.getBlobField(table, name, "1").getBinaryStream();
         assertEquals(new String(expectedBytes), CraftCommons.convertStreamToString(stream));
         assertEquals(expected.doubleValue(), datamanager.getDoubleField(table, name, "1"), 0);

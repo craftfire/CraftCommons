@@ -113,11 +113,11 @@ public class DataManager {
         this.timeout = timeout;
     }
 
-    public Long getStartup() {
+    public long getStartup() {
         return this.startup;
     }
 
-    public Long getUptime() {
+    public long getUptime() {
         return (System.currentTimeMillis() / 1000) - getStartup();
     }
 
