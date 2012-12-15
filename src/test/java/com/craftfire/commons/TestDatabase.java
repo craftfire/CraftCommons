@@ -25,6 +25,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -62,7 +63,7 @@ public class TestDatabase {
     @BeforeClass
     public static void init() {
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogger().getLogger().setLevel(Level.OFF); //Turn off logging temporarily so we won't be spammed with red warnings.
+        datamanager.getLogger().getLogger().setLevel(Level.OFF); // Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
         datamanager.setDirectory("./src/test/resource/");
         datamanager.setTimeout(0);
@@ -96,14 +97,17 @@ public class TestDatabase {
         assertFalse(datamanager.tableExist("thisTableShouldNeverExist"));
         assertTrue(datamanager.exist(table, "ID", 1));
         assertFalse(datamanager.exist(table, "id", 8));
+        assertFalse(datamanager.exist("thisTableShouldNeverExist", "id", 8));
     }
 
     @Test
     public void getLastID() {
         assertEquals(1, datamanager.getLastID("ID", table));
         assertEquals(0, datamanager.getLastID("I", "empty"));
+        assertEquals(0, datamanager.getLastID("I", "thisTableShouldNeverExist"));
         assertEquals(1, datamanager.getLastID("ID", table, "`char` = '8.88'"));
         assertEquals(0, datamanager.getLastID("ID", table, "`char` = 'alice has a cat'"));
+        assertEquals(0, datamanager.getLastID("ID", "thisTableShouldNeverExist", "`char` = 'alice has a cat'"));
     }
 
     @Test
@@ -113,6 +117,8 @@ public class TestDatabase {
         assertEquals("SELECT COUNT(*) FROM `" + table + "` WHERE `char` = 'alice has a cat' LIMIT 1", datamanager.getLastQuery());
         assertTrue(datamanager.getQueriesCount() >= 2);
         assertTrue(datamanager.getQueries().containsValue("SELECT COUNT(*) FROM `" + table + "` WHERE `char` = 'alice has a cat' LIMIT 1"));
+        assertEquals(0, datamanager.getCount("thisTableShouldNeverExist", "`char` = 'alice has a cat'"));
+        assertEquals(0, datamanager.getCount("thisTableShouldNeverExist"));
     }
 
     @Test
@@ -173,6 +179,26 @@ public class TestDatabase {
     }
 
     @Test
+    public void testGetKindaFieldEmptyTable() {
+        String name = "i";
+        String table = "empty";
+        assertFalse(datamanager.getBooleanField(table, name, "1"));
+        assertNull(datamanager.getBinaryField(table, name, "1"));
+        assertNull(datamanager.getBlobField(table, "b", "1"));
+        assertNull(datamanager.getDateField(table, name, "1"));
+        assertEquals(0, datamanager.getDoubleField(table, name, "1"), 0);
+        assertEquals(0, datamanager.getIntegerField(table, name, "1"));
+        assertNull(datamanager.getStringField(table, name, "1"));
+        assertFalse(datamanager.getBooleanField("SELECT `i` FROM `" + table + "`"));
+        assertNull(datamanager.getBinaryField("SELECT `i` FROM `" + table + "`"));
+        assertNull(datamanager.getBlobField("SELECT `b` FROM `" + table + "`"));
+        assertNull(datamanager.getDateField("SELECT `i` FROM `" + table + "`"));
+        assertEquals(0, datamanager.getDoubleField("SELECT `i` FROM `" + table + "`"), 0);
+        assertEquals(0, datamanager.getIntegerField("SELECT `i` FROM `" + table + "`"));
+        assertNull(datamanager.getStringField("SELECT `i` FROM `" + table + "`"));
+    }
+
+    @Test
     public void testGetKindaFieldRawQuery() {
         assertTrue(datamanager.getBooleanField("SELECT `bool` FROM `" + table + "`"));
         assertNotNull(datamanager.getBinaryField("SELECT `bin` FROM `" + table + "`"));
@@ -181,6 +207,26 @@ public class TestDatabase {
         assertThat(datamanager.getDoubleField("SELECT `double` FROM `" + table + "`"), not(equalTo(0d)));
         assertThat(datamanager.getIntegerField("SELECT `int` FROM `" + table + "`"), not(equalTo(0)));
         assertNotNull(datamanager.getStringField("SELECT `vchar` FROM `" + table + "`"));
+    }
+
+    @Test
+    public void testNonZeroTimeout() {
+        long time;
+        datamanager.close(true);
+        datamanager.setTimeout(1);
+        assertTrue(datamanager.hasConnection());
+        time = System.currentTimeMillis();
+        assertTrue(datamanager.getStartup() * 1000 < time);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        datamanager.close();
+        assertTrue(datamanager.hasConnection());
+        assertTrue(datamanager.getStartup() * 1000 > time);
+        datamanager.close(true);
+        datamanager.setTimeout(0);
     }
 
     @Test
@@ -220,7 +266,7 @@ public class TestDatabase {
         // DataManager.get<Kinda>Field()
         assertTrue(datamanager.getBooleanField(table, name, "1"));
         assertEquals(new String(expectedBytes), datamanager.getBinaryField(table, name, "1"));
-        //assertNotNull(datamanager.getBlobField(table, name, "1"));
+        // assertNotNull(datamanager.getBlobField(table, name, "1"));
         InputStream stream = datamanager.getBlobField(table, name, "1").getBinaryStream();
         assertEquals(new String(expectedBytes), CraftCommons.convertStreamToString(stream));
         assertEquals(expected.doubleValue(), datamanager.getDoubleField(table, name, "1"), 0);

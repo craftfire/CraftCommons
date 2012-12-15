@@ -113,11 +113,11 @@ public class DataManager {
         this.timeout = timeout;
     }
 
-    public Long getStartup() {
+    public long getStartup() {
         return this.startup;
     }
 
-    public Long getUptime() {
+    public long getUptime() {
         return (System.currentTimeMillis() / 1000) - getStartup();
     }
 
@@ -540,9 +540,12 @@ public class DataManager {
 
     public void executeQuery(String query) throws SQLException {
         connect();
+        log(query);
+        if (this.con == null) {
+            throw new SQLException("Unable to connect to the database");
+        }
         this.pStmt = this.con.prepareStatement(query);
         this.pStmt.executeUpdate();
-        log(query);
         close();
     }
 
@@ -561,6 +564,9 @@ public class DataManager {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
             connect();
             log(query);
+            if (this.con == null) {
+                throw new SQLException("Unable to connect to the database");
+            }
             this.stmt = this.con.createStatement();
             this.pStmt = this.con.prepareStatement(query);
             this.pStmt.setBlob(1, inputStream, array.length);
