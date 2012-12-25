@@ -59,7 +59,7 @@ public class DbTest_H2 {
         datamanager = new DataManager(DataType.H2, user, password);
         datamanager.getLogger().getLogger().setLevel(Level.OFF);	//Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
-        datamanager.setDirectory("./src/test/resource/");
+        datamanager.setDirectory("./target/test/");
         datamanager.setTimeout(0);
         datamanager.setKeepAlive(true);
         datamanager.setPrefix("");

@@ -65,7 +65,7 @@ public class TestDatabase {
         datamanager = new DataManager(DataType.H2, user, password);
         datamanager.getLogger().getLogger().setLevel(Level.OFF); // Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
-        datamanager.setDirectory("./src/test/resource/");
+        datamanager.setDirectory("./target/test/");
         datamanager.setTimeout(0);
         datamanager.setKeepAlive(true);
         datamanager.setPrefix("");
@@ -76,7 +76,7 @@ public class TestDatabase {
         assertEquals(user, datamanager.getUsername());
         assertEquals(password, datamanager.getPassword());
         assertEquals("test", datamanager.getDatabase());
-        assertEquals("./src/test/resource/", datamanager.getDirectory());
+        assertEquals("./target/test/", datamanager.getDirectory());
         assertEquals(0, datamanager.getTimeout());
         assertTrue(datamanager.isKeepAlive());
         assertEquals("", datamanager.getPrefix());
