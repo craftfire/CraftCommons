@@ -51,10 +51,10 @@ public class TestDataManager {
         dmH2.getLogger().setDebug(true);
         assertFalse(dmH2.setURL());
         assertNull(dmH2.getURL());
-        dmH2.setDirectory("../blah/meh/");
+        dmH2.setDirectory("./blah/meh/");
         dmH2.setDatabase("db");
         assertTrue(dmH2.setURL());
-        assertEquals("jdbc:h2:../blah/meh/db;AUTO_RECONNECT=TRUE", dmH2.getURL());
+        assertEquals("jdbc:h2:./blah/meh/db;AUTO_RECONNECT=TRUE", dmH2.getURL());
         datamanager.setHost(null);
         datamanager.setDatabase(null);
         assertFalse(datamanager.setURL());
@@ -128,8 +128,8 @@ public class TestDataManager {
     @Test
     public void testDirectory() {
         assertNull(datamanager.getDirectory());
-        datamanager.setDirectory("../blah/i/love/craftfire/" + randomInt + "/");
-        assertEquals("../blah/i/love/craftfire/" + randomInt + "/", datamanager.getDirectory());
+        datamanager.setDirectory("./target/test/" + randomInt + "/");
+        assertEquals("./target/test/" + randomInt + "/", datamanager.getDirectory());
         datamanager.setDirectory("../>? |:/"); // You will never be able to create such a file ;) Error should be printed
         assertEquals("../>? |:/", datamanager.getDirectory());
     }
