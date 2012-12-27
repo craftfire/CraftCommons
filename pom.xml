@@ -108,6 +108,18 @@
                 </includes>
             </resource>
         </resources>
+        
+        <!-- Test Resources -->
+        <testResources>
+            <testResource>
+                <targetPath>.</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/test/resource</directory>
+                <includes>
+                    <include>test.h2.db</include>
+                </includes>
+            </testResource>
+        </testResources>
 
         <!-- Plugins -->
         <plugins>
@@ -181,13 +193,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.7.1</version>
-		        <configuration>
-                    <excludes>
-                        <exclude>**/DbTest_MySQL.java</exclude>
-                        <exclude>**/DbTest_H2.java</exclude>
-                        <exclude>**/DbTest.java</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>default-test</id>

@@ -67,7 +67,7 @@ public class TestIPAddress {
     public void testValueOfStringHostname() {
         IPAddress addr = IPAddress.valueOf("craftfire.com");
         System.out.println("testValueOfStringHostname: " + addr);
-        assertTrue(addr.equals(new IPv4Address(176, 9, 85, 52)));
+        assertTrue(addr.equals(new IPv4Address(204, 232, 175, 78)));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class TestIPAddress {
         assertTrue(Arrays.equals(ipv4.getBytes(), ipv4.getAddress()));
         assertEquals(0xc0a80101, ipv4.getInt());
     }
-    
+
     @Test
     public void testIPv6() {
         System.out.println("testIPv6: " + ipv6);
