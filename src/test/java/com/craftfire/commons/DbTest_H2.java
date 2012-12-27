@@ -57,9 +57,9 @@ public class DbTest_H2 {
         String user = "sa";
         String password = "";
         datamanager = new DataManager(DataType.H2, user, password);
-        datamanager.getLogger().getLogger().setLevel(Level.OFF);	//Turn off logging temporarily so we won't be spammed with red warnings.
+        datamanager.getLogger().getLogger().setLevel(Level.OFF); // Turn off logging temporarily so we won't be spammed with red warnings.
         datamanager.setDatabase("test");
-        datamanager.setDirectory("./target/test/");
+        datamanager.setDirectory("./target/test-classes/");
         datamanager.setTimeout(0);
         datamanager.setKeepAlive(true);
         datamanager.setPrefix("");
@@ -276,7 +276,7 @@ public class DbTest_H2 {
         for (int i = 0; i < array.length; ++i) {
             s += array[i].toString() + ", ";
         }
-        s+= "]";
+        s += "]";
         return s;
     }
 
@@ -288,59 +288,50 @@ public class DbTest_H2 {
         for (int i = 0; i < array.length; ++i) {
             s += array[i] + ", ";
         }
-        s+="]";
+        s += "]";
         return s;
     }
 
-    @Test
     public void testBigInt() {
         BigInteger x = field.getBigInt();
         printResult("asBigInt", x);
     }
 
-    @Test
     public void testBlob() {
         Blob x = field.getBlob();
         printResult("asBlob", x);
     }
 
-    @Test
     public void testBool() {
         boolean x = field.getBool();
         printResult("asBool", x, x);
     }
 
-    @Test
     public void testBytes() {
         byte[] x = field.getBytes();
         printResult("asBytes", arrayToString(x));
     }
 
-    @Test
     public void testDate() {
         Date x = field.getDate();
         printResult("asDate", x);
     }
 
-    @Test
     public void testDecimal() {
         BigDecimal x = field.getDecimal();
         printResult("asDecimal", x);
     }
 
-    @Test
     public void testDouble() {
         double x = field.getDouble();
         printResult("asDouble", x != 0, x);
     }
 
-    @Test
     public void testFloat() {
         float x = field.getFloat();
         printResult("asFloat", x != 0, x);
     }
 
-    @Test
     public void testInt() {
         int x = field.getInt();
         printResult("asInt", x != 0, x);
