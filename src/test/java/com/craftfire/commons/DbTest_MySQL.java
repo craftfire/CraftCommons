@@ -30,8 +30,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.junit.Test;
-
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
@@ -313,67 +311,56 @@ public class DbTest_MySQL {
         return s;
     }
 
-    @Test
     public void testBigInt() {
         BigInteger x = field.getBigInt();
         printResult("asBigInt", x);
     }
 
-    @Test
     public void testBlob() {
         Blob x = field.getBlob();
         printResult("asBlob", x);
     }
 
-    @Test
     public void testBool() {
         boolean x = field.getBool();
         printResult("asBool", x, x);
     }
 
-    @Test
     public void testBytes() {
         byte[] x = field.getBytes();
         printResult("asBytes", arrayToString(x));
     }
 
-    @Test
     public void testDate() {
         Date x = field.getDate();
         printResult("asDate", x);
     }
 
-    @Test
     public void testDecimal() {
         BigDecimal x = field.getDecimal();
         printResult("asDecimal", x);
     }
 
-    @Test
     public void testDouble() {
         double x = field.getDouble();
         printResult("asDouble", x != 0, x);
     }
 
-    @Test
     public void testFloat() {
         float x = field.getFloat();
         printResult("asFloat", x != 0, x);
     }
 
-    @Test
     public void testInt() {
         int x = field.getInt();
         printResult("asInt", x != 0, x);
     }
 
-    @Test
     public void testLong() {
         long x = field.getLong();
         printResult("asLong", x != 0, x);
     }
 
-    @Test
     public void testString() {
         String x = field.getString();
         printResult("asString", x);
