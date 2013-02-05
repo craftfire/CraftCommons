@@ -9,7 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class ValueHolderBase implements ValueHolder {
+public class ValueHolderBase extends AbstractValueHolder {
     protected final String name;
     protected final Object value;
     protected final ValueType type;
@@ -134,11 +134,25 @@ public class ValueHolderBase implements ValueHolder {
      */
     @Override
     public String getString() {
+        return getString(this.value.toString());
+    }
+
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.database.IValueHolder#getString()
+     */
+    @Override
+    public String getString(String defaultValue) {
         if (getType().equals(ValueType.STRING)) {
             return (String) this.value;
         } else if (getType().equals(ValueType.BINARY)
                 || getType().equals(ValueType.BLOB)) {
-            return new String(getBytes());
+            byte[] bytes = getBytes();
+            if (bytes != null) {
+                return new String(bytes);
+            }
+        }
+        if (isNull()) {
+            return defaultValue;
         }
         return this.value.toString();
     }
@@ -147,15 +161,15 @@ public class ValueHolderBase implements ValueHolder {
      * @see com.craftfire.commons.database.IValueHolder#getInt()
      */
     @Override
-    public int getInt() {
-        return (int) getLong();
+    public int getInt(int defaultValue) {
+        return (int) getLong(defaultValue);
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getLong()
      */
     @Override
-    public long getLong() {
+    public long getLong(long defaultValue) {
         if (getType().equals(ValueType.INTEGER)
                 || getType().equals(ValueType.REAL)) {
             return ((Number) this.value).longValue();
@@ -181,14 +195,14 @@ public class ValueHolderBase implements ValueHolder {
             }
             return new Double(getDouble()).longValue();
         }
-        return 0;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getBigInt()
      */
     @Override
-    public BigInteger getBigInt() {
+    public BigInteger getBigInt(BigInteger defaultValue) {
         try {
             if (this.value instanceof BigInteger) {
                 return (BigInteger) this.value;
@@ -209,20 +223,20 @@ public class ValueHolderBase implements ValueHolder {
                 } else if (getType().equals(ValueType.DATE)) {
                     l = ((Date) this.value).getTime();
                 } else {
-                    return null;
+                    return defaultValue;
                 }
                 return new BigInteger(String.valueOf(l));
             }
         } catch (NumberFormatException e) {
         }
-        return null;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getDouble()
      */
     @Override
-    public double getDouble() {
+    public double getDouble(double defaultValue) {
         if (getType().equals(ValueType.INTEGER)
                 || getType().equals(ValueType.REAL)) {
             return ((Number) this.value).doubleValue();
@@ -253,22 +267,22 @@ public class ValueHolderBase implements ValueHolder {
                 e.getCause();
             }
         }
-        return 0;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getFloat()
      */
     @Override
-    public float getFloat() {
-        return (float) getDouble();
+    public float getFloat(float defaultValue) {
+        return (float) getDouble(defaultValue);
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getDecimal()
      */
     @Override
-    public BigDecimal getDecimal() {
+    public BigDecimal getDecimal(BigDecimal defaultValue) {
         try {
             if (this.value instanceof BigDecimal) {
                 return (BigDecimal) this.value;
@@ -285,46 +299,45 @@ public class ValueHolderBase implements ValueHolder {
             }
         } catch (NumberFormatException e) {
         }
-        return null;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getBytes()
      */
     @Override
-    public byte[] getBytes() {
+    public byte[] getBytes(byte[] defaultValue) {
         if (getType().equals(ValueType.BINARY)) {
             return (byte[]) this.value;
         } else if (getType().equals(ValueType.BLOB)) {
             try {
                 return ((Blob) this.value).getBytes(1,
                         (int) ((Blob) this.value).length());
-            } catch (SQLException e) {
-                e.getClass();
+            } catch (SQLException ignore) {
             }
         } else if (getType().equals(ValueType.BOOLEAN)) {
             return ByteBuffer.allocate(1)
                     .put((byte) (((Boolean) this.value).booleanValue() ? 1 : 0))
                     .array();
         } else if (getType().equals(ValueType.INTEGER)) {
-            return ByteBuffer.allocate(8).putLong(getLong()).array();
+            return ByteBuffer.allocate(8).putLong(getLong(0)).array();
         } else if (getType().equals(ValueType.REAL)) {
             return ByteBuffer.allocate(8).putDouble(getDouble()).array();
         } else if (getType().equals(ValueType.STRING)) {
             return this.value.toString().getBytes();
         }
-        return null;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getDate()
      */
     @Override
-    public Date getDate() {
+    public Date getDate(Date defaultValue) {
         if (getType().equals(ValueType.DATE)) {
             return (Date) this.value;
         } else if (getType().equals(ValueType.INTEGER)) {
-            return new Date(getLong());
+            return new Date(getLong(0));
         } else if (getType().equals(ValueType.STRING)) {
             try {
                 return DateFormat.getDateInstance().parse((String) this.value);
@@ -344,38 +357,38 @@ public class ValueHolderBase implements ValueHolder {
             } catch (ParseException e) {
             }
         }
-        return null;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getBlob()
      */
     @Override
-    public Blob getBlob() {
+    public Blob getBlob(Blob defaultValue) {
         if (getType().equals(ValueType.BLOB)) {
             return (Blob) this.value;
         }
-        return null;
+        return defaultValue;
     }
 
     /* (non-Javadoc)
      * @see com.craftfire.commons.database.IValueHolder#getBool()
      */
     @Override
-    public boolean getBool() {
+    public boolean getBool(boolean defaultValue) {
         if (getType().equals(ValueType.BOOLEAN)) {
             return (Boolean) this.value;
         } else if (getType().equals(ValueType.INTEGER)
                 || getType().equals(ValueType.REAL)
                 || getType().equals(ValueType.DATE)) {
-            return getLong() != 0;
+            return getLong(0) != 0;
         } else if (getType().equals(ValueType.BINARY)
                 || getType().equals(ValueType.BLOB)
                 || getType().equals(ValueType.STRING)) {
-            String s = getString();
+            String s = getString(null);
             return (s != null) && !s.isEmpty();
         }
-        return false;
+        return defaultValue;
     }
 
     /* (non-Javadoc)

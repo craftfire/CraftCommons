@@ -28,11 +28,12 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
 
+import com.craftfire.commons.util.AbstractValueHolder;
 import com.craftfire.commons.util.ValueHolder;
 import com.craftfire.commons.util.ValueHolderBase;
 import com.craftfire.commons.util.ValueType;
 
-public class DataField implements ValueHolder {
+public class DataField extends AbstractValueHolder {
     private final String table /* , type */;
     private final int sqltype, size;
     private final ValueHolder holder;
@@ -185,53 +186,58 @@ public class DataField implements ValueHolder {
     }
 
     @Override
-    public int getInt() {
-        return this.holder.getInt();
+    public String getString(String defaultValue) {
+        return this.holder.getString(null);
     }
 
     @Override
-    public long getLong() {
-        return this.holder.getLong();
+    public int getInt(int defaultValue) {
+        return this.holder.getInt(defaultValue);
     }
 
     @Override
-    public BigInteger getBigInt() {
-        return this.holder.getBigInt();
+    public long getLong(long defaultValue) {
+        return this.holder.getLong(defaultValue);
     }
 
     @Override
-    public double getDouble() {
-        return this.holder.getDouble();
+    public BigInteger getBigInt(BigInteger defaultValue) {
+        return this.holder.getBigInt(defaultValue);
     }
 
     @Override
-    public float getFloat() {
-        return this.holder.getFloat();
+    public double getDouble(double defaultValue) {
+        return this.holder.getDouble(defaultValue);
     }
 
     @Override
-    public BigDecimal getDecimal() {
-        return this.holder.getDecimal();
+    public float getFloat(float defaultValue) {
+        return this.holder.getFloat(defaultValue);
     }
 
     @Override
-    public byte[] getBytes() {
-        return this.holder.getBytes();
+    public BigDecimal getDecimal(BigDecimal defaultValue) {
+        return this.holder.getDecimal(defaultValue);
     }
 
     @Override
-    public Date getDate() {
-        return this.holder.getDate();
+    public byte[] getBytes(byte[] defaultValue) {
+        return this.holder.getBytes(defaultValue);
     }
 
     @Override
-    public Blob getBlob() {
-        return this.holder.getBlob();
+    public Date getDate(Date defaultValue) {
+        return this.holder.getDate(defaultValue);
     }
 
     @Override
-    public boolean getBool() {
-        return this.holder.getBool();
+    public Blob getBlob(Blob defaultValue) {
+        return this.holder.getBlob(defaultValue);
+    }
+
+    @Override
+    public boolean getBool(boolean defaultValue) {
+        return this.holder.getBool(defaultValue);
     }
 
     @Override
@@ -241,7 +247,6 @@ public class DataField implements ValueHolder {
 
     @Override
     public boolean isUnsigned() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.holder.isUnsigned();
     }
 }
