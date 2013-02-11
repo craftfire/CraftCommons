@@ -301,6 +301,11 @@ public class SimpleYamlManager implements YamlManager {
         return this.root.getNode(node);
     }
 
+    @Override
+    public int getFinalNodeCount() {
+        return getRootNode().getFinalNodeCount();
+    }
+
     /* (non-Javadoc)
      * @see com.craftfire.commons.yaml.YamlManager#save()
      */

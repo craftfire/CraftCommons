@@ -231,6 +231,15 @@ public class YamlCombiner implements YamlManager {
     }
 
     @Override
+    public int getFinalNodeCount() {
+        int count = 0;
+        for (YamlManager manager : this.managers) {
+            count += manager.getFinalNodeCount();
+        }
+        return count;
+    }
+
+    @Override
     public boolean save() {
         boolean result = false;
         for (YamlManager manager : this.managers) {

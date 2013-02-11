@@ -44,6 +44,8 @@ public interface YamlManager {
 
     YamlNode getNode(String node) throws YamlException;
 
+    int getFinalNodeCount();
+
     boolean save();
 
     boolean reload();
