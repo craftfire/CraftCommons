@@ -25,17 +25,17 @@ public class YamlNode extends AbstractValueHolder {
     private Map<String, YamlNode> mapCache = null;
     private boolean resolved = false;
     private ValueHolder holder;
-    private final YamlManager manager;
+    private final SimpleYamlManager manager;
     private YamlNode parent = null;
 
     /**
-     * Creates a new YamlNode with given YamlManager, node name, and value.
+     * Creates a new YamlNode with given SimpleYamlManager, node name, and value.
      * 
      * @param manager  the YamlManager
      * @param name     the name
      * @param value    the value
      */
-    public YamlNode(YamlManager manager, String name, Object value) {
+    public YamlNode(SimpleYamlManager manager, String name, Object value) {
         this.manager = manager;
         this.holder = new ValueHolderBase(normalizePath(name), false, value);
     }
@@ -114,11 +114,11 @@ public class YamlNode extends AbstractValueHolder {
     }
 
     /**
-     * Returns the YamlManager of the node.
+     * Returns the SimpleYamlManager of the node.
      * 
-     * @return the YamlManager
+     * @return the SimpleYamlManager
      */
-    public YamlManager getYamlManager() {
+    public SimpleYamlManager getYamlManager() {
         return this.manager;
     }
 
