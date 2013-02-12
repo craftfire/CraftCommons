@@ -56,14 +56,20 @@ import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
 /**
- * A custom representer that represents null values as empty text instean of {@code null}
+ * A custom representer that represents null values as empty text instead of {@code null}
  */
 public class EmptyNullRepresenter extends Representer {
+    /**
+     * Default constructor
+     */
     public EmptyNullRepresenter() {
         super();
         this.nullRepresenter = new EmptyRepresentNull();
     }
 
+    /**
+     * Represent that represents null as empty text
+     */
     protected class EmptyRepresentNull implements Represent {
         @Override
         public Node representData(Object data) {

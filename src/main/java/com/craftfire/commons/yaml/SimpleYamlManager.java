@@ -44,10 +44,23 @@ public class SimpleYamlManager implements YamlManager {
     private final String separator;
     private YamlNode root;
 
+    /**
+     * Creates a new SimpleYamlManager with default settings and loads yaml from the given file.
+     * 
+     * @param  file        file to load yaml from
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(File file) throws IOException {
         this(file, new Settings());
     }
 
+    /**
+     * Creates a new SimpleYamlManager with given settings and loads yaml from the given file.
+     * 
+     * @param  file        file to load yaml from
+     * @param  settings    settings to use
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(File file, Settings settings) throws IOException {
         this.file = file;
         this.yaml = settings.createYaml();
@@ -58,10 +71,23 @@ public class SimpleYamlManager implements YamlManager {
         load(file);
     }
 
+    /**
+     * Creates a new SimpleYamlManager with default settings and loads yaml from the given classpath resource.
+     * 
+     * @param  path        path to the resource in classpath to load the yaml from
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(String path) throws IOException {
         this(path, new Settings());
     }
 
+    /**
+     * Creates a new SimpleYamlManager with given settings and loads yaml from the given classpath resource.
+     * 
+     * @param  path        path to the resource in classpath to load the yaml from
+     * @param  settings    settings to use
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(String path, Settings settings) throws IOException {
         this.yaml = settings.createYaml();
         this.caseSensitive = settings.isCaseSensitive();
@@ -71,18 +97,44 @@ public class SimpleYamlManager implements YamlManager {
         load(path);
     }
 
+    /**
+     * Creates a new SimpleYamlManager with default settings and loads yaml from the given input stream.
+     * 
+     * @param  stream      stream to load the yaml from
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(InputStream stream) throws IOException {
         this(stream, new Settings());
     }
 
+    /**
+     * Creates a new SimpleYamlManager with given settings and loads yaml from the given input stream.
+     * 
+     * @param  stream      stream to load the yaml from
+     * @param  settings    settings to use
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(InputStream stream, Settings settings) throws IOException {
         this(new InputStreamReader(stream), settings);
     }
 
+    /**
+     * Creates a new SimpleYamlManager with default settings and loads yaml from the given reader.
+     * 
+     * @param  reader      reader to load the yaml from
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(Reader reader) throws IOException {
         this(reader, new Settings());
     }
 
+    /**
+     * Creates a new SimpleYamlManager with given settings and loads yaml from the given reader.
+     * 
+     * @param  reader      reader to load the yaml from
+     * @param  settings    settings to use
+     * @throws IOException if an IOException occurred
+     */
     public SimpleYamlManager(Reader reader, Settings settings) throws IOException {
         this.yaml = settings.createYaml();
         this.caseSensitive = settings.isCaseSensitive();
@@ -92,10 +144,24 @@ public class SimpleYamlManager implements YamlManager {
         load(reader);
     }
 
+    /**
+     * Returns the state of case-sensitive option (off by default).
+     * <p>
+     * If this option is on, node names will be case-sensitive. 
+     * 
+     * @return true if on, otherwise false
+     * @see Settings#isCaseSensitive()
+     */
     public boolean isCaseSensitive() {
         return this.caseSensitive;
     }
 
+    /**
+     * Returns the path separator to be used (default {@code "."}).
+     * 
+     * @return the path separator
+     * @see Settings#getSeparator()
+     */
     public String getSeparator() {
         return this.separator;
     }
@@ -274,7 +340,7 @@ public class SimpleYamlManager implements YamlManager {
     @Override
     public void addNodes(YamlManager yamlManager) throws YamlException {
         getLogger().debug("Adding node list to current node list: '" + yamlManager.getRootNode().getChildrenMap().toString() + "'.");
-        this.root.addChildren(yamlManager.getRootNode().getChildrenList().toArray(new YamlNode[0]));
+        this.root.addChildren(yamlManager.getRootNode().getChildrenList());
     }
 
     /* (non-Javadoc)
@@ -295,12 +361,18 @@ public class SimpleYamlManager implements YamlManager {
         this.root.getNode(node, true).setValue(value);
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.yaml.YamlManager#getNode(java.lang.String)
+     */
     @Override
     public YamlNode getNode(String node) throws YamlException {
         getLogger().debug("Getting node '" + node + "'.");
         return this.root.getNode(node);
     }
 
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.yaml.YamlManager#getFinalNodeCount()
+     */
     @Override
     public int getFinalNodeCount() {
         return getRootNode().getFinalNodeCount();
@@ -340,6 +412,14 @@ public class SimpleYamlManager implements YamlManager {
         return true;
     }
 
+    /**
+     * Loads yaml from the given file and sets is as the root node.
+     * <p>
+     * Tries to create the file if doesn't exist.
+     * 
+     * @param  file        file to load the yaml from
+     * @throws IOException if an IOException occurred
+     */
     protected void load(File file) throws IOException {
         if (file == null) {
             getLogger().error("File '" + file + "' is null, nodes could not be loaded from the yaml file.");
@@ -359,130 +439,34 @@ public class SimpleYamlManager implements YamlManager {
         load(new FileInputStream(file));
     }
 
+    /**
+     * Loads yaml from the given classpath resource and sets it as the root node.
+     * 
+     * @param  path        path to the resource in classpaht to load the yaml from
+     * @throws IOException if an IOException occurred
+     */
     protected void load(String path) throws IOException {
         getLogger().debug("Loading nodes from local file '" + path + "'.");
         load(getClass().getClassLoader().getResourceAsStream(path));
     }
 
+    /**
+     * Loads yaml from the given input stream and sets is as the root node.
+     * 
+     * @param stream  input stream to load the yaml from
+     */
     protected void load(InputStream stream) {
         load(new InputStreamReader(stream));
     }
 
+    /**
+     * Loads yaml from the given reader and sets is as the root node.
+     * 
+     * @param reader  reader to load the yaml from
+     */
     protected void load(Reader reader) {
         // TODO: Replace all tabs in the document before parsing.
         Object tree = this.yaml.load(reader);
         this.root = new YamlNode(this, null, tree);
     }
-
-    /*    private void load(InputStream yamlStream) throws IOException {
-            if (yamlStream != null) {
-                try {
-                    InputStreamReader yamlStreamReader = new InputStreamReader(yamlStream);
-                    BufferedReader buffer = new BufferedReader(yamlStreamReader);
-                    String line, node = "";
-                    int lastBlank = 0;
-                    boolean isNode = false;
-                    while  ((line = buffer.readLine()) != null) {
-                        int blank = 0;
-                        if (line.length() > 0 && line.charAt(line.length() - 1) == ':') {
-                            for (int i = 0; i < line.length(); i++) {
-                                if (Character.isWhitespace(line.charAt(i))) {
-                                    blank++;
-                                }
-                            }
-                            line = line.replaceAll("\\s+", "");
-                            line = line.replaceAll(":", "");
-                            if (blank == 0) {
-                                node = line + ".";
-                            } else if (blank > lastBlank) {
-                                node += line + ".";
-                            } else if (blank <= lastBlank) {
-                                String[] split = node.split("\\.");
-                                if ((lastBlank - blank) > 0) {
-                                    for (int i = 1; ((lastBlank - blank) / 4) >= i; i++) {
-                                        node = node.replace("." + split[split.length - i], "");
-                                    }
-                                } else {
-                                    node = node.replace("." + split[split.length - 1], "");
-                                }
-                                node += line + ".";
-                            }
-                            lastBlank = blank;
-                            isNode = true;
-                        } else if (line.length() > 0) {
-                            boolean set = false;
-                            for (int i=0; i < line.length() && ! set; i++) {
-                                if (Character.isWhitespace(line.charAt(i))) {
-                                    blank++;
-                                } else {
-                                    set = true;
-                                }
-                            }
-
-                            String[] split = line.split(":");
-                            String finalNode = split[0].replaceAll("\\s+", "");
-                            if (finalNode.startsWith("#")) {
-                                continue;
-                            }
-                            if (!isNode && blank > lastBlank) {
-                                node += finalNode + ".";
-                            } else if (!isNode && blank < lastBlank) {
-                                String[] spl = node.split("\\.");
-                                node = node.replace("." + spl[spl.length - 1], "");
-                            }
-                            lastBlank = blank;
-                            String temp = split[1].substring(1);
-                            if (split.length > 1) {
-                                for(int i=2; split.length > i; i++){
-                                    temp += ":" + split[i];
-                                }
-                            }
-                            int index = temp.lastIndexOf('#');
-                            if (index != -1 && Character.isWhitespace(temp.charAt(index - 1))) {
-                                temp = temp.substring(0, index - 1);
-                            }
-                            String value = "";
-                            char last = 0;
-                            for (int i = 0; i < temp.length(); i++) {
-                                if (Character.isWhitespace(temp.charAt(i)) && Character.isWhitespace(last)) {
-                                    continue;
-                                }
-                                value += temp.charAt(i);
-                                last = temp.charAt(i);
-                            }
-                            if (Character.isWhitespace(value.charAt(value.length() - 1))) {
-                                value = value.substring(0, value.length() - 1);
-                            }
-                            //System.out.println(node + finalNode + " = " + value);
-                            if (value.equalsIgnoreCase("true")) {
-                                getLogger().debug("Adding node '" + node + finalNode + "' " +
-                                        "to the node list with Boolean value 'true'.");
-                                this.yaml.put(node + finalNode, true);
-                            } else if (value.equalsIgnoreCase("false")) {
-                                getLogger().debug("Adding node '" + node + finalNode + "' " +
-                                        "to the node list with Boolean value 'false'.");
-                                this.yaml.put(node + finalNode, false);
-                            } else if (Util.isInteger(value)) {
-                                getLogger().debug("Adding node '" + node + finalNode + "' " +
-                                        "to the node list with Integer value '" + value + "'.");
-                                this.yaml.put(node + finalNode, Integer.parseInt(value));
-                            } else if (Util.isLong(value)) {
-                                getLogger().debug("Adding node '" + node + finalNode + "' " +
-                                        "to the node list with Long value '" + value + "'.");
-                                this.yaml.put(node + finalNode, Long.parseLong(value));
-                            } else if (value instanceof String && value != null && !value.equalsIgnoreCase("null")) {
-                                getLogger().debug("Adding node '" + node + finalNode + "' " +
-                                        "to the node list with String value '" + value + "'.");
-                                this.yaml.put(node + finalNode, value);
-                            } else {
-                                getLogger().error("Could not add node '" + node + finalNode + "' " + "to the node list because the value is '" + value + "'.");
-                            }
-                            isNode = false;
-                        }
-                    }
-                } finally  {
-                    yamlStream.close();
-                }
-            }
-        }*/
 }

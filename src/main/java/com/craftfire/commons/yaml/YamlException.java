@@ -5,6 +5,7 @@ package com.craftfire.commons.yaml;
  */
 public class YamlException extends Exception {
     // TODO: Should it be a RuntimeException?
+    private static final long serialVersionUID = -592286590230664399L;
     private final String path;
 
     /**
