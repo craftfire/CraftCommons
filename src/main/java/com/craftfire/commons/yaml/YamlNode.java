@@ -80,7 +80,7 @@ public class YamlNode extends AbstractValueHolder {
     }
 
     protected String normalizePath(String path) {
-        if (this.manager.isCaseSensitive()) {
+        if (this.manager.isCaseSensitive() || path == null) {
             return path;
         }
         return path.toLowerCase();
