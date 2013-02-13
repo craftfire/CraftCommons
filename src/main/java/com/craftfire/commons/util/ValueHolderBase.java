@@ -9,36 +9,54 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+/**
+ * An immutable implementation of ValueHolder with automatic type detection in constructor, and complex type conversion system.
+ * <p>
+ * NOTE: Conversions don't care about unsigned setting yet.
+ */
 public class ValueHolderBase extends AbstractValueHolder {
     protected final String name;
     protected final Object value;
     protected final ValueType type;
     protected final boolean unsigned;
 
-    protected static ValueType typeDetect(Object data) {
-        if (data == null) {
+    // TODO: Make the conversions consider the unsigned setting
+
+    /**
+     * Detects the ValueType of specified object.
+     * 
+     * @param value  the object
+     * @return       detected ValueType of the object
+     */
+    protected static ValueType typeDetect(Object value) {
+        if (value == null) {
             return ValueType.NULL;
-        } else if (data instanceof String) {
+        } else if (value instanceof String) {
             return ValueType.STRING;
-        } else if (data instanceof Number) {
-            if (((Number) data).doubleValue() == ((Number) data).longValue()) {
+        } else if (value instanceof Number) {
+            if (((Number) value).doubleValue() == ((Number) value).longValue()) {
                 return ValueType.INTEGER;
             } else {
                 return ValueType.REAL;
             }
-        } else if (data instanceof Date) {
+        } else if (value instanceof Date) {
             return ValueType.DATE;
-        } else if (data instanceof Blob) {
+        } else if (value instanceof Blob) {
             return ValueType.BLOB;
-        } else if (data instanceof byte[]) {
+        } else if (value instanceof byte[]) {
             return ValueType.BINARY;
-        } else if (data instanceof Boolean) {
+        } else if (value instanceof Boolean) {
             return ValueType.BOOLEAN;
         }
         // TODO: DataManager.getLogManager().warning("Unknown data type: " + data.toString());
         return ValueType.UNKNOWN;
     }
 
+    /**
+     * Checks if the value of the holder matches the ValueType.
+     * 
+     * @throws IllegalArgumentException if the value doesn't match the type 
+     */
     protected void typeCheck() {
         IllegalArgumentException e = new IllegalArgumentException("Data: "
                 + this.value + " doesn't match the type: "
@@ -70,22 +88,55 @@ public class ValueHolderBase extends AbstractValueHolder {
         }
     }
 
-    public ValueHolderBase(Object data) {
-        this(false, data);
+    /**
+     * Creates a new ValueHolderBase with specified value and automatically detected type (treated as signed).
+     * 
+     * @param value  the value
+     */
+    public ValueHolderBase(Object value) {
+        this(false, value);
     }
 
-    public ValueHolderBase(ValueType type, Object data) {
-        this(type, false, data);
+    /**
+     * Creates a new ValueHolderBase with specified value and specified type (treated as signed).
+     * 
+     * @param  type                     type of the value
+     * @param  value                    the value
+     * @throws IllegalArgumentException if the value doesn't match the type
+     */
+    public ValueHolderBase(ValueType type, Object value) {
+        this(type, false, value);
     }
 
-    public ValueHolderBase(boolean unsigned, Object data) {
-        this("", unsigned, data);
+    /**
+     * Creates a new ValueHolderBase with specified value and automatically detected type.
+     * 
+     * @param unsigned  weather or not the value is unsigned
+     * @param value     the value
+     */
+    public ValueHolderBase(boolean unsigned, Object value) {
+        this("", unsigned, value);
     }
 
-    public ValueHolderBase(ValueType type, boolean unsigned, Object data) {
-        this(type, "", unsigned, data);
+    /**
+     * Creates a new ValueHolderBase with specified value and specified type.
+     * 
+     * @param  type                     type of the value
+     * @param  unsigned                 weather or not the value is unsigned
+     * @param  value                    the value
+     * @throws IllegalArgumentException if the value doesn't match the type
+     */
+    public ValueHolderBase(ValueType type, boolean unsigned, Object value) {
+        this(type, "", unsigned, value);
     }
 
+    /**
+     * Creates a new ValueHolderBase with specified value and holder name, and automatically detected type.
+     * 
+     * @param name      name of the holder
+     * @param unsigned  weather or not the value is unsigned
+     * @param value     the value
+     */
     public ValueHolderBase(String name, boolean unsigned, Object data) {
         this.type = typeDetect(data);
         this.name = name;
@@ -93,15 +144,24 @@ public class ValueHolderBase extends AbstractValueHolder {
         this.value = data;
     }
 
-    public ValueHolderBase(ValueType type, String name, boolean unsigned, Object data) {
-        if (data == null) {
+    /**
+     * Creates a new ValueHolderBase with specified value, type, and holder name.
+     * 
+     * @param  type                     type of the value
+     * @param  name                     name of the holder
+     * @param  unsigned                 weather or not the value is unsigned
+     * @param  value                    the value
+     * @throws IllegalArgumentException if the value doesn't match the type
+     */
+    public ValueHolderBase(ValueType type, String name, boolean unsigned, Object value) {
+        if (value == null) {
             this.type = ValueType.NULL;
         } else {
             this.type = type;
         }
         this.name = name;
         this.unsigned = unsigned;
-        this.value = data;
+        this.value = value;
         typeCheck();
     }
 
@@ -407,6 +467,9 @@ public class ValueHolderBase extends AbstractValueHolder {
         return this.unsigned;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "ValueHolder " + getType().name() + " " + this.name + " = " + this.value;

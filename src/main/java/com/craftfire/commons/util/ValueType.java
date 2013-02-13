@@ -19,6 +19,9 @@
  */
 package com.craftfire.commons.util;
 
+/**
+ * Represents type of a value.
+ */
 public enum ValueType {
     STRING, INTEGER, DATE, BLOB, BINARY, BOOLEAN, REAL, NULL, UNKNOWN
 }
