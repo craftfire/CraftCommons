@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Iterator;
 
 import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.commons.util.Util;
@@ -160,6 +161,22 @@ public class YamlManager {
         }
         getLogger().debug("Could not find node '" + newNode + "', returning default value instead '" + defaultValue + "'.");
         return defaultValue;
+    }
+
+    public String getNode(String value) {
+        if (!getNodes().isEmpty()) {
+            Iterator iterator = getNodes().entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry pairs = (Map.Entry) iterator.next();
+                System.out.println(pairs.getKey() + " = " + pairs.getValue());
+                iterator.remove();
+                if (pairs.getValue() instanceof String && value.equalsIgnoreCase((String) pairs.getValue())) {
+                    getLogger().debug("Found '" + value + "' in the node list: '" + pairs.getKey() + "'");
+                    return (String) pairs.getKey();
+                }
+            }
+        }
+        return null;
     }
 
     public Map<String, Object> getNodes() {
