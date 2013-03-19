@@ -300,7 +300,7 @@ public class YamlManager {
                                               "to the node list with Long value '" + value + "'.");
                             this.yaml.put(node + finalNode, Long.parseLong(value));
                         } else if (value instanceof String && value != null && !value.equalsIgnoreCase("null")) {
-                            if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
+                            if (value.length() > 0 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
                                 value = value.substring(1, (value.length() - 1));
                             }
                             getLogger().debug("Adding node '" + node + finalNode + "' " +
