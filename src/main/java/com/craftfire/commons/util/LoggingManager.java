@@ -42,7 +42,7 @@ public class LoggingManager {
     }
 
     public static enum Type {
-        error, debug
+        info, error, debug, warning
     }
 
     public Logger getLogger() {
@@ -101,27 +101,53 @@ public class LoggingManager {
     }
 
     public void info(String line) {
-        this.logger.info(this.prefix + " " + line);
+        info(line, true);
     }
 
-    public void warning(String line) {
+    public void info(String line, boolean logFile) {
+        this.logger.info(this.prefix + " " + line);
+        if (logFile) {
+            toFile(Type.info, line);
+        }
+    }
+
+    private void warning(String line) {
+        warning(line, true);
+    }
+
+    private void warning(String line, boolean logFile) {
         this.logger.warning(this.prefix + " " + line);
+        if (logFile) {
+            toFile(Type.warning, line);
+        }
     }
 
     public void severe(String line) {
+        severe(line, true);
+    }
+
+    public void severe(String line, boolean logFile) {
         this.logger.severe(this.prefix + " " + line);
+        if (logFile) {
+            toFile(Type.error, line);
+        }
     }
 
     public void debug(String line) {
+        debug(line, true);
+    }
+
+    public void debug(String line,boolean logFile) {
         if (isDebug()) {
-            this.logger.log(this.debugLevel, this.prefix + " " + line);
-            toFile(Type.debug, line);
+            this.logger.log(debugLevel, this.prefix + " " + line);
+            if (logFile) {
+                toFile(Type.debug, line);
+            }
         }
     }
 
     public void error(String error) {
         severe(error);
-        toFile(Type.error, error);
     }
 
     public void advancedWarning() {
@@ -130,7 +156,7 @@ public class LoggingManager {
                 + System.getProperty("line.separator")
                 + "|---------------------------------- WARNING ----------------------------------|"
                 + System.getProperty("line.separator")
-                + "|-----------------------------------------------------------------------------|");
+                + "|-----------------------------------------------------------------------------|", false);
     }
 
     public void stackTrace(final Exception e) {
@@ -139,19 +165,19 @@ public class LoggingManager {
 
     public void stackTrace(final Exception e, Map<Integer, String> extra) {
         advancedWarning();
-        warning("Class name: " + e.getStackTrace()[1].getClassName());
-        warning("Error message: " + e.getMessage());
-        warning("Error cause: " + e.getCause());
-        warning("File name: " + e.getStackTrace()[1].getFileName());
-        warning("Function name: " + e.getStackTrace()[1].getMethodName());
-        warning("Error line: " + e.getStackTrace()[1].getLineNumber());
-        if (this.logging) {
+        warning("Class name: " + e.getStackTrace()[1].getClassName(), false);
+        warning("Error message: " + e.getMessage(), false);
+        warning("Error cause: " + e.getCause(), false);
+        warning("File name: " + e.getStackTrace()[1].getFileName(), false);
+        warning("Function name: " + e.getStackTrace()[1].getMethodName(), false);
+        warning("Error line: " + e.getStackTrace()[1].getLineNumber(), false);
+        if (isLogging()) {
             DateFormat logFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
             warning("Check log file: " + this.directory + "error" + File.separator
-                    + logFormat.format(date) + "-error.log");
+                    + logFormat.format(date) + "-error.log", false);
         } else {
-            warning("Enable logging in the config to get more information about the error.");
+            warning("Enable logging in the config to get more information about the error.", false);
         }
 
         logError("--------------------------- STACKTRACE ERROR ---------------------------");
