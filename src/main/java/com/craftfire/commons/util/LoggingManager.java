@@ -203,7 +203,7 @@ public class LoggingManager {
             Date date = new Date();
             if (isCombinedLogging()) {
                 data = new File(this.directory + "combined" + File.separator
-                        + logFormat.format(date) + "-" + combined + ".log");
+                        + logFormat.format(date) + "-combined.log");
                 if (!data.exists()) {
                     try {
                         if (!data.createNewFile()) {
