@@ -148,7 +148,7 @@ public class LoggingManager {
         if (this.logging) {
             DateFormat logFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
-            warning("Check log file: " + this.directory + "error\\"
+            warning("Check log file: " + this.directory + "error" + File.separator
                     + logFormat.format(date) + "-error.log");
         } else {
             warning("Enable logging in the config to get more information about the error.");
@@ -232,7 +232,8 @@ public class LoggingManager {
                                                     + "combined" + File.separator + logFormat.format(date) + "-"
                                                     + "combined" + ".log", true);
                     BufferedWriter buffer = new BufferedWriter(writer);
-                    buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
+                    buffer.write(stringFormat.format(date) + " - " + type.toString().toUpperCase()
+                               + " - " + line + System.getProperty("line.separator"));
                     buffer.close();
                     writer.close();
                 } catch (IOException e) {
