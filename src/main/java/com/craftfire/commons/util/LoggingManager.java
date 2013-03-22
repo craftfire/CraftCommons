@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 public class LoggingManager {
     private final Logger logger;
     private String prefix, directory, format = "HH:mm:ss";
-    private boolean debug = false, logging = false;
+    private boolean debug = false, logging = false, combined = true;
     protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};
 
     public LoggingManager(String logger, String prefix) {
@@ -74,6 +74,14 @@ public class LoggingManager {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public boolean isCombinedLogging() {
+        return this.combined;
+    }
+
+    public void setCombinedLogging(boolean combined) {
+        this.combined = combined;
     }
 
     public boolean isLogging() {
@@ -177,33 +185,67 @@ public class LoggingManager {
                     debug("Created missing directory: " + this.directory);
                 }
             }
-            data = new File(this.directory + type.toString() + "/", "");
+            data = new File(this.directory + type.toString() + File.separator, "");
             if (!data.exists()) {
                 if (data.mkdir()) {
-                    debug("Created missing directory: " + this.directory
-                            + type.toString());
+                    debug("Created missing directory: " + this.directory + type.toString());
+                }
+            }
+            if (isCombinedLogging()) {
+                data = new File(this.directory + "combined" + File.separator, "");
+                if (!data.exists()) {
+                    if (data.mkdir()) {
+                        debug("Created missing directory: " + this.directory + type.toString());
+                    }
                 }
             }
             DateFormat logFormat = new SimpleDateFormat(this.format);
             Date date = new Date();
-            data = new File(this.directory + type.toString() + "/"
+            if (isCombinedLogging()) {
+                data = new File(this.directory + "combined" + File.separator
+                        + logFormat.format(date) + "-" + combined + ".log");
+                if (!data.exists()) {
+                    try {
+                        if (!data.createNewFile()) {
+                            error("Failed creating file for logging: '" + data.getName() + "'.");
+                        }
+                    } catch (IOException e) {
+                        stackTrace(e);
+                    }
+                }
+            }
+            data = new File(this.directory + type.toString() + File.separator
                     + logFormat.format(date) + "-" + type.toString() + ".log");
             if (!data.exists()) {
                 try {
-                    data.createNewFile();
+                    if (!data.createNewFile()) {
+                        error("Failed creating file for logging: '" + data.getName() + "'.");
+                    }
+                } catch (IOException e) {
+                    stackTrace(e);
+                }
+            }
+            if (isCombinedLogging()) {
+                try {
+                    DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    FileWriter writer = new FileWriter(this.directory
+                                                    + "combined" + File.separator + logFormat.format(date) + "-"
+                                                    + "combined" + ".log", true);
+                    BufferedWriter buffer = new BufferedWriter(writer);
+                    buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
+                    buffer.close();
+                    writer.close();
                 } catch (IOException e) {
                     stackTrace(e);
                 }
             }
             try {
-                DateFormat stringFormat = new SimpleDateFormat(
-                        "yyyy/MM/dd HH:mm:ss");
+                DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 FileWriter writer = new FileWriter(this.directory
-                        + type.toString() + "/" + logFormat.format(date) + "-"
-                        + type.toString() + ".log", true);
+                                                   + type.toString() + File.separator + logFormat.format(date) + "-"
+                                                   + type.toString() + ".log", true);
                 BufferedWriter buffer = new BufferedWriter(writer);
-                buffer.write(stringFormat.format(date) + " - " + line
-                        + System.getProperty("line.separator"));
+                buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
                 buffer.close();
                 writer.close();
             } catch (IOException e) {
