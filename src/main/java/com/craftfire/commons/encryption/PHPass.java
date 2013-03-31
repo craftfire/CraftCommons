@@ -27,7 +27,7 @@ import java.util.Random;
 
 public class PHPass {
     private static String itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private PHPassIdentifier identifier = PHPassIdentifier.P;
+    private Encryption encryption = Encryption.PHPASS_P;
     private int iterationCountLog2;
     private SecureRandom randomGen;
 
@@ -40,17 +40,24 @@ public class PHPass {
         this.randomGen = new SecureRandom();
     }
 
-    public PHPass(PHPassIdentifier identifier, int iterationCountLog2) {
+    public PHPass(Encryption encryption, int iterationCountLog2) {
         this(iterationCountLog2);
-        this.identifier = identifier;
+        this.encryption = encryption;
     }
 
-    public PHPass(PHPassIdentifier identifier) {
-        this.identifier = identifier;
+    public PHPass(Encryption encryption) {
+        this.encryption = encryption;
     }
 
-    public PHPassIdentifier getIdentifier() {
-        return this.identifier;
+    public String getIdentifier() {
+        switch (this.encryption) {
+            case PHPASS_P:
+                return "P";
+            case PHPASS_H:
+                return "H";
+            default:
+                return "P";
+        }
     }
 
     private String encode64(byte[] src, int count) {
@@ -135,7 +142,7 @@ public class PHPass {
     }
 
     private String gensaltPrivate(byte[] input) {
-        String output = "$" + getIdentifier().name() + "$";
+        String output = "$" + getIdentifier() + "$";
         output += itoa64.charAt(Math.min(this.iterationCountLog2 + 5, 30));
         output += this.encode64(input, 6);
         return output;

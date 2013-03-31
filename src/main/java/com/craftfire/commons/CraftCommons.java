@@ -97,26 +97,13 @@ public final class CraftCommons {
     }
 
     public static String encrypt(Encryption encryption, Object object) {
-        return encrypt(encryption, object, null, 0, PHPassIdentifier.P);
+        return encrypt(encryption, object, null, 0);
     }
-
-    public static String encrypt(Encryption encryption, Object object, PHPassIdentifier identifier) {
-        return encrypt(encryption, object, null, 0, identifier);
-    }
-
     public static String encrypt(Encryption encryption, Object object, String salt) {
-        return encrypt(encryption, object, salt, 0, PHPassIdentifier.P);
-    }
-
-    public static String encrypt(Encryption encryption, Object object, String salt, PHPassIdentifier identifier) {
-        return encrypt(encryption, object, salt, 0, identifier);
+        return encrypt(encryption, object, salt, 0);
     }
 
     public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount) {
-        return encrypt(encryption, object, salt, iterationCount, PHPassIdentifier.P);
-    }
-
-    public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount, PHPassIdentifier identifier) {
         try {
             String string = (String) object;
             MessageDigest md = null;
@@ -140,12 +127,12 @@ public final class CraftCommons {
                 w.NESSIEadd(string);
                 w.NESSIEfinalize(digest);
                 return Whirlpool.display(digest);
-            } else if (encryption.equals(Encryption.PHPASS)) {
+            } else if (encryption.equals(Encryption.PHPASS_P) || encryption.equals(Encryption.PHPASS_H)) {
                 PHPass phpass;
                 if (iterationCount == 0) {
-                    phpass = new PHPass(identifier, 8);
+                    phpass = new PHPass(encryption, 8);
                 } else {
-                    phpass = new PHPass(identifier, iterationCount);
+                    phpass = new PHPass(encryption, iterationCount);
                 }
                 if (newSalt == null || newSalt.isEmpty()) {
                     newSalt = phpass.gensalt();
@@ -188,8 +175,10 @@ public final class CraftCommons {
             return Encryption.SHA256;
         } else if (hash.startsWith("$6$")) {
             return Encryption.SHA512;
-        } else if (hash.startsWith("$P$") || hash.startsWith("$H$")) {
-            return Encryption.PHPASS;
+        } else if (hash.startsWith("$P$")) {
+            return Encryption.PHPASS_P;
+        } else if (hash.startsWith("$H$")) {
+            return Encryption.PHPASS_H;
         }
         return null;
     }
