@@ -37,11 +37,7 @@ import java.util.zip.Checksum;
 
 import com.craftfire.commons.analytics.AnalyticsException;
 import com.craftfire.commons.analytics.AnalyticsManager;
-import com.craftfire.commons.encryption.BCrypt;
-import com.craftfire.commons.encryption.Encryption;
-import com.craftfire.commons.encryption.EncryptionUtil;
-import com.craftfire.commons.encryption.PHPass;
-import com.craftfire.commons.encryption.Whirlpool;
+import com.craftfire.commons.encryption.*;
 
 public final class CraftCommons {
     private CraftCommons() {
@@ -101,14 +97,26 @@ public final class CraftCommons {
     }
 
     public static String encrypt(Encryption encryption, Object object) {
-        return encrypt(encryption, object, null);
+        return encrypt(encryption, object, null, 0, PHPassIdentifier.P);
+    }
+
+    public static String encrypt(Encryption encryption, Object object, PHPassIdentifier identifier) {
+        return encrypt(encryption, object, null, 0, identifier);
     }
 
     public static String encrypt(Encryption encryption, Object object, String salt) {
-        return encrypt(encryption, object, salt, 0);
+        return encrypt(encryption, object, salt, 0, PHPassIdentifier.P);
+    }
+
+    public static String encrypt(Encryption encryption, Object object, String salt, PHPassIdentifier identifier) {
+        return encrypt(encryption, object, salt, 0, identifier);
     }
 
     public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount) {
+        return encrypt(encryption, object, salt, iterationCount, PHPassIdentifier.P);
+    }
+
+    public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount, PHPassIdentifier identifier) {
         try {
             String string = (String) object;
             MessageDigest md = null;
@@ -135,9 +143,9 @@ public final class CraftCommons {
             } else if (encryption.equals(Encryption.PHPASS)) {
                 PHPass phpass;
                 if (iterationCount == 0) {
-                    phpass = new PHPass(8);
+                    phpass = new PHPass(identifier, 8);
                 } else {
-                    phpass = new PHPass(iterationCount);
+                    phpass = new PHPass(identifier, iterationCount);
                 }
                 if (newSalt == null || newSalt.isEmpty()) {
                     newSalt = phpass.gensalt();
