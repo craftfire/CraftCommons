@@ -35,23 +35,23 @@ public class TestEncryption {
         final String correctpl = "ąćęłóńśźż";
         final String wrongpl = "acelonszz";
         final String hashpl = "$P$ByXWbzDvVAJ0jxvNp5sv4xYPIRXJJ1.";
-        String hashed = CraftCommons.encrypt(Encryption.PHPASS, correct);
+        String hashed = CraftCommons.encrypt(Encryption.PHPASS_P, correct);
         assertEquals("Correct password doesn't match generated hash", hashed,
-                CraftCommons.encrypt(Encryption.PHPASS, correct, hashed));
+                CraftCommons.encrypt(Encryption.PHPASS_P, correct, hashed));
         assertFalse("Wrong password matches generated hash", CraftCommons
-                .encrypt(Encryption.PHPASS, wrong, hashed).equals(hashed));
+                .encrypt(Encryption.PHPASS_P, wrong, hashed).equals(hashed));
         assertEquals(
                 "Correct password doesn't match hash from original PHPass",
-                hash, CraftCommons.encrypt(Encryption.PHPASS, correct, hash));
+                hash, CraftCommons.encrypt(Encryption.PHPASS_P, correct, hash));
         assertFalse("Wrong password matches hash from phpass", CraftCommons
-                .encrypt(Encryption.PHPASS, wrong, hash).equals(hash));
+                .encrypt(Encryption.PHPASS_P, wrong, hash).equals(hash));
         assertEquals(
                 "Correct password with polish characters doesn't match hash from original PHPass",
                 hashpl,
-                CraftCommons.encrypt(Encryption.PHPASS, correctpl, hashpl));
+                CraftCommons.encrypt(Encryption.PHPASS_P, correctpl, hashpl));
         assertFalse(
-                "Wrong password matches  hash from oroginal PHPass (original password contained polish characters)",
-                CraftCommons.encrypt(Encryption.PHPASS, wrongpl, hashpl)
+                "Wrong password matches  hash from original PHPass (original password contained polish characters)",
+                CraftCommons.encrypt(Encryption.PHPASS_P, wrongpl, hashpl)
                         .equals(hashpl));
     }
 }
