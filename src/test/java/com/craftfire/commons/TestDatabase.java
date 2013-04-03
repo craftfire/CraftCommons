@@ -50,7 +50,7 @@ import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.database.DataType;
-import com.craftfire.commons.database.FieldType;
+import com.craftfire.commons.util.ValueType;
 
 public class TestDatabase {
     private static final String table = "typetest";
@@ -136,7 +136,7 @@ public class TestDatabase {
         assertEquals(randomInt + 1, datamanager.getIntegerField(wrtable, "x", "`id` = '" + id + "'"));
         assertEquals("commons" + randomInt, datamanager.getStringField(wrtable, "txt", "`id` = '" + id + "'"));
         assertEquals(now.getTime(), datamanager.getDateField(wrtable, "d", "`id` = '" + id + "'").getTime());
-        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "b", "`id` = '" + id + "'").isNull());
+        assertTrue(datamanager.getField(ValueType.UNKNOWN, wrtable, "b", "`id` = '" + id + "'").isNull());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class TestDatabase {
         data.put("x", null);
         datamanager.updateFields(data, wrtable, "`id` = '1'");
         assertEquals(testString, datamanager.getStringField(wrtable, "txt", "`id` = '1'"));
-        assertTrue(datamanager.getField(FieldType.UNKNOWN, wrtable, "x", "`id` = '1'").isNull());
+        assertTrue(datamanager.getField(ValueType.UNKNOWN, wrtable, "x", "`id` = '1'").isNull());
         assertEquals(testDate, datamanager.getDateField(wrtable, "d", "`id` = '1'"));
         datamanager.updateField(wrtable, "txt", oldString, "`id` = '1'");
         datamanager.updateField(wrtable, "d", oldDate, "`id` = '1'");
@@ -251,7 +251,7 @@ public class TestDatabase {
         assertEquals("487250340273948", field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertEquals(expected, field.getBigInt());
         assertTrue(field.getBool());
         assertArrayEquals(expectedBytes, field.getBytes());
@@ -302,7 +302,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -347,7 +347,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertNotNull(field.getBlob());
         assertTrue(field.getBool());
@@ -393,7 +393,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -440,7 +440,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
         assertNotNull(field.getDecimal());
@@ -471,7 +471,7 @@ public class TestDatabase {
     public void testClob() throws SQLException {
         final String name = "clob";
 
-        if (datamanager.getField(FieldType.UNKNOWN, table, name, "1").getDate() == null) {
+        if (datamanager.getField(ValueType.UNKNOWN, table, name, "1").getDate() == null) {
             datamanager.updateField(table, name, DateFormat.getDateTimeInstance().format(new Date()), "1");
             // Just for debug purposes, to see what is the locale of host.
             System.out.println(DateFormat.getDateInstance().format(new Date()));
@@ -497,7 +497,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
         assertNotNull(field.getDate());
@@ -532,7 +532,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getDate());
@@ -578,7 +578,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -626,7 +626,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -674,7 +674,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -720,7 +720,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
         assertThat(field.getDouble(), not(equalTo(0d)));
@@ -762,7 +762,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -812,7 +812,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -850,7 +850,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
         assertNotNull(field.getString());
@@ -883,7 +883,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -932,7 +932,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -981,7 +981,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -1032,7 +1032,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getDate());
@@ -1078,7 +1078,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getDate());
@@ -1125,7 +1125,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -1175,7 +1175,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertNotNull(field.getBigInt());
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
@@ -1214,7 +1214,7 @@ public class TestDatabase {
         assertNotNull(field.getString());
 
         // DataManager.getField()
-        field = datamanager.getField(FieldType.UNKNOWN, table, name, "1");
+        field = datamanager.getField(ValueType.UNKNOWN, table, name, "1");
         assertTrue(field.getBool());
         assertNotNull(field.getBytes());
         assertNotNull(field.getString());
