@@ -499,6 +499,27 @@ public class YamlNode extends AbstractValueHolder {
     }
 
     /**
+     * Returns list of final (scalar) nodes among descendants of this node
+     * 
+     * @return list of final nodes
+     */
+    public List<YamlNode> getFinalNodeList() {
+        List<YamlNode> list = new ArrayList<YamlNode>();
+        if (isScalar()) {
+            list.add(this);
+        } else {
+            try {
+                for (YamlNode node : getChildrenList()) {
+                    list.addAll(node.getFinalNodeList());
+                }
+            } catch (YamlException e) {
+                this.manager.getLogger().stackTrace(e);
+            }
+        }
+        return list;
+    }
+
+    /**
      * Returns number of final (scalar) nodes among descendants of this node
      * 
      * @return number of final nodes

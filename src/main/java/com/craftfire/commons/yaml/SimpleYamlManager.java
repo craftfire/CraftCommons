@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -388,6 +390,24 @@ public class SimpleYamlManager implements YamlManager {
     public YamlNode getNode(String node) throws YamlException {
         getLogger().debug("Getting node '" + node + "'.");
         return this.root.getNode(node);
+    }
+
+    @Deprecated
+    @Override
+    public Map<String, Object> getNodes() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (YamlNode node : getFinalNodeList()) {
+            map.put(node.getPath(), node.getValue());
+        }
+        return map;
+    }
+
+    /* (non-Javadoc)
+     * @see com.craftfire.commons.yaml.YamlManager#getFinalNodeList()
+     */
+    @Override
+    public List<YamlNode> getFinalNodeList() {
+        return getRootNode().getFinalNodeList();
     }
 
     /* (non-Javadoc)

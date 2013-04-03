@@ -20,6 +20,7 @@
 package com.craftfire.commons.yaml;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -186,7 +187,22 @@ public interface YamlManager {
     YamlNode getNode(String node) throws YamlException;
 
     /**
-     * Retuns total number of all scalar nodes loaded by the manager.
+     * Returns a map of the values of all the final nodes. The map key is the node path, the map value is the node value. 
+     * 
+     * @return a map of values of all the final nodes
+     */
+    @Deprecated
+    public Map<String, Object> getNodes();
+
+    /**
+     * Returns list of all scalar nodes loaded by the manager.
+     * 
+     * @return list of all scalar nodes
+     */
+    List<YamlNode> getFinalNodeList();
+
+    /**
+     * Returns total number of all scalar nodes loaded by the manager.
      * 
      * @return number of all scalar nodes
      */
