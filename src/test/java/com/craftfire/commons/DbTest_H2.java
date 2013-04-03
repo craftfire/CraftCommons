@@ -31,8 +31,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.junit.Test;
-
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
@@ -337,13 +335,11 @@ public class DbTest_H2 {
         printResult("asInt", x != 0, x);
     }
 
-    @Test
     public void testLong() {
         long x = field.getLong();
         printResult("asLong", x != 0, x);
     }
 
-    @Test
     public void testString() {
         String x = field.getString();
         printResult("asString", x);
