@@ -29,7 +29,7 @@ public interface YamlManager {
      * Sets the logging manager to be used by this manager.
      * 
      * @param  loggingManager            the logging manager
-     * @throws IllegalArguementException if the loggingManager is {@code null} 
+     * @throws IllegalArguementException if the loggingManager is {@code null}
      */
     void setLoggingManager(LoggingManager loggingManager);
 
@@ -96,7 +96,7 @@ public interface YamlManager {
 
     /**
      * Returns {@code int} value of node with given path.
-     * <p> 
+     * <p>
      * Defaults to {@code 0} if the node doesn't exist or can't be converted to {@code int}.
      * 
      * @param node  the node path
@@ -115,7 +115,7 @@ public interface YamlManager {
 
     /**
      * Returns {@code long} value of node with given path.
-     * <p> 
+     * <p>
      * Defaults to {@code 0} if the node doesn't exist or can't be converted to {@code long}.
      * 
      * @param node  the node path
@@ -183,12 +183,12 @@ public interface YamlManager {
     boolean save();
 
     /**
-     * Reloads the manager's document from the file it was loaded from.
+     * Loads the manager's document.
      * <p>
-     * Fails if the document wasn't loaded from a file or IOException occurred.
+     * Fails if trying to load the document from a stream or a reader more than once, or IOException occurred.
      * 
      * @return {@code true} if succeed, {@code false} otherwise
      */
-    boolean reload();
+    boolean load();
 
 }

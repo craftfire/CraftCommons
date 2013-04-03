@@ -219,6 +219,17 @@ public class ValueHolderBase extends AbstractValueHolder {
      */
     @Override
     public int getInt(int defaultValue) {
+        if (getType() == ValueType.BINARY || getType() == ValueType.BLOB) {
+            byte[] bytes = { 0, 0, 0, 0 };
+            byte[] bytes1 = getBytes();
+            if (bytes1.length >= 4) {
+                System.arraycopy(bytes1, bytes1.length - 4, bytes, 0, 4);
+            } else {
+                System.arraycopy(bytes1, 0, bytes, 4 - bytes1.length, bytes1.length);
+            }
+            return ByteBuffer.wrap(bytes).getInt();
+
+        }
         return (int) getLong(defaultValue);
     }
 
@@ -239,10 +250,9 @@ public class ValueHolderBase extends AbstractValueHolder {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
             byte[] bytes1 = getBytes();
             if (bytes1.length >= 8) {
-                System.arraycopy(bytes1, 0, bytes, 0, 8);
+                System.arraycopy(bytes1, bytes1.length - 8, bytes, 0, 8);
             } else {
-                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length,
-                        bytes1.length);
+                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length, bytes1.length);
             }
             return ByteBuffer.wrap(bytes).getLong();
         } else if (getType().equals(ValueType.STRING)) {
@@ -306,12 +316,11 @@ public class ValueHolderBase extends AbstractValueHolder {
             byte[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
             byte[] bytes1 = getBytes();
             if (bytes1.length >= 8) {
-                System.arraycopy(bytes1, 0, bytes, 0, 8);
+                System.arraycopy(bytes1, bytes1.length - 8, bytes, 0, 8);
             } else {
-                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length,
-                        bytes1.length);
+                System.arraycopy(bytes1, 0, bytes, 8 - bytes1.length, bytes1.length);
             }
-            return ByteBuffer.wrap(bytes).getLong();
+            return ByteBuffer.wrap(bytes).getDouble();
         } else if (getType().equals(ValueType.STRING)) {
             try {
                 return Double.parseDouble((String) this.value);
@@ -332,6 +341,17 @@ public class ValueHolderBase extends AbstractValueHolder {
      */
     @Override
     public float getFloat(float defaultValue) {
+        if (getType() == ValueType.BINARY || getType() == ValueType.BLOB) {
+            byte[] bytes = { 0, 0, 0, 0 };
+            byte[] bytes1 = getBytes();
+            if (bytes1.length >= 4) {
+                System.arraycopy(bytes1, bytes1.length - 4, bytes, 0, 4);
+            } else {
+                System.arraycopy(bytes1, 0, bytes, 4 - bytes1.length, bytes1.length);
+            }
+            return ByteBuffer.wrap(bytes).getFloat();
+
+        }
         return (float) getDouble(defaultValue);
     }
 
@@ -368,8 +388,7 @@ public class ValueHolderBase extends AbstractValueHolder {
             return (byte[]) this.value;
         } else if (getType().equals(ValueType.BLOB)) {
             try {
-                return ((Blob) this.value).getBytes(1,
-                        (int) ((Blob) this.value).length());
+                return ((Blob) this.value).getBytes(1, (int) ((Blob) this.value).length());
             } catch (SQLException ignore) {
             }
         } else if (getType().equals(ValueType.BOOLEAN)) {
@@ -397,12 +416,11 @@ public class ValueHolderBase extends AbstractValueHolder {
             return new Date(getLong(0));
         } else if (getType().equals(ValueType.STRING)) {
             try {
-                return DateFormat.getDateInstance().parse((String) this.value);
+                return DateFormat.getDateTimeInstance().parse((String) this.value);
             } catch (ParseException e) {
             }
             try {
-                return DateFormat.getDateTimeInstance().parse(
-                        (String) this.value);
+                return DateFormat.getDateInstance().parse((String) this.value);
             } catch (ParseException e) {
             }
             try {

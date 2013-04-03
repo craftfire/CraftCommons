@@ -2,10 +2,8 @@ package com.craftfire.commons.yaml;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +15,7 @@ import com.craftfire.commons.util.LoggingManager;
  * It allows to load yaml nodes from multiple files and treat them as one document, and then save them back to the files they came from.
  */
 public class YamlCombiner implements YamlManager {
-    private List<YamlManager> managers = new ArrayList<YamlManager>();
+    private Set<YamlManager> managers = new HashSet<YamlManager>();
     private YamlManager defaultManager;
     private Settings settings = new Settings();
 
@@ -28,31 +26,49 @@ public class YamlCombiner implements YamlManager {
     }
 
     /**
-     * Returns list of all YamlManagers used by the combiner.
+     * Returns set of all YamlManagers used by the combiner.
      * 
-     * @return list of YamlManagers
+     * @return set of YamlManagers
      */
-    public List<YamlManager> getYamlManagers() {
-        return new ArrayList<YamlManager>(this.managers);
+    public Set<YamlManager> getYamlManagers() {
+        return new HashSet<YamlManager>(this.managers);
     }
 
     /**
-     * Sets the list of YamlManagers to use.
+     * Sets the set of YamlManagers to use.
+     * <p>
+     * If {@code managers} is null, sets the set of YamlManagers to an empty set.
+     * <p>
+     * Sets the first YamlManager returned by iterator of {@code managers} as the default manager, or null if {@code managers} is empty.
      * 
-     * @param managers  list of YamlManagers
+     * @param managers  collection of YamlManagers
      */
     public void setYamlManagers(Collection<YamlManager> managers) {
-        this.managers = new ArrayList<YamlManager>(managers);
-        this.defaultManager = null;
+        if (managers == null || managers.isEmpty()) {
+            this.managers = new HashSet<YamlManager>();
+            this.defaultManager = null;
+        } else {
+            this.managers = new HashSet<YamlManager>(managers);
+            this.defaultManager = managers.iterator().next();
+        }
     }
 
     /**
      * Adds a YamlManager to this combiner.
+     * <p>
+     * If the default YamlManager is null, sets it to given {@code manager}.
      * 
-     * @param manager  the YamlManager to add
+     * @param  manager                  the YamlManager to add
+     * @throws IllegalArgumentException if the {@code manager} is null
      */
     public void addYamlManager(YamlManager manager) {
+        if (manager == null) {
+            throw new IllegalArgumentException("The manager must not be null!");
+        }
         this.managers.add(manager);
+        if (this.defaultManager == null) {
+            this.defaultManager = manager;
+        }
     }
 
     /**
@@ -60,16 +76,16 @@ public class YamlCombiner implements YamlManager {
      * <p>
      * All new nodes that don't match elsewhere will be added to the default YamlManager.
      * <p>
-     * If the default manager is not set, this method will set it to the first one on the list. If the list is empty, will return {@code null}.
+     * If the default manager is not set, this method will set it to the first one in the set. If the set is empty, will return {@code null}.
      * 
      * @return the default YamlManager or null
      */
     public YamlManager getDefaultManager() {
-        if (this.defaultManager == null) {
-            if (!this.managers.isEmpty()) {
-                this.defaultManager = this.managers.get(0);
-            }
-        }
+        /*if (this.defaultManager == null) {
+             if (!this.managers.isEmpty()) {
+                 this.defaultManager = this.managers.iterator().next(); // TODO: Unreachable?
+             }
+         }*/
         return this.defaultManager;
     }
 
@@ -78,10 +94,10 @@ public class YamlCombiner implements YamlManager {
      * <p>
      * All new nodes that don't match elsewhere will be added to the default YamlManager.
      * <p>
-     * The given YamlManager must be already added to the list of managers to use.
+     * The given YamlManager must be already added to the set of managers to use.
      * 
      * @param  manager                  the YamlManager to set as default
-     * @throws IllegalArgumentException if the manager is not on the list
+     * @throws IllegalArgumentException if the manager is not in the set
      * @see    #addYamlManager(YamlManager)
      */
     public void setDefaultManager(YamlManager manager) {
@@ -135,6 +151,9 @@ public class YamlCombiner implements YamlManager {
     @Override
     public void setLoggingManager(LoggingManager loggingManager) {
         this.settings.setLogger(loggingManager);
+        for (YamlManager manager : this.managers) {
+            manager.setLoggingManager(loggingManager);
+        }
     }
 
     /**
@@ -144,6 +163,7 @@ public class YamlCombiner implements YamlManager {
      * @see #getDefaultManager()
      */
     @Override
+    @Deprecated
     public YamlNode getRootNode() {
         return this.defaultManager.getRootNode();
     }
@@ -156,7 +176,7 @@ public class YamlCombiner implements YamlManager {
      */
     @Override
     public YamlNode setRootNode(YamlNode node) {
-        this.managers = new ArrayList<YamlManager>();
+        this.managers = new HashSet<YamlManager>();
         this.managers.add(this.defaultManager);
         return this.defaultManager.setRootNode(node);
     }
@@ -318,17 +338,17 @@ public class YamlCombiner implements YamlManager {
             getNode(node).setValue(value);
         } else {
             int last = node.lastIndexOf(this.settings.getSeparator());
-            String left = node.substring(last);
-            String found = node.substring(0, last);
+            String left = "";
+            String found = node;
 
-            while (!found.isEmpty()) {
+            while (last >= 0) {
+                left = found.substring(last) + left;
+                found = found.substring(0, last);
                 if (exist(found)) {
-                    getNode(found).getChild(left, true).setValue(value);
+                    getNode(found).getChild(left.substring(1), true).setValue(value);
                     return;
                 }
                 last = found.lastIndexOf(this.settings.getSeparator());
-                left = found.substring(last) + left;
-                found = found.substring(0, last);
             }
             getDefaultManager().setNode(node, value);
         }
@@ -366,25 +386,25 @@ public class YamlCombiner implements YamlManager {
     public boolean save() {
         boolean result = false;
         for (YamlManager manager : this.managers) {
-            result = result || manager.save();
+            result = manager.save() || result;
         }
         return result;
     }
 
     /**
-     * @return {@code true} reloaded successfully at least one YamlManager, {@code false} otherwise
+     * @return {@code true} if at least one YamlManager loaded it's document successfully, {@code false} otherwise
      */
     @Override
-    public boolean reload() {
+    public boolean load() {
         boolean result = false;
         for (YamlManager manager : this.managers) {
-            result = result || manager.reload();
+            result = manager.load() || result;
         }
         return result;
     }
 
     /**
-     * Creates a new SimpleYamlManager with the given file and adds it to the list.
+     * Creates a new SimpleYamlManager with the given file and adds it to the set.
      * <p>
      * Uses the default settings of the combiner to create the manager.
      * 
@@ -395,11 +415,13 @@ public class YamlCombiner implements YamlManager {
      * @see     SimpleYamlManager#SimpleYamlManager(File, Settings)
      */
     public void load(File file) throws IOException {
-        addYamlManager(new SimpleYamlManager(file, this.settings));
+        YamlManager mgr = new SimpleYamlManager(file, this.settings);
+        mgr.load();
+        addYamlManager(mgr);
     }
 
     /**
-     * Creates a new SimpleYamlManager with the given classpath resource and adds it to the list.
+     * Creates a new SimpleYamlManager with the given classpath resource and adds it to the set.
      * <p>
      * Uses the default settings of the combiner to create the manager.
      * 
@@ -410,7 +432,9 @@ public class YamlCombiner implements YamlManager {
      * @see    SimpleYamlManager#SimpleYamlManager(String, Settings)
      */
     public void load(String path) throws IOException {
-        addYamlManager(new SimpleYamlManager(path, this.settings));
+        YamlManager mgr = new SimpleYamlManager(path, this.settings);
+        mgr.load();
+        addYamlManager(mgr);
     }
 
 }
