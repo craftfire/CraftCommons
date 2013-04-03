@@ -234,7 +234,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>
         </plugins>
 
         <!-- Plugin management -->
