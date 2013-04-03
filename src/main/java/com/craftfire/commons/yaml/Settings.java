@@ -62,9 +62,11 @@ public class Settings {
      * If this option is on, node names will be case-sensitive.
      * 
      * @param caseSensitive  true to turn on, false to turn off
+     * @return               this
      */
-    public void setCaseSensitive(boolean caseSensitive) {
+    public Settings setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
+        return this;
     }
 
     /**
@@ -86,9 +88,11 @@ public class Settings {
      * This option allows to read multiple yaml documents from one file (separated by {@code ---}).
      * 
      * @param multiDocument  true to turn on, false to turn off
+     * @return               this
      */
-    public void setMultiDocument(boolean multiDocument) {
+    public Settings setMultiDocument(boolean multiDocument) {
         this.multiDocument = multiDocument;
+        return this;
     }
 
     /**
@@ -104,9 +108,11 @@ public class Settings {
      * Sets the path separator to be used (default {@code "."}).
      * 
      * @param separator  the path separator
+     * @return           this
      */
-    public void setSeparator(String separator) {
+    public Settings setSeparator(String separator) {
         this.separator = separator;
+        return this;
     }
 
     /**
@@ -122,9 +128,11 @@ public class Settings {
      * Sets the yaml constructor to be used ({@link Constructor} by default).
      * 
      * @param constructor  the yaml constructor
+     * @return             this
      */
-    public void setConstructor(BaseConstructor constructor) {
+    public Settings setConstructor(BaseConstructor constructor) {
         this.constructor = constructor;
+        return this;
     }
 
     /**
@@ -140,9 +148,11 @@ public class Settings {
      * Sets the yaml representer to be used ({@link EmptyNullRepresenter} by default).
      * 
      * @param representer  the yaml representer
+     * @return             this
      */
-    public void setRepresenter(Representer representer) {
+    public Settings setRepresenter(Representer representer) {
         this.representer = representer;
+        return this;
     }
 
     /**
@@ -162,9 +172,11 @@ public class Settings {
      * By default it's block style, 4 spaces ident.
      * 
      * @param options  yaml dumper options
+     * @return         this
      */
-    public void setDumperOptions(DumperOptions options) {
+    public Settings setDumperOptions(DumperOptions options) {
         this.options = options;
+        return this;
     }
 
     /**
@@ -180,9 +192,11 @@ public class Settings {
      * Sets the yaml resolver to be used ({@link Resolver} by default).
      * 
      * @param resolver  the yaml resolver
+     * @return          this
      */
-    public void setResolver(Resolver resolver) {
+    public Settings setResolver(Resolver resolver) {
         this.resolver = resolver;
+        return this;
     }
 
     /**
@@ -202,12 +216,14 @@ public class Settings {
      * By default it's {@code new LoggingManager("CraftFire.YamlManager", "[YamlManager]")}.
      * 
      * @param  logger                   the logging manager
+     * @return                          this
      * @throws IllegalArgumentException if the logger is null
      */
-    public void setLogger(LoggingManager logger) {
+    public Settings setLogger(LoggingManager logger) {
         if (logger == null) {
             throw new IllegalArgumentException("Parameter 'logger' cannot be null.");
         }
         this.logger = logger;
+        return this;
     }
 }

@@ -31,11 +31,15 @@ public class YamlNode extends AbstractValueHolder {
     /**
      * Creates a new YamlNode with given SimpleYamlManager, node name, and value.
      * 
-     * @param manager  the YamlManager
-     * @param name     the name
-     * @param value    the value
+     * @param manager               the YamlManager
+     * @param name                  the name
+     * @param value                 the value
+     * @throws NullPointerException if the manager is null
      */
     public YamlNode(SimpleYamlManager manager, String name, Object value) {
+        if (manager == null) {
+            throw new NullPointerException("manager can't be null");
+        }
         this.manager = manager;
         this.holder = new ValueHolderBase(normalizePath(name), false, value);
     }
@@ -47,7 +51,7 @@ public class YamlNode extends AbstractValueHolder {
      * @param name    the name
      * @param value   the value
      */
-    public YamlNode(YamlNode parent, String name, Object value) {
+    protected YamlNode(YamlNode parent, String name, Object value) {
         this(parent.getYamlManager(), name, value);
         this.parent = parent;
     }
@@ -98,8 +102,8 @@ public class YamlNode extends AbstractValueHolder {
         } else {
             elements = new ArrayList<String>();
         }
-        if (getName() != null) {
-            elements.add(getName());
+        if (this.holder.getName() != null) {
+            elements.add(this.holder.getName());
         }
         return elements;
     }
@@ -131,7 +135,7 @@ public class YamlNode extends AbstractValueHolder {
         if (this.resolved) {
             return this.mapCache != null;
         }
-        return getValue() instanceof Map<?, ?>;
+        return this.holder.getValue() instanceof Map<?, ?>;
     }
 
     /**
@@ -143,7 +147,7 @@ public class YamlNode extends AbstractValueHolder {
         if (this.resolved) {
             return this.listCache != null;
         }
-        return getValue() instanceof Collection<?>;
+        return this.holder.getValue() instanceof Collection<?>;
     }
 
     /**
@@ -162,7 +166,7 @@ public class YamlNode extends AbstractValueHolder {
      * 
      * @return {@code true} if resolved, {@code false} otherwise
      */
-    public boolean isResloved() {
+    public boolean isResolved() {
         return this.resolved;
     }
 
@@ -230,7 +234,7 @@ public class YamlNode extends AbstractValueHolder {
         }
         if (!this.resolved) {
             this.mapCache = new HashMap<String, YamlNode>();
-            for (Map.Entry<?, ?> entry : ((Map<?, ?>) getValue()).entrySet()) {
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) this.holder.getValue()).entrySet()) {
                 String name = normalizePath(entry.getKey().toString());
                 this.mapCache.put(name, new YamlNode(this, name, entry.getValue()));
             }
@@ -258,7 +262,7 @@ public class YamlNode extends AbstractValueHolder {
         }
         if (!this.resolved) {
             this.listCache = new ArrayList<YamlNode>();
-            for (Object o : (Collection<?>) getValue()) {
+            for (Object o : (Collection<?>) this.holder.getValue()) {
                 this.listCache.add(new YamlNode(this, "", o));
             }
             this.holder = new ValueHolderBase(this.holder.getName(), false, null);
@@ -309,9 +313,9 @@ public class YamlNode extends AbstractValueHolder {
                 throw new YamlException("Can't add child to scalar node", getPath());
             }
         }
-        if (value instanceof ValueHolder) {
-            value = ((ValueHolder) value).getValue();
-        }
+        /*if (value instanceof ValueHolder) {
+            value = ((ValueHolder) value).getValue();   // We don't really need this, do we?
+        }*/
         YamlNode node;
         name = normalizePath(name);
         if (!this.resolved) {
@@ -461,11 +465,13 @@ public class YamlNode extends AbstractValueHolder {
         if (isScalar()) {
             return 0;
         }
-        try {
-            getChildrenList(); // This can resolve both Map and List
-        } catch (YamlException e) {
-            this.manager.getLogger().stackTrace(e);
-            return 0;
+        if (!this.resolved) {
+            try {
+                getChildrenList(); // This can resolve both Map and List
+            } catch (YamlException e) {
+                this.manager.getLogger().stackTrace(e);
+                return 0;
+            }
         }
         if (isList()) {
             return this.listCache.size();
@@ -522,12 +528,13 @@ public class YamlNode extends AbstractValueHolder {
             return null;
         }
         if (!this.resolved) {
-            try {
+            throw new IllegalStateException("Unresolved node shouldn't have any children!");
+            /*try {
                 getChildrenList(); // This can resolve both Map and List
             } catch (YamlException e) {
                 this.manager.getLogger().stackTrace(e);
                 return null;
-            }
+            }*/
         }
         if (isList()) {
             this.listCache.remove(node);
@@ -579,7 +586,7 @@ public class YamlNode extends AbstractValueHolder {
      */
     public Object dump() {
         if (!this.resolved) {
-            return getValue();
+            return this.holder.getValue();
         }
         if (isList()) {
             List<Object> list = new ArrayList<Object>();
@@ -643,8 +650,8 @@ public class YamlNode extends AbstractValueHolder {
      */
     public YamlNode getNode(String path, boolean add) throws YamlException {
         String[] elements = normalizePath(path).split(Pattern.quote(this.manager.getSeparator()), 2);
-        if (elements.length == 0) {
-            return this;
+        if (elements.length == 0 || path.isEmpty()) {
+            return null;
         }
         YamlNode node = getChild(elements[0], add);
         if (node == null || elements.length == 1) {
@@ -671,7 +678,7 @@ public class YamlNode extends AbstractValueHolder {
      */
     public boolean hasNode(String path) {
         String[] elements = normalizePath(path).split(Pattern.quote(this.manager.getSeparator()), 2);
-        if (elements.length == 0 || !hasChild(elements[0])) {
+        if (elements.length == 0 || path.isEmpty() || !hasChild(elements[0])) {
             return false;
         }
         if (elements.length == 1) {
@@ -736,14 +743,6 @@ public class YamlNode extends AbstractValueHolder {
     @Override
     public Object getValue() {
         return this.holder.getValue();
-    }
-
-    /* (non-Javadoc)
-     * @see com.craftfire.commons.util.AbstractValueHolder#getString()
-     */
-    @Override
-    public String getString() {
-        return this.holder.getString();
     }
 
     /* (non-Javadoc)
