@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class ValueHolderBase implements ValueHolder {
-
     protected final String name;
     protected final Object value;
     protected final ValueType type;
@@ -36,7 +35,7 @@ public class ValueHolderBase implements ValueHolder {
         } else if (data instanceof Boolean) {
             return ValueType.BOOLEAN;
         }
-        //TODO: DataManager.getLogManager().warning("Unknown data type: " + data.toString());
+        // TODO: DataManager.getLogManager().warning("Unknown data type: " + data.toString());
         return ValueType.UNKNOWN;
     }
 
@@ -88,7 +87,10 @@ public class ValueHolderBase implements ValueHolder {
     }
 
     public ValueHolderBase(String name, boolean unsigned, Object data) {
-        this(typeDetect(data), name, unsigned, data);
+        this.type = typeDetect(data);
+        this.name = name;
+        this.unsigned = unsigned;
+        this.value = data;
     }
 
     public ValueHolderBase(ValueType type, String name, boolean unsigned, Object data) {
