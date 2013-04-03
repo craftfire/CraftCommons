@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.craftfire.commons.util.AbstractValueHolder;
 import com.craftfire.commons.util.Util;
@@ -35,8 +36,8 @@ public class YamlNode extends AbstractValueHolder {
      * @param value    the value
      */
     public YamlNode(YamlManager manager, String name, Object value) {
-        this.holder = new ValueHolderBase(name, false, value);
         this.manager = manager;
+        this.holder = new ValueHolderBase(normalizePath(name), false, value);
     }
 
     /**
@@ -78,6 +79,13 @@ public class YamlNode extends AbstractValueHolder {
         this.parent = parent;
     }
 
+    protected String normalizePath(String path) {
+        if (this.manager.isCaseSensitive()) {
+            return path;
+        }
+        return path.toLowerCase();
+    }
+
     /**
      * Returns a list of names of all nodes in the path to this node.
      * 
@@ -102,7 +110,7 @@ public class YamlNode extends AbstractValueHolder {
      * @return the path
      */
     public String getPath() {
-        return Util.join(getPathElements(), ".");
+        return Util.join(getPathElements(), this.manager.getSeparator());
     }
 
     /**
@@ -187,7 +195,7 @@ public class YamlNode extends AbstractValueHolder {
         if (add && (isMap() || isNull()) && !hasChild(name)) {
             return addChild(name, null);
         }
-        return getChildrenMap().get(name);
+        return getChildrenMap().get(normalizePath(name));
     }
 
     /**
@@ -203,7 +211,7 @@ public class YamlNode extends AbstractValueHolder {
             return false;
         }
         try {
-            return getChildrenMap().containsKey(name);
+            return getChildrenMap().containsKey(normalizePath(name));
         } catch (YamlException e) {
             this.manager.getLogger().stackTrace(e);
             return false;
@@ -223,7 +231,7 @@ public class YamlNode extends AbstractValueHolder {
         if (!this.resolved) {
             this.mapCache = new HashMap<String, YamlNode>();
             for (Map.Entry<?, ?> entry : ((Map<?, ?>) getValue()).entrySet()) {
-                String name = entry.getKey().toString();
+                String name = normalizePath(entry.getKey().toString());
                 this.mapCache.put(name, new YamlNode(this, name, entry.getValue()));
             }
             this.holder = new ValueHolderBase(this.holder.getName(), false, null);
@@ -305,6 +313,7 @@ public class YamlNode extends AbstractValueHolder {
             value = ((ValueHolder) value).getValue();
         }
         YamlNode node;
+        name = normalizePath(name);
         if (!this.resolved) {
             getChildrenList(); // This can resolve both Map and List
         }
@@ -371,10 +380,11 @@ public class YamlNode extends AbstractValueHolder {
             return;
         }
         for (YamlNode node : nodes) {
-            if (node.getName() == null || node.getName().isEmpty()) {
+            String name = normalizePath(node.getName());
+            if (name == null || name.isEmpty()) {
                 throw new YamlException("Can't add nameless child to a map node", getPath());
             }
-            this.mapCache.put(node.getName(), new YamlNode(this, node.getName(), node.dump()));
+            this.mapCache.put(name, new YamlNode(this, name, node.dump()));
         }
     }
 
@@ -490,6 +500,7 @@ public class YamlNode extends AbstractValueHolder {
      * @return      the removed child, or {@code null} if didn't remove anything
      */
     public YamlNode removeChild(String name) {
+        name = normalizePath(name);
         if (hasChild(name)) {
             try {
                 return removeChild(getChild(name));
@@ -521,7 +532,7 @@ public class YamlNode extends AbstractValueHolder {
         if (isList()) {
             this.listCache.remove(node);
         } else {
-            this.mapCache.remove(node.getName());
+            this.mapCache.remove(node.getName()); // It's our node, no need to normalize name.
         }
         node.setParent(null);
         return node;
@@ -606,7 +617,7 @@ public class YamlNode extends AbstractValueHolder {
      * @throws YamlException if any node in the path is not a map and not null
      */
     public YamlNode getNode(boolean add, String... path) throws YamlException {
-        return getNode(Util.join(path, "."), add);
+        return getNode(Util.join(path, this.manager.getSeparator()), add);
     }
 
     /**
@@ -631,7 +642,7 @@ public class YamlNode extends AbstractValueHolder {
      * @throws YamlException if any node in the path is not a map and not null
      */
     public YamlNode getNode(String path, boolean add) throws YamlException {
-        String[] elements = path.split("\\.", 2);
+        String[] elements = normalizePath(path).split(Pattern.quote(this.manager.getSeparator()), 2);
         if (elements.length == 0) {
             return this;
         }
@@ -649,7 +660,7 @@ public class YamlNode extends AbstractValueHolder {
      * @return      {@code true} if has, {@code false} otherwise
      */
     public boolean hasNode(String... path) {
-        return hasNode(Util.join(path, "."));
+        return hasNode(Util.join(path, this.manager.getSeparator()));
     }
 
     /**
@@ -659,7 +670,7 @@ public class YamlNode extends AbstractValueHolder {
      * @return      {@code true} if has, {@code false} otherwise
      */
     public boolean hasNode(String path) {
-        String[] elements = path.split("\\.", 2);
+        String[] elements = normalizePath(path).split(Pattern.quote(this.manager.getSeparator()), 2);
         if (elements.length == 0 || !hasChild(elements[0])) {
             return false;
         }
