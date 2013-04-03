@@ -91,6 +91,11 @@
         	<artifactId>mail</artifactId>
         	<version>1.4</version>
         </dependency>
+        <dependency>
+        	<groupId>org.yaml</groupId>
+        	<artifactId>snakeyaml</artifactId>
+        	<version>1.11</version>
+        </dependency>
     </dependencies>
 
     <!-- Build settings -->
@@ -223,7 +228,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>            
         </plugins>
 
         <!-- Plugin management -->
