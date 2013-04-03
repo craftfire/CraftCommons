@@ -34,7 +34,7 @@ import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.database.DataType;
-import com.craftfire.commons.database.FieldType;
+import com.craftfire.commons.util.ValueType;
 
 public class DbTest_MySQL {
     static DataManager datamanager;
@@ -92,10 +92,10 @@ public class DbTest_MySQL {
         while (I.hasNext()) {
             field = I.next();
             System.out.println(seperate);
-            System.out.println(field.getFieldName() + " from "
+            System.out.println(field.getName() + " from "
                     + field.getTable());
-            System.out.println("Type: " + field.getFieldType().name());
-            System.out.println("Size: " + field.getFieldSize());
+            System.out.println("Type: " + field.getType().name());
+            System.out.println("Size: " + field.getSize());
             System.out.println("SQL Type: " + field.getSQLType());
             runTest();
             System.out.println("SUCCEED: " + succeed + "/" + count);
@@ -115,17 +115,17 @@ public class DbTest_MySQL {
         for (Object o : labels.keySet().toArray()) {
             String s = (String) o;
             try {
-                field = datamanager.getField(FieldType.UNKNOWN, "typetest", s,
+                field = datamanager.getField(ValueType.UNKNOWN, "typetest", s,
                         "1");
             } catch (SQLException e) {
                 e.printStackTrace();
                 field = null;
             }
             System.out.println(seperate);
-            System.out.println(field.getFieldName() + " from "
+            System.out.println(field.getName() + " from "
                     + field.getTable());
-            System.out.println("Type: " + field.getFieldType().name());
-            System.out.println("Size: " + field.getFieldSize());
+            System.out.println("Type: " + field.getType().name());
+            System.out.println("Size: " + field.getSize());
             System.out.println("SQL Type: " + field.getSQLType());
             runTest();
             System.out.println("SUCCEED: " + succeed + "/" + count);

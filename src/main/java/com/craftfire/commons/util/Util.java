@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 public final class Util {
     private Util() {
@@ -38,7 +39,7 @@ public final class Util {
      * @return true, if the string is an email.
      */
     public static boolean isEmail(String string) {
-        if (string != null && ! string.isEmpty()) {
+        if (string != null && !string.isEmpty()) {
             Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
             Matcher m = p.matcher(string);
             if (m.matches()) {
@@ -55,14 +56,14 @@ public final class Util {
      * @return true, if string is an IP.
      */
     public static boolean isIP(String string) {
-        if (string != null && ! string.isEmpty()) {
+        if (string != null && !string.isEmpty()) {
             String[] parts = string.split("\\.");
             if (parts.length == 4) {
                 for (String s : parts) {
                     if (s.equals("*")) {
                         continue;
                     }
-                    if (! isInteger(s)) {
+                    if (!isInteger(s)) {
                         return false;
                     }
                     int i = Integer.parseInt(s);
@@ -142,5 +143,36 @@ public final class Util {
         } catch (IOException e) {
             return 0;
         }
+    }
+
+    public static String join(Object[] elements, String separator) {
+        if (elements == null || elements.length <= 0) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < elements.length; ++i) {
+            if (i > 0) {
+                builder.append(separator);
+            }
+            if (elements[i] != null) {
+                builder.append(elements[i]);
+            }
+        }
+        return builder.toString();
+    }
+
+    public static String join(Collection<?> elements, String separator) {
+        if (elements == null || elements.isEmpty()) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        Iterator<?> itr = elements.iterator();
+        while (itr.hasNext()) {
+            builder.append(itr.next());
+            if (itr.hasNext()) {
+                builder.append(separator);
+            }
+        }
+        return builder.toString();
     }
 }

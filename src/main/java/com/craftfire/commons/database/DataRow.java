@@ -26,13 +26,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import com.craftfire.commons.util.ValueType;
+
 
 public class DataRow extends ArrayList<DataField> {
     public DataField get(String fieldName) {
         Iterator<DataField> iterator = iterator();
         while (iterator.hasNext()) {
             DataField dataField = iterator.next();
-            if (dataField.getFieldName().equalsIgnoreCase(fieldName)) {
+            if (dataField.getName().equalsIgnoreCase(fieldName)) {
                 return dataField;
             }
         }
@@ -137,10 +139,10 @@ public class DataRow extends ArrayList<DataField> {
         return f != null;
     }
 
-    public FieldType getFieldType(String fieldName) {
+    public ValueType getFieldType(String fieldName) {
         DataField f = get(fieldName);
         if (f != null) {
-            return f.getFieldType();
+            return f.getType();
         }
         return null;
     }
@@ -148,7 +150,7 @@ public class DataRow extends ArrayList<DataField> {
     public int getFieldSize(String fieldName) {
         DataField f = get(fieldName);
         if (f != null) {
-            return f.getFieldSize();
+            return f.getSize();
         }
         return 0;
     }
