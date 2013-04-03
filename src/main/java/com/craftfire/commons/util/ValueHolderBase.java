@@ -15,10 +15,10 @@ import java.util.Date;
  * NOTE: Conversions don't care about unsigned setting yet.
  */
 public class ValueHolderBase extends AbstractValueHolder {
-    protected final String name;
-    protected final Object value;
-    protected final ValueType type;
-    protected final boolean unsigned;
+    private final String name;
+    private final Object value;
+    private final ValueType type;
+    private final boolean unsigned;
 
     // TODO: Make the conversions consider the unsigned setting
 
@@ -55,7 +55,7 @@ public class ValueHolderBase extends AbstractValueHolder {
     /**
      * Checks if the value of the holder matches the ValueType.
      * 
-     * @throws IllegalArgumentException if the value doesn't match the type 
+     * @throws IllegalArgumentException if the value doesn't match the type
      */
     protected void typeCheck() {
         IllegalArgumentException e = new IllegalArgumentException("Data: "
@@ -68,6 +68,11 @@ public class ValueHolderBase extends AbstractValueHolder {
         } else if (this.type.equals(ValueType.INTEGER) || this.type.equals(ValueType.REAL)) {
             if (!(this.value instanceof Number)) {
                 throw e;
+            }
+            if (this.type.equals(ValueType.INTEGER)) {
+                if (((Number) this.value).longValue() != ((Number) this.value).doubleValue()) {
+                    throw e;
+                }
             }
         } else if (this.type.equals(ValueType.DATE)) {
             if (!(this.value instanceof Date)) {
@@ -193,14 +198,6 @@ public class ValueHolderBase extends AbstractValueHolder {
      * @see com.craftfire.commons.database.IValueHolder#getString()
      */
     @Override
-    public String getString() {
-        return getString(this.value.toString());
-    }
-
-    /* (non-Javadoc)
-     * @see com.craftfire.commons.database.IValueHolder#getString()
-     */
-    @Override
     public String getString(String defaultValue) {
         if (getType().equals(ValueType.STRING)) {
             return (String) this.value;
@@ -285,7 +282,7 @@ public class ValueHolderBase extends AbstractValueHolder {
                 } else {
                     return defaultValue;
                 }
-                return new BigInteger(String.valueOf(l));
+                return BigInteger.valueOf(l);
             }
         } catch (NumberFormatException e) {
         }
