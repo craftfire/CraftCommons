@@ -165,8 +165,10 @@ public class YamlManager {
 
     public String getNode(String value) {
         if (!getNodes().isEmpty()) {
-            for (Map.Entry<String, Object> stringObjectEntry : getNodes().entrySet()) {
-                Map.Entry pairs = (Map.Entry) stringObjectEntry;
+            Iterator iterator = getNodes().entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry pairs = (Map.Entry) iterator.next();
+                iterator.remove();
                 if (pairs.getValue() instanceof String && value.equalsIgnoreCase((String) pairs.getValue())) {
                     getLogger().debug("Found '" + value + "' in the node list: '" + pairs.getKey() + "'");
                     return (String) pairs.getKey();
