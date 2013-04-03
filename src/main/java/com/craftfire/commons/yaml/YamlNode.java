@@ -19,6 +19,7 @@ import com.craftfire.commons.util.ValueType;
 public class YamlNode extends AbstractValueHolder {
     private List<YamlNode> listCache = null;
     private Map<String, YamlNode> mapCache = null;
+    private boolean resolved = false;
     private ValueHolder holder;
     private final YamlManager manager;
     private YamlNode parent = null;
@@ -67,15 +68,25 @@ public class YamlNode extends AbstractValueHolder {
     }
 
     public boolean isMap() {
+        if (this.resolved) {
+            return this.mapCache != null;
+        }
         return getValue() instanceof Map<?, ?>;
     }
 
     public boolean isList() {
+        if (this.resolved) {
+            return this.listCache != null;
+        }
         return getValue() instanceof Collection<?>;
     }
 
     public boolean isScalar() {
         return !isMap() && !isList();
+    }
+
+    public boolean isResloved() {
+        return this.resolved;
     }
 
     public YamlNode getChild(String name) throws YamlException {
@@ -105,19 +116,21 @@ public class YamlNode extends AbstractValueHolder {
         if (!isMap()) {
             throw new YamlException("Node is not a map!", getPath());
         }
-        if (this.mapCache == null) {
+        if (!this.resolved) {
             this.mapCache = new HashMap<String, YamlNode>();
             for (Map.Entry<?, ?> entry : ((Map<?, ?>) getValue()).entrySet()) {
                 String name = entry.getKey().toString();
                 this.mapCache.put(name, new YamlNode(this, name, entry.getValue()));
             }
+            this.holder = new ValueHolderBase(this.holder.getName(), false, null);
+            this.resolved = true;
         }
         return new HashMap<String, YamlNode>(this.mapCache);
     }
 
     public List<YamlNode> getChildrenList() throws YamlException {
         if (isMap()) {
-            if (this.mapCache != null) {
+            if (this.resolved) {
                 return new ArrayList<YamlNode>(this.mapCache.values());
             }
             return new ArrayList<YamlNode>(getChildrenMap().values());
@@ -125,25 +138,34 @@ public class YamlNode extends AbstractValueHolder {
         if (!isList()) {
             throw new YamlException("Node is not a list!", getPath());
         }
-        if (this.listCache == null) {
+        if (!this.resolved) {
             this.listCache = new ArrayList<YamlNode>();
             for (Object o : (Collection<?>) getValue()) {
                 this.listCache.add(new YamlNode(this, "", o));
             }
+            this.holder = new ValueHolderBase(this.holder.getName(), false, null);
+            this.resolved = true;
         }
         return new ArrayList<YamlNode>(this.listCache);
     }
 
-    protected void clearCache() {
-        this.listCache = null;
-        this.mapCache = null;
+    public YamlNode addChild(Object value) throws YamlException {
+        if (!isList()) {
+            if (isNull()) {
+                this.listCache = new ArrayList<YamlNode>();
+                this.resolved = true;
+            } else {
+                throw new YamlException("Can't add nameless child to non-list node", getPath());
+            }
+        }
+        return addChild("", value);
     }
 
-    @SuppressWarnings("unchecked")
     public YamlNode addChild(String name, Object value) throws YamlException {
         if (isScalar()) {
             if (isNull()) {
-                setValue(new HashMap<String, Object>());
+                this.mapCache = new HashMap<String, YamlNode>();
+                this.resolved = true;
             } else {
                 throw new YamlException("Can't add child to scalar node", getPath());
             }
@@ -151,31 +173,126 @@ public class YamlNode extends AbstractValueHolder {
         if (value instanceof ValueHolder) {
             value = ((ValueHolder) value).getValue();
         }
-        if (isList()) {
-            List<Object> list;
-            if (getValue() instanceof List<?>) {
-                list = (List<Object>) getValue(); // Because Java doesn't care if it's <Object> or something else.
-            } else {
-                list = new ArrayList<Object>((Collection<?>) getValue());
-                setValue(list);
-            }
-            list.add(value);
-            clearCache();
-            return getChildrenList().get(list.lastIndexOf(value));
+        YamlNode node;
+        if (!this.resolved) {
+            getChildrenList(); // This can resolve both Map and List
         }
-        Map<Object, Object> map = (Map<Object, Object>) getValue();
-        map.put(name, value);
-        clearCache();
-        return getChild(name);
+        if (isList()) {
+            node = new YamlNode(this, "", value);
+            this.listCache.add(node);
+            return node;
+        }
+        node = new YamlNode(this, name, value);
+        this.mapCache.put(name, node);
+        return node;
     }
 
     public YamlNode addChild(YamlNode node) throws YamlException {
-        return addChild(node.getName(), node.getValue());
+        return addChild(node.getName(), node.dump());
     }
 
-    public YamlNode removeChild(String name) throws YamlException {
+    public void addChildren(YamlNode... nodes) throws YamlException {
+        if (isScalar()) {
+            if (isNull()) {
+                this.mapCache = new HashMap<String, YamlNode>();
+                this.resolved = true;
+            } else {
+                throw new YamlException("Can't add child to scalar node", getPath());
+            }
+        }
+        if (!this.resolved) {
+            getChildrenList(); // This can resolve both Map and List
+        }
+        if (isList()) {
+            for (YamlNode node : nodes) {
+                this.listCache.add(new YamlNode(this, "", node.dump()));
+            }
+            return;
+        }
+        for (YamlNode node : nodes) {
+            this.mapCache.put(node.getName(), new YamlNode(this, node.getName(), node.dump()));
+        }
+    }
+
+    public void addChildren(Map<?, ?> map) throws YamlException {
+        if (isScalar()) {
+            if (isNull()) {
+                this.mapCache = new HashMap<String, YamlNode>();
+                this.resolved = true;
+            } else {
+                throw new YamlException("Can't add child to scalar node", getPath());
+            }
+        }
+        if (!this.resolved) {
+            getChildrenList(); // This can resolve both Map and List
+        }
+        if (isList()) {
+            for (Object value : map.values()) {
+                this.listCache.add(new YamlNode(this, "", value));
+            }
+            return;
+        }
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            String name = entry.getKey().toString();
+            this.mapCache.put(name, new YamlNode(this, name, entry.getValue()));
+        }
+    }
+
+    public void addChildren(Collection<?> collection) throws YamlException {
+        if (!isList()) {
+            if (isNull()) {
+                this.listCache = new ArrayList<YamlNode>();
+                this.resolved = true;
+            } else {
+                throw new YamlException("Can't add nameless child to non-list node", getPath());
+            }
+        }
+        if (!this.resolved) {
+            getChildrenList();
+        }
+        for (Object value : collection) {
+            this.listCache.add(new YamlNode(this, "", value));
+        }
+    }
+
+    public int getChildrenCount() {
+        if (isScalar()) {
+            return 0;
+        }
+        try {
+            getChildrenList(); // This can resolve both Map and List
+        } catch (YamlException e) {
+            this.manager.getLogger().stackTrace(e);
+            return 0;
+        }
+        if (isList()) {
+            return this.listCache.size();
+        }
+        return this.mapCache.size();
+    }
+
+    public int getFinalNodeCount() {
+        if (isScalar()) {
+            return 1;
+        }
+        int count = 0;
+        try {
+            for (YamlNode node : getChildrenList()) {
+                count += node.getFinalNodeCount();
+            }
+        } catch (YamlException e) {
+            this.manager.getLogger().stackTrace(e);
+        }
+        return count;
+    }
+
+    public YamlNode removeChild(String name) {
         if (hasChild(name)) {
-            return removeChild(getChild(name));
+            try {
+                return removeChild(getChild(name));
+            } catch (YamlException e) {
+                this.manager.getLogger().stackTrace(e);
+            }
         }
         return null;
     }
@@ -184,27 +301,54 @@ public class YamlNode extends AbstractValueHolder {
         if (isScalar() || node.getParent() != this) {
             return null;
         }
+        if (!this.resolved) {
+            try {
+                getChildrenList(); // This can resolve both Map and List
+            } catch (YamlException e) {
+                this.manager.getLogger().stackTrace(e);
+                return null;
+            }
+        }
         if (isList()) {
-            ((Collection<?>) getValue()).remove(node.getValue());
+            this.listCache.remove(node);
         } else {
-            ((Map<?, ?>) getValue()).remove(node.getName());
+            this.mapCache.remove(node.getName());
         }
         node.setParent(null);
-        clearCache();
         return node;
     }
 
     public void removeAllChildren() {
         if (isMap()) {
-            setValue(new HashMap<String, Object>());
+            this.mapCache = new HashMap<String, YamlNode>();
         } else if (isList()) {
-            setValue(new ArrayList<Object>());
+            this.listCache = new ArrayList<YamlNode>();
         }
     }
 
     public void setValue(Object data) {
         this.holder = new ValueHolderBase(this.holder.getName(), false, data);
-        clearCache();
+        this.listCache = null;
+        this.mapCache = null;
+        this.resolved = false;
+    }
+
+    public Object dump() {
+        if (!this.resolved) {
+            return getValue();
+        }
+        if (isList()) {
+            List<Object> list = new ArrayList<Object>();
+            for (YamlNode node : this.listCache) {
+                list.add(node.dump());
+            }
+            return list;
+        }
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (Map.Entry<String, YamlNode> entry : this.mapCache.entrySet()) {
+            map.put(entry.getKey(), entry.getValue().dump());
+        }
+        return map;
     }
 
     public YamlNode getNode(String... path) throws YamlException {
@@ -254,18 +398,15 @@ public class YamlNode extends AbstractValueHolder {
     @SuppressWarnings("unchecked")
     public List<Object> getList() {
         if (isList()) {
-            Collection<?> value = (Collection<?>) getValue();
-            if (value instanceof List<?>) {
-                return (List<Object>) value;
-            }
-            return new ArrayList<Object>(value);
+            return (List<Object>) dump();
         }
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public Map<Object, Object> getMap() {
         if (isMap()) {
-            return (Map<Object, Object>) getValue();
+            return (Map<Object, Object>) dump();
         }
         return null;
     }
@@ -277,6 +418,9 @@ public class YamlNode extends AbstractValueHolder {
 
     @Override
     public ValueType getType() {
+        if (this.resolved) {
+            return ValueType.UNKNOWN;
+        }
         return this.holder.getType();
     }
 
@@ -347,7 +491,7 @@ public class YamlNode extends AbstractValueHolder {
 
     @Override
     public boolean isNull() {
-        return this.holder.isNull();
+        return !this.resolved && this.holder.isNull();
     }
 
     @Override
