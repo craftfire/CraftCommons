@@ -34,7 +34,8 @@ public class LoggingManager {
     private final Logger logger;
     private String prefix, directory, format = "HH:mm:ss";
     private boolean debug = false, logging = false, combined = true;
-    protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};
+    protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {
+    };
 
     public LoggingManager(String logger, String prefix) {
         this.logger = Logger.getLogger(logger);
@@ -111,11 +112,11 @@ public class LoggingManager {
         }
     }
 
-    private void warning(String line) {
+    public void warning(String line) {
         warning(line, true);
     }
 
-    private void warning(String line, boolean logFile) {
+    public void warning(String line, boolean logFile) {
         this.logger.warning(this.prefix + " " + line);
         if (logFile) {
             toFile(Type.warning, line);
@@ -137,7 +138,7 @@ public class LoggingManager {
         debug(line, true);
     }
 
-    public void debug(String line,boolean logFile) {
+    public void debug(String line, boolean logFile) {
         if (isDebug()) {
             this.logger.log(debugLevel, this.prefix + " " + line);
             if (logFile) {
@@ -255,11 +256,11 @@ public class LoggingManager {
                 try {
                     DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     FileWriter writer = new FileWriter(this.directory
-                                                    + "combined" + File.separator + logFormat.format(date) + "-"
-                                                    + "combined" + ".log", true);
+                            + "combined" + File.separator + logFormat.format(date) + "-"
+                            + "combined" + ".log", true);
                     BufferedWriter buffer = new BufferedWriter(writer);
                     buffer.write(stringFormat.format(date) + " - " + type.toString().toUpperCase()
-                               + " - " + line + System.getProperty("line.separator"));
+                            + " - " + line + System.getProperty("line.separator"));
                     buffer.close();
                     writer.close();
                 } catch (IOException e) {
@@ -269,8 +270,8 @@ public class LoggingManager {
             try {
                 DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 FileWriter writer = new FileWriter(this.directory
-                                                   + type.toString() + File.separator + logFormat.format(date) + "-"
-                                                   + type.toString() + ".log", true);
+                        + type.toString() + File.separator + logFormat.format(date) + "-"
+                        + type.toString() + ".log", true);
                 BufferedWriter buffer = new BufferedWriter(writer);
                 buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));
                 buffer.close();
