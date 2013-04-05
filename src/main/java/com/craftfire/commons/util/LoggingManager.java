@@ -160,11 +160,11 @@ public class LoggingManager {
                 + "|-----------------------------------------------------------------------------|", false);
     }
 
-    public void stackTrace(final Exception e) {
+    public void stackTrace(final Throwable e) {
         stackTrace(e, null);
     }
 
-    public void stackTrace(final Exception e, Map<Integer, String> extra) {
+    public void stackTrace(final Throwable e, Map<Integer, String> extra) {
         advancedWarning();
         warning("Class name: " + e.getStackTrace()[1].getClassName(), false);
         warning("Error message: " + e.getMessage(), false);
