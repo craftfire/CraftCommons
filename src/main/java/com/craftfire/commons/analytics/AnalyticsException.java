@@ -21,22 +21,46 @@ package com.craftfire.commons.analytics;
 
 import com.craftfire.commons.util.Util;
 
+/**
+ * This exception is thrown by {@link AnalyticsManager}.
+ */
 public class AnalyticsException extends Exception {
     private AnalyticsManager manager;
 
+    /**
+     * Default constructor.
+     *
+     * @param manager  the manager that threw the exception
+     * @param message  the message
+     */
     public AnalyticsException(AnalyticsManager manager, String message) {
         super(message);
         this.manager = manager;
     }
 
+    /**
+     * Returns the {@link AnalyticsManager} of this exception.
+     *
+     * @return manager of this exception
+     */
     public AnalyticsManager getManager() {
         return this.manager;
     }
 
+    /**
+     * Returns the data of this exception.
+     *
+     * @return data of this exception
+     */
     public AnalyticsData getData() {
         return getManager().getData();
     }
 
+    /**
+     * Returns the HTTP response code of the URL used in the manager.
+     *
+     * @return HTTP response code of the URL used in the manager
+     */
     public int getResponseCode() {
         return Util.getResponseCode(getManager().getURL());
     }

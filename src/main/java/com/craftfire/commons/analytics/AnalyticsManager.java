@@ -25,16 +25,38 @@ import com.craftfire.commons.util.Util;
 import java.io.*;
 import java.net.*;
 
+/**
+ * The manager for analytics reporting.
+ * <p>
+ * To submit the data use the {@link #submit()} method.
+ *
+ * @see AnalyticsData
+ * TODO: create a PHP script for reporting.
+ */
 public class AnalyticsManager {
     private URL url;
     private AnalyticsData data;
     private LoggingManager loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
 
+    /**
+     * Constructor for AnalyticsManager class.
+     *
+     * @param url      URL to where the PHP script is located.
+     * @param name     name of the item that is being reported
+     * @param version  version of the item that is being reported
+     */
     public AnalyticsManager(URL url, String name, String version) {
         this.url = url;
         this.data = new AnalyticsData(name, version);
     }
 
+    /**
+     * Constructor for AnalyticsManager class.
+     *
+     * @param url      String url to where the PHP script is located.
+     * @param name     name of the item that is being reported
+     * @param version  version of the item that is being reported
+     */
     public AnalyticsManager(String url, String name, String version) {
         try {
             this.url = new URL(url);
@@ -44,6 +66,9 @@ public class AnalyticsManager {
         this.data = new AnalyticsData(name, version);
     }
 
+    /**
+     * Submit the data to the {@link #url} without throwing any exceptions.
+     */
     public void submitVoid() {
         if (Util.isURLOnline(getURL())) {
             try {
@@ -71,6 +96,12 @@ public class AnalyticsManager {
         getLogger().error(error);
     }
 
+    /**
+     * Submit the data to the {@link #url}.
+     *
+     * @throws AnalyticsException  if submitting the data failed
+     * @throws IOException         if submitting the data failed
+     */
     public void submit() throws AnalyticsException, IOException {
         if (Util.isURLOnline(getURL())) {
             String dataString = getParameters();
@@ -95,6 +126,11 @@ public class AnalyticsManager {
         throw new AnalyticsException(this, error);
     }
 
+    /**
+     * Returns a UTF-8 formatted string of all the data for the POST request.
+     *
+     * @return UTF-8 formatted string of all the data
+     */
     public String getParameters() {
         String dataString = getData().getName().getKeyUTF8() + "=" + getData().getName().getValueUTF8() + "&"
                     + getData().getVersion().getKeyUTF8() + "=" + getData().getVersion().getValueUTF8() + "&"
@@ -110,6 +146,11 @@ public class AnalyticsManager {
         return dataString.substring(0, dataString.length() - 1);
     }
 
+    /**
+     * Returns the {@link LoggingManager} of the manager, creates a new one if one doesn't exist already.
+     *
+     * @return the LoggingManager
+     */
     public LoggingManager getLogger() {
         if (this.loggingManager == null) {
             this.loggingManager = new LoggingManager("CraftFire.AnalyticsManager", "[AnalyticsManager]");
@@ -117,6 +158,11 @@ public class AnalyticsManager {
         return this.loggingManager;
     }
 
+    /**
+     * Sets the LoggingManager.
+     *
+     * @param loggingManager  the LoggingManager
+     */
     public void setLoggingManager(LoggingManager loggingManager) {
         if (loggingManager == null) {
             throw new IllegalArgumentException("Parameter 'loggingManager' cannot be null.");
@@ -124,18 +170,39 @@ public class AnalyticsManager {
         this.loggingManager = loggingManager;
     }
 
+    /**
+     * Returns the data that is being reported.
+     *
+     * @return data that is being reported
+     */
     public AnalyticsData getData() {
         return this.data;
     }
 
+    /**
+     * Adds a data item to the reporting.
+     *
+     * @param key    key of the data item
+     * @param value  value of the data item
+     */
     public void addData(String key, String value) {
         getData().add(key, value);
     }
 
+    /**
+     * Returns the submit URL.
+     *
+     * @return submit URL
+     */
     public URL getURL() {
         return this.url;
     }
 
+    /**
+     * Sets the submit URL.
+     *
+     * @param url  submit URL
+     */
     public void setURL(URL url) {
         this.url = url;
     }
