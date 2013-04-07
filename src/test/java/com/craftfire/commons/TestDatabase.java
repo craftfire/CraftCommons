@@ -36,7 +36,6 @@ import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -233,7 +232,7 @@ public class TestDatabase {
     public void testBInt() throws SQLException, ParseException, IOException {
         final String name = "bint";
         final BigInteger expected = new BigInteger("487250340273948");
-        final Date expectedDate = new SimpleDateFormat("d/M/yy H:mm:ss.SSS").parse("8/5/17410 14:44:33.948");
+        final Date expectedDate = new Date(487250340273948L);
         final byte[] expectedBytes = { 0, 1, -69, 38, -49, 114, -33, 28 };
         DataRow row = datamanager.getResults("SELECT `" + name + "` FROM `" + table + "` LIMIT 1").getFirstResult();
 
