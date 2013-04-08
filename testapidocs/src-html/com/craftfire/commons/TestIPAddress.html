@@ -1,0 +1,322 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
+<FONT color="green">006</FONT>     *<a name="line.6"></a>
+<FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
+<FONT color="green">008</FONT>     * it under the terms of the GNU Lesser General Public License as published by<a name="line.8"></a>
+<FONT color="green">009</FONT>     * the Free Software Foundation, either version 3 of the License, or<a name="line.9"></a>
+<FONT color="green">010</FONT>     * (at your option) any later version.<a name="line.10"></a>
+<FONT color="green">011</FONT>     *<a name="line.11"></a>
+<FONT color="green">012</FONT>     * CraftCommons is distributed in the hope that it will be useful,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * but WITHOUT ANY WARRANTY; without even the implied warranty of<a name="line.13"></a>
+<FONT color="green">014</FONT>     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<a name="line.14"></a>
+<FONT color="green">015</FONT>     * GNU Lesser General Public License for more details.<a name="line.15"></a>
+<FONT color="green">016</FONT>     *<a name="line.16"></a>
+<FONT color="green">017</FONT>     * You should have received a copy of the GNU Lesser General Public License<a name="line.17"></a>
+<FONT color="green">018</FONT>     * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.18"></a>
+<FONT color="green">019</FONT>     */<a name="line.19"></a>
+<FONT color="green">020</FONT>    package com.craftfire.commons;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import static org.junit.Assert.assertEquals;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import static org.junit.Assert.assertFalse;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import static org.junit.Assert.assertNull;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import static org.junit.Assert.assertTrue;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import static org.junit.Assert.fail;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>    import java.net.InetAddress;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import java.util.Arrays;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import java.util.HashMap;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import java.util.Map;<a name="line.31"></a>
+<FONT color="green">032</FONT>    <a name="line.32"></a>
+<FONT color="green">033</FONT>    import org.junit.Test;<a name="line.33"></a>
+<FONT color="green">034</FONT>    <a name="line.34"></a>
+<FONT color="green">035</FONT>    import com.craftfire.commons.ip.IPAddress;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import com.craftfire.commons.ip.IPv4Address;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import com.craftfire.commons.ip.IPv6Address;<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>    public class TestIPAddress {<a name="line.39"></a>
+<FONT color="green">040</FONT>        private static IPv4Address ipv4 = new IPv4Address(192, 168, 1, 1);<a name="line.40"></a>
+<FONT color="green">041</FONT>        private static IPv6Address ipv6 = new IPv6Address(0xfe80, 0, 0, 0, 0, 0x1015, 0xc0a8, 1);<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>        @Test<a name="line.43"></a>
+<FONT color="green">044</FONT>        public void testValueOfStringV4() {<a name="line.44"></a>
+<FONT color="green">045</FONT>            IPAddress addr = IPAddress.valueOf("192.168.1.1");<a name="line.45"></a>
+<FONT color="green">046</FONT>            System.out.println("testValueOfStringV4: " + addr);<a name="line.46"></a>
+<FONT color="green">047</FONT>            assertTrue(addr.isIPv4());<a name="line.47"></a>
+<FONT color="green">048</FONT>            assertTrue(addr.equals(ipv4));<a name="line.48"></a>
+<FONT color="green">049</FONT>        }<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>        @Test<a name="line.51"></a>
+<FONT color="green">052</FONT>        public void testValueOfStringV6() {<a name="line.52"></a>
+<FONT color="green">053</FONT>            IPAddress addr = IPAddress.valueOf("fe80::1015:c0a8:1");<a name="line.53"></a>
+<FONT color="green">054</FONT>            System.out.println("testValueOfStringV6: " + addr);<a name="line.54"></a>
+<FONT color="green">055</FONT>            assertTrue(addr.isIPv6());<a name="line.55"></a>
+<FONT color="green">056</FONT>            assertTrue(addr.equals(ipv6));<a name="line.56"></a>
+<FONT color="green">057</FONT>        }<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>        @Test<a name="line.59"></a>
+<FONT color="green">060</FONT>        public void testValueOfStringLocalhost() {<a name="line.60"></a>
+<FONT color="green">061</FONT>            IPAddress addr = IPAddress.valueOf("localhost");<a name="line.61"></a>
+<FONT color="green">062</FONT>            System.out.println("testValueOfStringLocalhost: " + addr);<a name="line.62"></a>
+<FONT color="green">063</FONT>            assertTrue(addr.getInetAddress().isLoopbackAddress());<a name="line.63"></a>
+<FONT color="green">064</FONT>        }<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>        @Test<a name="line.66"></a>
+<FONT color="green">067</FONT>        public void testValueOfStringHostname() {<a name="line.67"></a>
+<FONT color="green">068</FONT>            IPAddress addr = IPAddress.valueOf("craftfire.com");<a name="line.68"></a>
+<FONT color="green">069</FONT>            System.out.println("testValueOfStringHostname: " + addr);<a name="line.69"></a>
+<FONT color="green">070</FONT>            assertTrue(addr.equals(new IPv4Address(204, 232, 175, 78)));<a name="line.70"></a>
+<FONT color="green">071</FONT>        }<a name="line.71"></a>
+<FONT color="green">072</FONT>    <a name="line.72"></a>
+<FONT color="green">073</FONT>        @Test<a name="line.73"></a>
+<FONT color="green">074</FONT>        public void testValueOfStringInvalid() {<a name="line.74"></a>
+<FONT color="green">075</FONT>            IPAddress addr = IPAddress.valueOf("AliceHasACat;AndTheCatHas~~TheAlice~&amp;**(:-)");<a name="line.75"></a>
+<FONT color="green">076</FONT>            System.out.println("testValueOfStringInvalid: " + addr);<a name="line.76"></a>
+<FONT color="green">077</FONT>            assertNull(addr);<a name="line.77"></a>
+<FONT color="green">078</FONT>        }<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>        @Test<a name="line.80"></a>
+<FONT color="green">081</FONT>        public void testValueOfInetAddressV4() {<a name="line.81"></a>
+<FONT color="green">082</FONT>            IPAddress addr = IPAddress.valueOf(ipv4.getInetAddress());<a name="line.82"></a>
+<FONT color="green">083</FONT>            System.out.println("testValueOfInetAddressV4: " + addr);<a name="line.83"></a>
+<FONT color="green">084</FONT>            assertTrue(addr.isIPv4());<a name="line.84"></a>
+<FONT color="green">085</FONT>            assertTrue(addr.equals(ipv4));<a name="line.85"></a>
+<FONT color="green">086</FONT>        }<a name="line.86"></a>
+<FONT color="green">087</FONT>    <a name="line.87"></a>
+<FONT color="green">088</FONT>        @Test<a name="line.88"></a>
+<FONT color="green">089</FONT>        public void testValueOfInetAddressV6() {<a name="line.89"></a>
+<FONT color="green">090</FONT>            IPAddress addr = IPAddress.valueOf(ipv6.getInetAddress());<a name="line.90"></a>
+<FONT color="green">091</FONT>            System.out.println("testValueOfInetAddressV6: " + addr);<a name="line.91"></a>
+<FONT color="green">092</FONT>            assertTrue(addr.isIPv6());<a name="line.92"></a>
+<FONT color="green">093</FONT>            assertTrue(addr.equals(ipv6));<a name="line.93"></a>
+<FONT color="green">094</FONT>        }<a name="line.94"></a>
+<FONT color="green">095</FONT>    <a name="line.95"></a>
+<FONT color="green">096</FONT>        @Test<a name="line.96"></a>
+<FONT color="green">097</FONT>        public void testValueOfInetAddressNull() {<a name="line.97"></a>
+<FONT color="green">098</FONT>            IPAddress addr = IPAddress.valueOf((InetAddress) null);<a name="line.98"></a>
+<FONT color="green">099</FONT>            assertNull(addr);<a name="line.99"></a>
+<FONT color="green">100</FONT>        }<a name="line.100"></a>
+<FONT color="green">101</FONT>    <a name="line.101"></a>
+<FONT color="green">102</FONT>        @Test<a name="line.102"></a>
+<FONT color="green">103</FONT>        public void testIPv4() {<a name="line.103"></a>
+<FONT color="green">104</FONT>            System.out.println("testIPv4: " + ipv4);<a name="line.104"></a>
+<FONT color="green">105</FONT>            assertTrue(ipv4.isIPv4());<a name="line.105"></a>
+<FONT color="green">106</FONT>            assertFalse(ipv4.isIPv6());<a name="line.106"></a>
+<FONT color="green">107</FONT>            assertTrue(ipv4.toIPv4() == ipv4);<a name="line.107"></a>
+<FONT color="green">108</FONT>            assertTrue(Arrays.equals(ipv4.getInetAddress().getAddress(), ipv4.getAddress()));<a name="line.108"></a>
+<FONT color="green">109</FONT>            assertTrue(Arrays.equals(ipv4.getBytes(), ipv4.getAddress()));<a name="line.109"></a>
+<FONT color="green">110</FONT>            assertEquals(0xc0a80101, ipv4.getInt());<a name="line.110"></a>
+<FONT color="green">111</FONT>        }<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>        @Test<a name="line.113"></a>
+<FONT color="green">114</FONT>        public void testIPv6() {<a name="line.114"></a>
+<FONT color="green">115</FONT>            System.out.println("testIPv6: " + ipv6);<a name="line.115"></a>
+<FONT color="green">116</FONT>            assertTrue(ipv6.isIPv6());<a name="line.116"></a>
+<FONT color="green">117</FONT>            assertFalse(ipv6.isIPv4());<a name="line.117"></a>
+<FONT color="green">118</FONT>            assertTrue(ipv6.toIPv6() == ipv6);<a name="line.118"></a>
+<FONT color="green">119</FONT>            assertTrue(Arrays.equals(ipv6.getInetAddress().getAddress(), ipv6.getBytes()));<a name="line.119"></a>
+<FONT color="green">120</FONT>            assertTrue(Arrays.equals(ipv6.getAddress(), new short[] { (short) 0xfe80, 0, 0, 0, 0, 0x1015, (short) 0xc0a8, 1 }));<a name="line.120"></a>
+<FONT color="green">121</FONT>        }<a name="line.121"></a>
+<FONT color="green">122</FONT>    <a name="line.122"></a>
+<FONT color="green">123</FONT>        @Test<a name="line.123"></a>
+<FONT color="green">124</FONT>        public void testIPv4InvalidConstructorCall() {<a name="line.124"></a>
+<FONT color="green">125</FONT>            try {<a name="line.125"></a>
+<FONT color="green">126</FONT>                IPAddress addr = new IPv4Address(new byte[] { 127, 0, 1 });<a name="line.126"></a>
+<FONT color="green">127</FONT>                fail("Shoudl be not able to create: " + addr);<a name="line.127"></a>
+<FONT color="green">128</FONT>            } catch (IllegalArgumentException e) {<a name="line.128"></a>
+<FONT color="green">129</FONT>            }<a name="line.129"></a>
+<FONT color="green">130</FONT>            try {<a name="line.130"></a>
+<FONT color="green">131</FONT>                IPAddress addr = new IPv4Address(192, 168, 1, 255, 8);<a name="line.131"></a>
+<FONT color="green">132</FONT>                fail("Shoudl be not able to create: " + addr);<a name="line.132"></a>
+<FONT color="green">133</FONT>            } catch (IllegalArgumentException e) {<a name="line.133"></a>
+<FONT color="green">134</FONT>            }<a name="line.134"></a>
+<FONT color="green">135</FONT>        }<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>        @Test<a name="line.137"></a>
+<FONT color="green">138</FONT>        public void testIPv6InvalidConstructorCall() {<a name="line.138"></a>
+<FONT color="green">139</FONT>            try {<a name="line.139"></a>
+<FONT color="green">140</FONT>                IPAddress addr = new IPv6Address(new byte[] { 127, 0, 1, 60, 90 });<a name="line.140"></a>
+<FONT color="green">141</FONT>                fail("Shoudl be not able to create: " + addr);<a name="line.141"></a>
+<FONT color="green">142</FONT>            } catch (IllegalArgumentException e) {<a name="line.142"></a>
+<FONT color="green">143</FONT>            }<a name="line.143"></a>
+<FONT color="green">144</FONT>            try {<a name="line.144"></a>
+<FONT color="green">145</FONT>                IPAddress addr = new IPv6Address(new short[] { 127, 0, 1, 60, 90, 1200 });<a name="line.145"></a>
+<FONT color="green">146</FONT>                fail("Shoudl be not able to create: " + addr);<a name="line.146"></a>
+<FONT color="green">147</FONT>            } catch (IllegalArgumentException e) {<a name="line.147"></a>
+<FONT color="green">148</FONT>            }<a name="line.148"></a>
+<FONT color="green">149</FONT>            try {<a name="line.149"></a>
+<FONT color="green">150</FONT>                IPAddress addr = new IPv6Address(192, 168, 1, 255, 8, 1200, 91, 88, 1228);<a name="line.150"></a>
+<FONT color="green">151</FONT>                fail("Shoudl be not able to create: " + addr);<a name="line.151"></a>
+<FONT color="green">152</FONT>            } catch (IllegalArgumentException e) {<a name="line.152"></a>
+<FONT color="green">153</FONT>            }<a name="line.153"></a>
+<FONT color="green">154</FONT>        }<a name="line.154"></a>
+<FONT color="green">155</FONT>    <a name="line.155"></a>
+<FONT color="green">156</FONT>        @Test<a name="line.156"></a>
+<FONT color="green">157</FONT>        public void testAnycastConversion() {<a name="line.157"></a>
+<FONT color="green">158</FONT>            IPAddress ipv4new = new IPv4Address(0, 0, 0, 0);<a name="line.158"></a>
+<FONT color="green">159</FONT>            IPv6Address addr = ipv4new.toIPv6();<a name="line.159"></a>
+<FONT color="green">160</FONT>            System.out.println("testAnycastIPv4to6: " + addr);<a name="line.160"></a>
+<FONT color="green">161</FONT>            assertTrue(addr.equals(new IPv6Address(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 })));<a name="line.161"></a>
+<FONT color="green">162</FONT>            assertTrue(addr.toIPv4().equals(ipv4new));<a name="line.162"></a>
+<FONT color="green">163</FONT>        }<a name="line.163"></a>
+<FONT color="green">164</FONT>    <a name="line.164"></a>
+<FONT color="green">165</FONT>        @Test<a name="line.165"></a>
+<FONT color="green">166</FONT>        public void testLoopbackConversion() {<a name="line.166"></a>
+<FONT color="green">167</FONT>            IPAddress ipv6new = IPAddress.valueOf("0::1");<a name="line.167"></a>
+<FONT color="green">168</FONT>            IPv4Address addr = ipv6new.toIPv4();<a name="line.168"></a>
+<FONT color="green">169</FONT>            System.out.println("testLoopbackIPv6to4: " + addr);<a name="line.169"></a>
+<FONT color="green">170</FONT>            assertTrue(addr.equals(new IPv4Address(127, 0, 0, 1)));<a name="line.170"></a>
+<FONT color="green">171</FONT>            assertTrue(addr.toIPv6().equals(ipv6new));<a name="line.171"></a>
+<FONT color="green">172</FONT>        }<a name="line.172"></a>
+<FONT color="green">173</FONT>    <a name="line.173"></a>
+<FONT color="green">174</FONT>        @Test<a name="line.174"></a>
+<FONT color="green">175</FONT>        public void testIPv4to6() {<a name="line.175"></a>
+<FONT color="green">176</FONT>            IPv6Address addr = ipv4.toIPv6();<a name="line.176"></a>
+<FONT color="green">177</FONT>            System.out.println("testIPv4to6: " + addr);<a name="line.177"></a>
+<FONT color="green">178</FONT>            assertTrue(addr.equals(new IPv6Address(0xfe80, 0, 0, 0, 0, 0, 0xc0a8, 0x0101)));<a name="line.178"></a>
+<FONT color="green">179</FONT>            assertTrue(addr.toIPv4().equals(ipv4));<a name="line.179"></a>
+<FONT color="green">180</FONT>        }<a name="line.180"></a>
+<FONT color="green">181</FONT>    <a name="line.181"></a>
+<FONT color="green">182</FONT>        @Test<a name="line.182"></a>
+<FONT color="green">183</FONT>        public void testIPv6to4() {<a name="line.183"></a>
+<FONT color="green">184</FONT>            IPAddress ipv6new = IPAddress.valueOf("2002:0:0:0:0:0:cdfd:c7b6");<a name="line.184"></a>
+<FONT color="green">185</FONT>            IPv4Address addr = ipv6new.toIPv4();<a name="line.185"></a>
+<FONT color="green">186</FONT>            System.out.println("testIPv6to4: " + addr);<a name="line.186"></a>
+<FONT color="green">187</FONT>            assertTrue(addr.equals(new IPv4Address(205, 253, 199, 182)));<a name="line.187"></a>
+<FONT color="green">188</FONT>            assertTrue(addr.toIPv6().equals(ipv6new));<a name="line.188"></a>
+<FONT color="green">189</FONT>        }<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>        @Test<a name="line.191"></a>
+<FONT color="green">192</FONT>        public void testWrongConversion() {<a name="line.192"></a>
+<FONT color="green">193</FONT>            IPAddress ipv6new = IPAddress.valueOf("2001::1");<a name="line.193"></a>
+<FONT color="green">194</FONT>            IPv4Address addr = ipv6new.toIPv4();<a name="line.194"></a>
+<FONT color="green">195</FONT>            assertNull(addr);<a name="line.195"></a>
+<FONT color="green">196</FONT>        }<a name="line.196"></a>
+<FONT color="green">197</FONT>    <a name="line.197"></a>
+<FONT color="green">198</FONT>        @Test<a name="line.198"></a>
+<FONT color="green">199</FONT>        public void testIPv4HashAndEquals() {<a name="line.199"></a>
+<FONT color="green">200</FONT>            IPAddress addr = IPAddress.valueOf("192.168.1.1");<a name="line.200"></a>
+<FONT color="green">201</FONT>            IPv4Address addr1 = new IPv4Address(192, 168, 2, 1);<a name="line.201"></a>
+<FONT color="green">202</FONT>            assertTrue(ipv4.equals(ipv4));<a name="line.202"></a>
+<FONT color="green">203</FONT>            assertTrue(ipv4.hashCode() == ipv4.hashCode());<a name="line.203"></a>
+<FONT color="green">204</FONT>            assertTrue(ipv4.equals(addr));<a name="line.204"></a>
+<FONT color="green">205</FONT>            assertTrue(addr.equals(ipv4));<a name="line.205"></a>
+<FONT color="green">206</FONT>            assertTrue(ipv4.hashCode() == addr.hashCode());<a name="line.206"></a>
+<FONT color="green">207</FONT>            assertFalse(ipv4.equals(addr1));<a name="line.207"></a>
+<FONT color="green">208</FONT>            assertFalse(addr1.equals(ipv4));<a name="line.208"></a>
+<FONT color="green">209</FONT>            assertFalse(ipv4.equals(ipv6));<a name="line.209"></a>
+<FONT color="green">210</FONT>            assertFalse(addr.equals(ipv6));<a name="line.210"></a>
+<FONT color="green">211</FONT>            assertFalse(ipv6.equals(addr));<a name="line.211"></a>
+<FONT color="green">212</FONT>            assertFalse(ipv4.equals(ipv4.toIPv6()));<a name="line.212"></a>
+<FONT color="green">213</FONT>            assertFalse(ipv4.toIPv6().equals(ipv4));<a name="line.213"></a>
+<FONT color="green">214</FONT>            Map&lt;IPv4Address, String&gt; map = new HashMap&lt;IPv4Address, String&gt;();<a name="line.214"></a>
+<FONT color="green">215</FONT>            map.put(ipv4, "alice");<a name="line.215"></a>
+<FONT color="green">216</FONT>            map.put(addr1, "bob");<a name="line.216"></a>
+<FONT color="green">217</FONT>            assertEquals("alice", map.get(addr));<a name="line.217"></a>
+<FONT color="green">218</FONT>        }<a name="line.218"></a>
+<FONT color="green">219</FONT>    <a name="line.219"></a>
+<FONT color="green">220</FONT>        @Test<a name="line.220"></a>
+<FONT color="green">221</FONT>        public void testIPv6HashAndEquals() {<a name="line.221"></a>
+<FONT color="green">222</FONT>            IPAddress addr = IPAddress.valueOf("fe80::1015:c0a8:1");<a name="line.222"></a>
+<FONT color="green">223</FONT>            IPv6Address addr1 = new IPv6Address(0x2002, 0, 0, 0, 0, 0, 0xcdfd, 0xc7b6);<a name="line.223"></a>
+<FONT color="green">224</FONT>            assertTrue(ipv6.equals(ipv6));<a name="line.224"></a>
+<FONT color="green">225</FONT>            assertTrue(ipv6.hashCode() == ipv6.hashCode());<a name="line.225"></a>
+<FONT color="green">226</FONT>            assertTrue(ipv6.equals(addr));<a name="line.226"></a>
+<FONT color="green">227</FONT>            assertTrue(addr.equals(ipv6));<a name="line.227"></a>
+<FONT color="green">228</FONT>            assertTrue(ipv6.hashCode() == addr.hashCode());<a name="line.228"></a>
+<FONT color="green">229</FONT>            assertFalse(ipv6.equals(addr1));<a name="line.229"></a>
+<FONT color="green">230</FONT>            assertFalse(addr1.equals(ipv6));<a name="line.230"></a>
+<FONT color="green">231</FONT>            assertFalse(ipv6.equals(ipv4));<a name="line.231"></a>
+<FONT color="green">232</FONT>            assertFalse(addr.equals(ipv4));<a name="line.232"></a>
+<FONT color="green">233</FONT>            assertFalse(ipv4.equals(addr));<a name="line.233"></a>
+<FONT color="green">234</FONT>            assertFalse(ipv6.equals(ipv6.toIPv4()));<a name="line.234"></a>
+<FONT color="green">235</FONT>            assertFalse(ipv6.toIPv4().equals(ipv6));<a name="line.235"></a>
+<FONT color="green">236</FONT>            Map&lt;IPv6Address, String&gt; map = new HashMap&lt;IPv6Address, String&gt;();<a name="line.236"></a>
+<FONT color="green">237</FONT>            map.put(ipv6, "alice");<a name="line.237"></a>
+<FONT color="green">238</FONT>            map.put(addr1, "bob");<a name="line.238"></a>
+<FONT color="green">239</FONT>            assertEquals("alice", map.get(addr));<a name="line.239"></a>
+<FONT color="green">240</FONT>        }<a name="line.240"></a>
+<FONT color="green">241</FONT>    <a name="line.241"></a>
+<FONT color="green">242</FONT>        @Test<a name="line.242"></a>
+<FONT color="green">243</FONT>        public void testIPHashMaps() {<a name="line.243"></a>
+<FONT color="green">244</FONT>            IPAddress v4 = IPAddress.valueOf("192.168.1.1");<a name="line.244"></a>
+<FONT color="green">245</FONT>            IPv4Address v41 = new IPv4Address(192, 168, 2, 1);<a name="line.245"></a>
+<FONT color="green">246</FONT>            IPAddress v6 = IPAddress.valueOf("fe80::1015:c0a8:1");<a name="line.246"></a>
+<FONT color="green">247</FONT>            IPv6Address v61 = new IPv6Address(0x2002, 0, 0, 0, 0, 0, 0xcdfd, 0xc7b6);<a name="line.247"></a>
+<FONT color="green">248</FONT>            Map&lt;IPAddress, String&gt; map = new HashMap&lt;IPAddress, String&gt;();<a name="line.248"></a>
+<FONT color="green">249</FONT>            map.put(ipv4, "alice");<a name="line.249"></a>
+<FONT color="green">250</FONT>            map.put(v61, "bob");<a name="line.250"></a>
+<FONT color="green">251</FONT>            map.put(v41, "charlie");<a name="line.251"></a>
+<FONT color="green">252</FONT>            map.put(v6, "dan");<a name="line.252"></a>
+<FONT color="green">253</FONT>            assertEquals("alice", map.get(v4));<a name="line.253"></a>
+<FONT color="green">254</FONT>            assertEquals("dan", map.get(ipv6));<a name="line.254"></a>
+<FONT color="green">255</FONT>        }<a name="line.255"></a>
+<FONT color="green">256</FONT>    }<a name="line.256"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

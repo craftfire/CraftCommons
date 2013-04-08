@@ -1,0 +1,158 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
+<FONT color="green">006</FONT>     *<a name="line.6"></a>
+<FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
+<FONT color="green">008</FONT>     * it under the terms of the GNU Lesser General Public License as published by<a name="line.8"></a>
+<FONT color="green">009</FONT>     * the Free Software Foundation, either version 3 of the License, or<a name="line.9"></a>
+<FONT color="green">010</FONT>     * (at your option) any later version.<a name="line.10"></a>
+<FONT color="green">011</FONT>     *<a name="line.11"></a>
+<FONT color="green">012</FONT>     * CraftCommons is distributed in the hope that it will be useful,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * but WITHOUT ANY WARRANTY; without even the implied warranty of<a name="line.13"></a>
+<FONT color="green">014</FONT>     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<a name="line.14"></a>
+<FONT color="green">015</FONT>     * GNU Lesser General Public License for more details.<a name="line.15"></a>
+<FONT color="green">016</FONT>     *<a name="line.16"></a>
+<FONT color="green">017</FONT>     * You should have received a copy of the GNU Lesser General Public License<a name="line.17"></a>
+<FONT color="green">018</FONT>     * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.18"></a>
+<FONT color="green">019</FONT>     */<a name="line.19"></a>
+<FONT color="green">020</FONT>    package com.craftfire.commons.encryption;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import java.io.UnsupportedEncodingException;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>    public final class EncryptionUtil {<a name="line.24"></a>
+<FONT color="green">025</FONT>        private EncryptionUtil() {<a name="line.25"></a>
+<FONT color="green">026</FONT>        }<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>        public static String pack(String hex) {<a name="line.28"></a>
+<FONT color="green">029</FONT>            StringBuilder buf = new StringBuilder();<a name="line.29"></a>
+<FONT color="green">030</FONT>            for (int i = 0; i &lt; hex.length(); i += 2) {<a name="line.30"></a>
+<FONT color="green">031</FONT>                char c1 = hex.charAt(i);<a name="line.31"></a>
+<FONT color="green">032</FONT>                char c2 = hex.charAt(i + 1);<a name="line.32"></a>
+<FONT color="green">033</FONT>                char packed = (char) (hexToInt(c1) * 16 + hexToInt(c2));<a name="line.33"></a>
+<FONT color="green">034</FONT>                buf.append(packed);<a name="line.34"></a>
+<FONT color="green">035</FONT>            }<a name="line.35"></a>
+<FONT color="green">036</FONT>            return buf.toString();<a name="line.36"></a>
+<FONT color="green">037</FONT>        }<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>        public static String bytesTohex(byte[] data)  {<a name="line.39"></a>
+<FONT color="green">040</FONT>            StringBuilder buf = new StringBuilder();<a name="line.40"></a>
+<FONT color="green">041</FONT>            for (byte aByte : data) {<a name="line.41"></a>
+<FONT color="green">042</FONT>                int halfbyte = (aByte &gt;&gt;&gt; 4) &amp; 0x0F;<a name="line.42"></a>
+<FONT color="green">043</FONT>                int twoHalfs = 0;<a name="line.43"></a>
+<FONT color="green">044</FONT>                do {<a name="line.44"></a>
+<FONT color="green">045</FONT>                    if ((0 &lt;= halfbyte) &amp;&amp; (halfbyte &lt;= 9)) {<a name="line.45"></a>
+<FONT color="green">046</FONT>                        buf.append((char) ('0' + halfbyte));<a name="line.46"></a>
+<FONT color="green">047</FONT>                    } else {<a name="line.47"></a>
+<FONT color="green">048</FONT>                        buf.append((char) ('a' + (halfbyte - 10)));<a name="line.48"></a>
+<FONT color="green">049</FONT>                    }<a name="line.49"></a>
+<FONT color="green">050</FONT>                    halfbyte = aByte &amp; 0x0F;<a name="line.50"></a>
+<FONT color="green">051</FONT>                }<a name="line.51"></a>
+<FONT color="green">052</FONT>                while (twoHalfs++ &lt; 1);<a name="line.52"></a>
+<FONT color="green">053</FONT>            }<a name="line.53"></a>
+<FONT color="green">054</FONT>            return buf.toString();<a name="line.54"></a>
+<FONT color="green">055</FONT>        }<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>        public static int hexToInt(char ch) {<a name="line.57"></a>
+<FONT color="green">058</FONT>            if (ch &gt;= '0' &amp;&amp; ch &lt;= '9') {<a name="line.58"></a>
+<FONT color="green">059</FONT>                return ch - '0';<a name="line.59"></a>
+<FONT color="green">060</FONT>            }<a name="line.60"></a>
+<FONT color="green">061</FONT>            char nch = Character.toUpperCase(ch);<a name="line.61"></a>
+<FONT color="green">062</FONT>            if (nch &gt;= 'A' &amp;&amp; nch &lt;= 'F') {<a name="line.62"></a>
+<FONT color="green">063</FONT>                return nch - 'A' + 0xA;<a name="line.63"></a>
+<FONT color="green">064</FONT>            }<a name="line.64"></a>
+<FONT color="green">065</FONT>            throw new IllegalArgumentException("Not a hex character: " + ch);<a name="line.65"></a>
+<FONT color="green">066</FONT>        }<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        public static String hexToString(String str) {<a name="line.68"></a>
+<FONT color="green">069</FONT>            char[] chars = str.toCharArray();<a name="line.69"></a>
+<FONT color="green">070</FONT>            StringBuilder hex = new StringBuilder();<a name="line.70"></a>
+<FONT color="green">071</FONT>            for (char aChar : chars) {<a name="line.71"></a>
+<FONT color="green">072</FONT>                hex.append(Integer.toHexString(aChar));<a name="line.72"></a>
+<FONT color="green">073</FONT>            }<a name="line.73"></a>
+<FONT color="green">074</FONT>            return hex.toString();<a name="line.74"></a>
+<FONT color="green">075</FONT>        }<a name="line.75"></a>
+<FONT color="green">076</FONT>    <a name="line.76"></a>
+<FONT color="green">077</FONT>        public static String utf8ToString(byte[] utf8) {<a name="line.77"></a>
+<FONT color="green">078</FONT>            try {<a name="line.78"></a>
+<FONT color="green">079</FONT>                return new String(utf8, "UTF-8");<a name="line.79"></a>
+<FONT color="green">080</FONT>            } catch (UnsupportedEncodingException e) {<a name="line.80"></a>
+<FONT color="green">081</FONT>                throw new UnsupportedOperationException("This system doesn't support UTF-8!", e);<a name="line.81"></a>
+<FONT color="green">082</FONT>            }<a name="line.82"></a>
+<FONT color="green">083</FONT>        }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        public static byte[] stringToUtf8(String string) {<a name="line.85"></a>
+<FONT color="green">086</FONT>            try {<a name="line.86"></a>
+<FONT color="green">087</FONT>                return string.getBytes("UTF-8");<a name="line.87"></a>
+<FONT color="green">088</FONT>            } catch (UnsupportedEncodingException e) {<a name="line.88"></a>
+<FONT color="green">089</FONT>                throw new UnsupportedOperationException("This system doesn't support UTF-8!", e);<a name="line.89"></a>
+<FONT color="green">090</FONT>            }<a name="line.90"></a>
+<FONT color="green">091</FONT>        }<a name="line.91"></a>
+<FONT color="green">092</FONT>    }<a name="line.92"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

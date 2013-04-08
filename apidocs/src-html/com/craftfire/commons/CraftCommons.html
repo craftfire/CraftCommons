@@ -1,0 +1,435 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
+<FONT color="green">006</FONT>     *<a name="line.6"></a>
+<FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
+<FONT color="green">008</FONT>     * it under the terms of the GNU Lesser General Public License as published by<a name="line.8"></a>
+<FONT color="green">009</FONT>     * the Free Software Foundation, either version 3 of the License, or<a name="line.9"></a>
+<FONT color="green">010</FONT>     * (at your option) any later version.<a name="line.10"></a>
+<FONT color="green">011</FONT>     *<a name="line.11"></a>
+<FONT color="green">012</FONT>     * CraftCommons is distributed in the hope that it will be useful,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * but WITHOUT ANY WARRANTY; without even the implied warranty of<a name="line.13"></a>
+<FONT color="green">014</FONT>     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<a name="line.14"></a>
+<FONT color="green">015</FONT>     * GNU Lesser General Public License for more details.<a name="line.15"></a>
+<FONT color="green">016</FONT>     *<a name="line.16"></a>
+<FONT color="green">017</FONT>     * You should have received a copy of the GNU Lesser General Public License<a name="line.17"></a>
+<FONT color="green">018</FONT>     * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.18"></a>
+<FONT color="green">019</FONT>     */<a name="line.19"></a>
+<FONT color="green">020</FONT>    package com.craftfire.commons;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import java.awt.Image;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import java.awt.Toolkit;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import java.io.IOException;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import java.io.InputStream;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import java.io.UnsupportedEncodingException;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import java.net.MalformedURLException;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import java.net.URL;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import java.security.GeneralSecurityException;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import java.security.MessageDigest;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import java.util.ArrayList;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import java.util.List;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import java.util.StringTokenizer;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import java.util.regex.Pattern;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import java.util.zip.CRC32;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import java.util.zip.Checksum;<a name="line.36"></a>
+<FONT color="green">037</FONT>    <a name="line.37"></a>
+<FONT color="green">038</FONT>    import com.craftfire.commons.analytics.AnalyticsException;<a name="line.38"></a>
+<FONT color="green">039</FONT>    import com.craftfire.commons.analytics.AnalyticsManager;<a name="line.39"></a>
+<FONT color="green">040</FONT>    import com.craftfire.commons.encryption.*;<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>    public final class CraftCommons {<a name="line.42"></a>
+<FONT color="green">043</FONT>        private CraftCommons() {<a name="line.43"></a>
+<FONT color="green">044</FONT>            try {<a name="line.44"></a>
+<FONT color="green">045</FONT>                new AnalyticsManager("http://stats.craftfire.com/", "CraftCommons", "1.0.0").submit();<a name="line.45"></a>
+<FONT color="green">046</FONT>            } catch (MalformedURLException ignore) {<a name="line.46"></a>
+<FONT color="green">047</FONT>            } catch (IOException e) {<a name="line.47"></a>
+<FONT color="green">048</FONT>                //TODO: logging<a name="line.48"></a>
+<FONT color="green">049</FONT>            } catch (AnalyticsException e) {<a name="line.49"></a>
+<FONT color="green">050</FONT>                //TODO: logging<a name="line.50"></a>
+<FONT color="green">051</FONT>            }<a name="line.51"></a>
+<FONT color="green">052</FONT>        }<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>        public static String getName() {<a name="line.54"></a>
+<FONT color="green">055</FONT>            return "CraftCommons";<a name="line.55"></a>
+<FONT color="green">056</FONT>        }<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>        public static String getVersion() {<a name="line.58"></a>
+<FONT color="green">059</FONT>            return "1.0.0";<a name="line.59"></a>
+<FONT color="green">060</FONT>        }<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>        public static String long2ip(Long i) {<a name="line.62"></a>
+<FONT color="green">063</FONT>            return ((i &gt;&gt; 24) &amp; 0xFF) + "." +<a name="line.63"></a>
+<FONT color="green">064</FONT>                   ((i &gt;&gt; 16) &amp; 0xFF) + "." +<a name="line.64"></a>
+<FONT color="green">065</FONT>                   ((i &gt;&gt; 8) &amp; 0xFF) + "." +<a name="line.65"></a>
+<FONT color="green">066</FONT>                   (i &amp; 0xFF);<a name="line.66"></a>
+<FONT color="green">067</FONT>        }<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>        public static Long ip2long(String ip) {<a name="line.69"></a>
+<FONT color="green">070</FONT>            String[] ipArray = ip.split("\\.");<a name="line.70"></a>
+<FONT color="green">071</FONT>            long num = 0;<a name="line.71"></a>
+<FONT color="green">072</FONT>            for (int i = 0; i &lt; ipArray.length; i++) {<a name="line.72"></a>
+<FONT color="green">073</FONT>                int power = 3 - i;<a name="line.73"></a>
+<FONT color="green">074</FONT>                num += ((Integer.parseInt(ipArray[i]) % 256 * Math.pow(256, power)));<a name="line.74"></a>
+<FONT color="green">075</FONT>            }<a name="line.75"></a>
+<FONT color="green">076</FONT>            return num;<a name="line.76"></a>
+<FONT color="green">077</FONT>        }<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>        public static boolean hasClass(String classString) {<a name="line.79"></a>
+<FONT color="green">080</FONT>            try {<a name="line.80"></a>
+<FONT color="green">081</FONT>                Class.forName(classString);<a name="line.81"></a>
+<FONT color="green">082</FONT>            } catch (ClassNotFoundException ignore) {<a name="line.82"></a>
+<FONT color="green">083</FONT>                return false;<a name="line.83"></a>
+<FONT color="green">084</FONT>            }<a name="line.84"></a>
+<FONT color="green">085</FONT>            return true;<a name="line.85"></a>
+<FONT color="green">086</FONT>        }<a name="line.86"></a>
+<FONT color="green">087</FONT>    <a name="line.87"></a>
+<FONT color="green">088</FONT>        @Deprecated<a name="line.88"></a>
+<FONT color="green">089</FONT>        public static boolean inVersionRange(String lastversion, String compare) {<a name="line.89"></a>
+<FONT color="green">090</FONT>            if (lastversion.equalsIgnoreCase(compare)) {<a name="line.90"></a>
+<FONT color="green">091</FONT>                return true;<a name="line.91"></a>
+<FONT color="green">092</FONT>            }<a name="line.92"></a>
+<FONT color="green">093</FONT>            String s1 = normalisedVersion(compare);<a name="line.93"></a>
+<FONT color="green">094</FONT>            String s2 = normalisedVersion(lastversion);<a name="line.94"></a>
+<FONT color="green">095</FONT>            int cmp = s1.compareTo(s2);<a name="line.95"></a>
+<FONT color="green">096</FONT>            return cmp &lt; 0;<a name="line.96"></a>
+<FONT color="green">097</FONT>        }<a name="line.97"></a>
+<FONT color="green">098</FONT>    <a name="line.98"></a>
+<FONT color="green">099</FONT>        public static String encrypt(Encryption encryption, Object object) {<a name="line.99"></a>
+<FONT color="green">100</FONT>            return encrypt(encryption, object, null, 0);<a name="line.100"></a>
+<FONT color="green">101</FONT>        }<a name="line.101"></a>
+<FONT color="green">102</FONT>        public static String encrypt(Encryption encryption, Object object, String salt) {<a name="line.102"></a>
+<FONT color="green">103</FONT>            return encrypt(encryption, object, salt, 0);<a name="line.103"></a>
+<FONT color="green">104</FONT>        }<a name="line.104"></a>
+<FONT color="green">105</FONT>    <a name="line.105"></a>
+<FONT color="green">106</FONT>        public static String encrypt(Encryption encryption, Object object, String salt, int iterationCount) {<a name="line.106"></a>
+<FONT color="green">107</FONT>            try {<a name="line.107"></a>
+<FONT color="green">108</FONT>                String string = (String) object;<a name="line.108"></a>
+<FONT color="green">109</FONT>                MessageDigest md = null;<a name="line.109"></a>
+<FONT color="green">110</FONT>                String newSalt = salt;<a name="line.110"></a>
+<FONT color="green">111</FONT>                if (encryption.equals(Encryption.MD5)) {<a name="line.111"></a>
+<FONT color="green">112</FONT>                    md = MessageDigest.getInstance("MD5");<a name="line.112"></a>
+<FONT color="green">113</FONT>                } else if (encryption.equals(Encryption.SHA1)) {<a name="line.113"></a>
+<FONT color="green">114</FONT>                    md = MessageDigest.getInstance("SHA-1");<a name="line.114"></a>
+<FONT color="green">115</FONT>                } else if (encryption.equals(Encryption.SHA256)) {<a name="line.115"></a>
+<FONT color="green">116</FONT>                    md = MessageDigest.getInstance("SHA-256");<a name="line.116"></a>
+<FONT color="green">117</FONT>                } else if (encryption.equals(Encryption.SHA512)) {<a name="line.117"></a>
+<FONT color="green">118</FONT>                    md = MessageDigest.getInstance("SHA-512");<a name="line.118"></a>
+<FONT color="green">119</FONT>                } else if (encryption.equals(Encryption.CRC32)) {<a name="line.119"></a>
+<FONT color="green">120</FONT>                    Checksum checksum = new CRC32();<a name="line.120"></a>
+<FONT color="green">121</FONT>                    checksum.update(string.getBytes(), 0, string.getBytes().length);<a name="line.121"></a>
+<FONT color="green">122</FONT>                    return Long.toString(checksum.getValue());<a name="line.122"></a>
+<FONT color="green">123</FONT>                } else if (encryption.equals(Encryption.WHIRLPOOL)) {<a name="line.123"></a>
+<FONT color="green">124</FONT>                    Whirlpool w = new Whirlpool();<a name="line.124"></a>
+<FONT color="green">125</FONT>                    byte[] digest = new byte[Whirlpool.DIGESTBYTES];<a name="line.125"></a>
+<FONT color="green">126</FONT>                    w.NESSIEinit();<a name="line.126"></a>
+<FONT color="green">127</FONT>                    w.NESSIEadd(string);<a name="line.127"></a>
+<FONT color="green">128</FONT>                    w.NESSIEfinalize(digest);<a name="line.128"></a>
+<FONT color="green">129</FONT>                    return Whirlpool.display(digest);<a name="line.129"></a>
+<FONT color="green">130</FONT>                } else if (encryption.equals(Encryption.PHPASS_P) || encryption.equals(Encryption.PHPASS_H)) {<a name="line.130"></a>
+<FONT color="green">131</FONT>                    PHPass phpass;<a name="line.131"></a>
+<FONT color="green">132</FONT>                    if (iterationCount == 0) {<a name="line.132"></a>
+<FONT color="green">133</FONT>                        phpass = new PHPass(encryption, 8);<a name="line.133"></a>
+<FONT color="green">134</FONT>                    } else {<a name="line.134"></a>
+<FONT color="green">135</FONT>                        phpass = new PHPass(encryption, iterationCount);<a name="line.135"></a>
+<FONT color="green">136</FONT>                    }<a name="line.136"></a>
+<FONT color="green">137</FONT>                    if (newSalt == null || newSalt.isEmpty()) {<a name="line.137"></a>
+<FONT color="green">138</FONT>                        newSalt = phpass.gensalt();<a name="line.138"></a>
+<FONT color="green">139</FONT>                    }<a name="line.139"></a>
+<FONT color="green">140</FONT>                    String hash = phpass.crypt(string, newSalt);<a name="line.140"></a>
+<FONT color="green">141</FONT>                    if (hash.length() == 34) {<a name="line.141"></a>
+<FONT color="green">142</FONT>                        return hash;<a name="line.142"></a>
+<FONT color="green">143</FONT>                    }<a name="line.143"></a>
+<FONT color="green">144</FONT>                    return "*";<a name="line.144"></a>
+<FONT color="green">145</FONT>                } else if (encryption.equals(Encryption.BLOWFISH)) {<a name="line.145"></a>
+<FONT color="green">146</FONT>                    if (newSalt == null || newSalt.isEmpty()) {<a name="line.146"></a>
+<FONT color="green">147</FONT>                        if (iterationCount == 0) {<a name="line.147"></a>
+<FONT color="green">148</FONT>                            newSalt = BCrypt.gensalt(8);<a name="line.148"></a>
+<FONT color="green">149</FONT>                        } else {<a name="line.149"></a>
+<FONT color="green">150</FONT>                            newSalt = BCrypt.gensalt(iterationCount);<a name="line.150"></a>
+<FONT color="green">151</FONT>                        }<a name="line.151"></a>
+<FONT color="green">152</FONT>                    }<a name="line.152"></a>
+<FONT color="green">153</FONT>                    return BCrypt.hashpw(string, newSalt);<a name="line.153"></a>
+<FONT color="green">154</FONT>                }<a name="line.154"></a>
+<FONT color="green">155</FONT>                if (md != null) {<a name="line.155"></a>
+<FONT color="green">156</FONT>                    md.update(string.getBytes("ISO-8859-1"), 0, string.length());<a name="line.156"></a>
+<FONT color="green">157</FONT>                    byte[] hash = md.digest();<a name="line.157"></a>
+<FONT color="green">158</FONT>                    return EncryptionUtil.bytesTohex(hash);<a name="line.158"></a>
+<FONT color="green">159</FONT>                } else {<a name="line.159"></a>
+<FONT color="green">160</FONT>                    return null;<a name="line.160"></a>
+<FONT color="green">161</FONT>                }<a name="line.161"></a>
+<FONT color="green">162</FONT>            } catch (GeneralSecurityException e) {<a name="line.162"></a>
+<FONT color="green">163</FONT>                throw new IllegalStateException(e);<a name="line.163"></a>
+<FONT color="green">164</FONT>            } catch (UnsupportedEncodingException e) {<a name="line.164"></a>
+<FONT color="green">165</FONT>                throw new UnsupportedOperationException(e);<a name="line.165"></a>
+<FONT color="green">166</FONT>            }<a name="line.166"></a>
+<FONT color="green">167</FONT>        }<a name="line.167"></a>
+<FONT color="green">168</FONT>    <a name="line.168"></a>
+<FONT color="green">169</FONT>        public static Encryption unixHashIdentify(String hash){<a name="line.169"></a>
+<FONT color="green">170</FONT>            if (hash.startsWith("$1$") || hash.startsWith("$md5$")) {<a name="line.170"></a>
+<FONT color="green">171</FONT>                return Encryption.MD5;<a name="line.171"></a>
+<FONT color="green">172</FONT>            } else if (hash.startsWith("$2")) {<a name="line.172"></a>
+<FONT color="green">173</FONT>                return Encryption.BLOWFISH;<a name="line.173"></a>
+<FONT color="green">174</FONT>            } else if (hash.startsWith("$5$")) {<a name="line.174"></a>
+<FONT color="green">175</FONT>                return Encryption.SHA256;<a name="line.175"></a>
+<FONT color="green">176</FONT>            } else if (hash.startsWith("$6$")) {<a name="line.176"></a>
+<FONT color="green">177</FONT>                return Encryption.SHA512;<a name="line.177"></a>
+<FONT color="green">178</FONT>            } else if (hash.startsWith("$P$")) {<a name="line.178"></a>
+<FONT color="green">179</FONT>                return Encryption.PHPASS_P;<a name="line.179"></a>
+<FONT color="green">180</FONT>            } else if (hash.startsWith("$H$")) {<a name="line.180"></a>
+<FONT color="green">181</FONT>                return Encryption.PHPASS_H;<a name="line.181"></a>
+<FONT color="green">182</FONT>            }<a name="line.182"></a>
+<FONT color="green">183</FONT>            return null;<a name="line.183"></a>
+<FONT color="green">184</FONT>        }<a name="line.184"></a>
+<FONT color="green">185</FONT>    <a name="line.185"></a>
+<FONT color="green">186</FONT>        @Deprecated<a name="line.186"></a>
+<FONT color="green">187</FONT>        public static String normalisedVersion(String version) {<a name="line.187"></a>
+<FONT color="green">188</FONT>            return normalisedVersion(version, ".", 4);<a name="line.188"></a>
+<FONT color="green">189</FONT>        }<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>        @Deprecated<a name="line.191"></a>
+<FONT color="green">192</FONT>        public static String normalisedVersion(String version, String sep, int maxWidth) {<a name="line.192"></a>
+<FONT color="green">193</FONT>            String[] split = Pattern.compile(sep, Pattern.LITERAL).split(version);<a name="line.193"></a>
+<FONT color="green">194</FONT>            StringBuilder sb = new StringBuilder();<a name="line.194"></a>
+<FONT color="green">195</FONT>            for (String s : split) {<a name="line.195"></a>
+<FONT color="green">196</FONT>                sb.append(String.format("%" + maxWidth + 's', s));<a name="line.196"></a>
+<FONT color="green">197</FONT>            }<a name="line.197"></a>
+<FONT color="green">198</FONT>            return sb.toString();<a name="line.198"></a>
+<FONT color="green">199</FONT>        }<a name="line.199"></a>
+<FONT color="green">200</FONT>    <a name="line.200"></a>
+<FONT color="green">201</FONT>        /**<a name="line.201"></a>
+<FONT color="green">202</FONT>         * @param urlstring The url of the image.<a name="line.202"></a>
+<FONT color="green">203</FONT>         * @return Image object.<a name="line.203"></a>
+<FONT color="green">204</FONT>         */<a name="line.204"></a>
+<FONT color="green">205</FONT>        public static Image urlToImage(String urlstring) {<a name="line.205"></a>
+<FONT color="green">206</FONT>            try {<a name="line.206"></a>
+<FONT color="green">207</FONT>                URL url = new URL(urlstring);<a name="line.207"></a>
+<FONT color="green">208</FONT>                return Toolkit.getDefaultToolkit().createImage(url);<a name="line.208"></a>
+<FONT color="green">209</FONT>            } catch (MalformedURLException e) {<a name="line.209"></a>
+<FONT color="green">210</FONT>                e.printStackTrace();<a name="line.210"></a>
+<FONT color="green">211</FONT>            }<a name="line.211"></a>
+<FONT color="green">212</FONT>            return null;<a name="line.212"></a>
+<FONT color="green">213</FONT>        }<a name="line.213"></a>
+<FONT color="green">214</FONT>    <a name="line.214"></a>
+<FONT color="green">215</FONT>        public static String convertStreamToString(InputStream is) {<a name="line.215"></a>
+<FONT color="green">216</FONT>            try {<a name="line.216"></a>
+<FONT color="green">217</FONT>                return new java.util.Scanner(is).useDelimiter("\\A").next();<a name="line.217"></a>
+<FONT color="green">218</FONT>            } catch (java.util.NoSuchElementException e) {<a name="line.218"></a>
+<FONT color="green">219</FONT>                return "";<a name="line.219"></a>
+<FONT color="green">220</FONT>            }<a name="line.220"></a>
+<FONT color="green">221</FONT>        }<a name="line.221"></a>
+<FONT color="green">222</FONT>    <a name="line.222"></a>
+<FONT color="green">223</FONT>        public static String convertHexToString(String hex) {<a name="line.223"></a>
+<FONT color="green">224</FONT>            StringBuilder sb = new StringBuilder();<a name="line.224"></a>
+<FONT color="green">225</FONT>            for ( int i=0; i&lt;hex.length()-1; i+=2 ) {<a name="line.225"></a>
+<FONT color="green">226</FONT>                String output = hex.substring(i, (i + 2));<a name="line.226"></a>
+<FONT color="green">227</FONT>                int decimal = Integer.parseInt(output, 16);<a name="line.227"></a>
+<FONT color="green">228</FONT>                sb.append((char)decimal);<a name="line.228"></a>
+<FONT color="green">229</FONT>            }<a name="line.229"></a>
+<FONT color="green">230</FONT>            return sb.toString();<a name="line.230"></a>
+<FONT color="green">231</FONT>        }<a name="line.231"></a>
+<FONT color="green">232</FONT>    <a name="line.232"></a>
+<FONT color="green">233</FONT>        public static String convertStringToHex(String str) {<a name="line.233"></a>
+<FONT color="green">234</FONT>            char[] chars = str.toCharArray();<a name="line.234"></a>
+<FONT color="green">235</FONT>            StringBuffer hex = new StringBuffer();<a name="line.235"></a>
+<FONT color="green">236</FONT>            for (int i = 0; i &lt; chars.length; i++){<a name="line.236"></a>
+<FONT color="green">237</FONT>                hex.append(Integer.toHexString(chars[i]));<a name="line.237"></a>
+<FONT color="green">238</FONT>            }<a name="line.238"></a>
+<FONT color="green">239</FONT>            return hex.toString();<a name="line.239"></a>
+<FONT color="green">240</FONT>        }<a name="line.240"></a>
+<FONT color="green">241</FONT>    <a name="line.241"></a>
+<FONT color="green">242</FONT>        @Deprecated<a name="line.242"></a>
+<FONT color="green">243</FONT>        public static String forumCache(String cache, String player, int userid, String nummember, String activemembers,<a name="line.243"></a>
+<FONT color="green">244</FONT>                                        String newusername, String newuserid, String extrausername, String lastvalue) {<a name="line.244"></a>
+<FONT color="green">245</FONT>            StringTokenizer st = new StringTokenizer(cache, ":");<a name="line.245"></a>
+<FONT color="green">246</FONT>            int i = 0;<a name="line.246"></a>
+<FONT color="green">247</FONT>            List&lt;String&gt; array = new ArrayList&lt;String&gt;();<a name="line.247"></a>
+<FONT color="green">248</FONT>            while (st.hasMoreTokens()) {<a name="line.248"></a>
+<FONT color="green">249</FONT>                array.add(st.nextToken() + ":");<a name="line.249"></a>
+<FONT color="green">250</FONT>            }<a name="line.250"></a>
+<FONT color="green">251</FONT>            StringBuffer newcache = new StringBuffer();<a name="line.251"></a>
+<FONT color="green">252</FONT>            while (array.size() &gt; i) {<a name="line.252"></a>
+<FONT color="green">253</FONT>                if (array.get(i).equals("\"" + nummember + "\";i:") &amp;&amp; nummember != null) {<a name="line.253"></a>
+<FONT color="green">254</FONT>                    String temp = array.get(i + 1);<a name="line.254"></a>
+<FONT color="green">255</FONT>                    temp = removeChar(temp, '"');<a name="line.255"></a>
+<FONT color="green">256</FONT>                    temp = removeChar(temp, ':');<a name="line.256"></a>
+<FONT color="green">257</FONT>                    temp = removeChar(temp, 's');<a name="line.257"></a>
+<FONT color="green">258</FONT>                    temp = removeChar(temp, ';');<a name="line.258"></a>
+<FONT color="green">259</FONT>                    temp = temp.trim();<a name="line.259"></a>
+<FONT color="green">260</FONT>                    int tempnum = Integer.parseInt(temp) + 1;<a name="line.260"></a>
+<FONT color="green">261</FONT>                    if (lastvalue.equalsIgnoreCase(nummember)) {<a name="line.261"></a>
+<FONT color="green">262</FONT>                        temp = tempnum + ";}";<a name="line.262"></a>
+<FONT color="green">263</FONT>                    } else {<a name="line.263"></a>
+<FONT color="green">264</FONT>                        temp = tempnum + ";s:";<a name="line.264"></a>
+<FONT color="green">265</FONT>                    }<a name="line.265"></a>
+<FONT color="green">266</FONT>                    array.set(i + 1, temp);<a name="line.266"></a>
+<FONT color="green">267</FONT>                } else if (array.get(i).equals("\"" + newusername + "\";s:") &amp;&amp; newusername != null) {<a name="line.267"></a>
+<FONT color="green">268</FONT>                    array.set(i + 1, player.length() + ":");<a name="line.268"></a>
+<FONT color="green">269</FONT>                    if (lastvalue.equalsIgnoreCase(newusername)) {<a name="line.269"></a>
+<FONT color="green">270</FONT>                        array.set(i + 2, "\"" + player + "\"" + ";}");<a name="line.270"></a>
+<FONT color="green">271</FONT>                    } else {<a name="line.271"></a>
+<FONT color="green">272</FONT>                        array.set(i + 2, "\"" + player + "\"" + ";s" + ":");<a name="line.272"></a>
+<FONT color="green">273</FONT>                    }<a name="line.273"></a>
+<FONT color="green">274</FONT>                } else if (array.get(i).equals("\"" + extrausername + "\";s:") &amp;&amp; extrausername != null) {<a name="line.274"></a>
+<FONT color="green">275</FONT>                    array.set(i + 1, player.length() + ":");<a name="line.275"></a>
+<FONT color="green">276</FONT>                    if (lastvalue.equalsIgnoreCase(extrausername)) {<a name="line.276"></a>
+<FONT color="green">277</FONT>                        array.set(i + 2, "\"" + player + "\"" + ";}");<a name="line.277"></a>
+<FONT color="green">278</FONT>                    } else {<a name="line.278"></a>
+<FONT color="green">279</FONT>                        array.set(i + 2, "\"" + player + "\"" + ";s" + ":");<a name="line.279"></a>
+<FONT color="green">280</FONT>                    }<a name="line.280"></a>
+<FONT color="green">281</FONT>                } else if (array.get(i).equals("\"" + activemembers + "\";s:") &amp;&amp; activemembers != null) {<a name="line.281"></a>
+<FONT color="green">282</FONT>                    String temp = array.get(i + 2);<a name="line.282"></a>
+<FONT color="green">283</FONT>                    temp = removeChar(temp, '"');<a name="line.283"></a>
+<FONT color="green">284</FONT>                    temp = removeChar(temp, ':');<a name="line.284"></a>
+<FONT color="green">285</FONT>                    temp = removeChar(temp, 's');<a name="line.285"></a>
+<FONT color="green">286</FONT>                    temp = removeChar(temp, ';');<a name="line.286"></a>
+<FONT color="green">287</FONT>                    temp = temp.trim();<a name="line.287"></a>
+<FONT color="green">288</FONT>                    int tempnum = Integer.parseInt(temp) + 1;<a name="line.288"></a>
+<FONT color="green">289</FONT>                    String templength = "" + tempnum;<a name="line.289"></a>
+<FONT color="green">290</FONT>                    if (lastvalue.equalsIgnoreCase(activemembers)) {<a name="line.290"></a>
+<FONT color="green">291</FONT>                        temp = "\"" + tempnum + "\"" + ";}";<a name="line.291"></a>
+<FONT color="green">292</FONT>                    } else {<a name="line.292"></a>
+<FONT color="green">293</FONT>                        temp = "\"" + tempnum + "\"" + ";s:";<a name="line.293"></a>
+<FONT color="green">294</FONT>                    }<a name="line.294"></a>
+<FONT color="green">295</FONT>                    array.set(i + 1, templength.length() + ":");<a name="line.295"></a>
+<FONT color="green">296</FONT>                    array.set(i + 2, temp);<a name="line.296"></a>
+<FONT color="green">297</FONT>                } else if (array.get(i).equals("\"" + newuserid + "\";s:") &amp;&amp; newuserid != null) {<a name="line.297"></a>
+<FONT color="green">298</FONT>                    String dupe = "" + userid;<a name="line.298"></a>
+<FONT color="green">299</FONT>                    array.set(i + 1, dupe.length() + ":");<a name="line.299"></a>
+<FONT color="green">300</FONT>                    if (lastvalue.equalsIgnoreCase(newuserid)) {<a name="line.300"></a>
+<FONT color="green">301</FONT>                        array.set(i + 2, "\"" + userid + "\"" + ";}");<a name="line.301"></a>
+<FONT color="green">302</FONT>                    } else {<a name="line.302"></a>
+<FONT color="green">303</FONT>                        array.set(i + 2, "\"" + userid + "\"" + ";s:");<a name="line.303"></a>
+<FONT color="green">304</FONT>                    }<a name="line.304"></a>
+<FONT color="green">305</FONT>                }<a name="line.305"></a>
+<FONT color="green">306</FONT>                newcache.append(array.get(i));<a name="line.306"></a>
+<FONT color="green">307</FONT>                i++;<a name="line.307"></a>
+<FONT color="green">308</FONT>            }<a name="line.308"></a>
+<FONT color="green">309</FONT>            return newcache.toString();<a name="line.309"></a>
+<FONT color="green">310</FONT>        }<a name="line.310"></a>
+<FONT color="green">311</FONT>    <a name="line.311"></a>
+<FONT color="green">312</FONT>        @Deprecated<a name="line.312"></a>
+<FONT color="green">313</FONT>        public static String forumCacheValue(String cache, String value) {<a name="line.313"></a>
+<FONT color="green">314</FONT>            StringTokenizer st = new StringTokenizer(cache, ":");<a name="line.314"></a>
+<FONT color="green">315</FONT>            int i = 0;<a name="line.315"></a>
+<FONT color="green">316</FONT>            List&lt;String&gt; array = new ArrayList&lt;String&gt;();<a name="line.316"></a>
+<FONT color="green">317</FONT>            while (st.hasMoreTokens()) {<a name="line.317"></a>
+<FONT color="green">318</FONT>                array.add(st.nextToken() + ":");<a name="line.318"></a>
+<FONT color="green">319</FONT>            }<a name="line.319"></a>
+<FONT color="green">320</FONT>            while (array.size() &gt; i) {<a name="line.320"></a>
+<FONT color="green">321</FONT>                if (array.get(i).equals("\"" + value + "\";s:") &amp;&amp; value != null) {<a name="line.321"></a>
+<FONT color="green">322</FONT>                    String temp = array.get(i + 2);<a name="line.322"></a>
+<FONT color="green">323</FONT>                    temp = removeChar(temp, '"');<a name="line.323"></a>
+<FONT color="green">324</FONT>                    temp = removeChar(temp, ':');<a name="line.324"></a>
+<FONT color="green">325</FONT>                    temp = removeChar(temp, 's');<a name="line.325"></a>
+<FONT color="green">326</FONT>                    temp = removeChar(temp, ';');<a name="line.326"></a>
+<FONT color="green">327</FONT>                    temp = temp.trim();<a name="line.327"></a>
+<FONT color="green">328</FONT>                    return temp;<a name="line.328"></a>
+<FONT color="green">329</FONT>                }<a name="line.329"></a>
+<FONT color="green">330</FONT>                i++;<a name="line.330"></a>
+<FONT color="green">331</FONT>            }<a name="line.331"></a>
+<FONT color="green">332</FONT>            return null;<a name="line.332"></a>
+<FONT color="green">333</FONT>        }<a name="line.333"></a>
+<FONT color="green">334</FONT>    <a name="line.334"></a>
+<FONT color="green">335</FONT>        public static String removeChar(String s, char c) {<a name="line.335"></a>
+<FONT color="green">336</FONT>            StringBuilder r = new StringBuilder(s.length());<a name="line.336"></a>
+<FONT color="green">337</FONT>            r.setLength(s.length());<a name="line.337"></a>
+<FONT color="green">338</FONT>            int current = 0;<a name="line.338"></a>
+<FONT color="green">339</FONT>            for (int i = 0; i &lt; s.length(); i++) {<a name="line.339"></a>
+<FONT color="green">340</FONT>                char cur = s.charAt(i);<a name="line.340"></a>
+<FONT color="green">341</FONT>                if (cur != c) {<a name="line.341"></a>
+<FONT color="green">342</FONT>                    r.setCharAt(current++, cur);<a name="line.342"></a>
+<FONT color="green">343</FONT>                }<a name="line.343"></a>
+<FONT color="green">344</FONT>            }<a name="line.344"></a>
+<FONT color="green">345</FONT>            return r.toString();<a name="line.345"></a>
+<FONT color="green">346</FONT>        }<a name="line.346"></a>
+<FONT color="green">347</FONT>    <a name="line.347"></a>
+<FONT color="green">348</FONT>        /**<a name="line.348"></a>
+<FONT color="green">349</FONT>         * Unserialize object serialized with php serialization.<a name="line.349"></a>
+<FONT color="green">350</FONT>         *<a name="line.350"></a>
+<FONT color="green">351</FONT>         * @param  serialized  string to unserialize<a name="line.351"></a>
+<FONT color="green">352</FONT>         * @return             unserialized data - Integer, Double, String,<a name="line.352"></a>
+<FONT color="green">353</FONT>         *                     Boolean, Map&lt;Object,Object&gt; or PhpObject<a name="line.353"></a>
+<FONT color="green">354</FONT>         */<a name="line.354"></a>
+<FONT color="green">355</FONT>        public static Object phpUnserialize(String serialized) {<a name="line.355"></a>
+<FONT color="green">356</FONT>            SerializedPhpParser parser = new SerializedPhpParser(serialized);<a name="line.356"></a>
+<FONT color="green">357</FONT>            return parser.parse();<a name="line.357"></a>
+<FONT color="green">358</FONT>        }<a name="line.358"></a>
+<FONT color="green">359</FONT>    <a name="line.359"></a>
+<FONT color="green">360</FONT>        /**<a name="line.360"></a>
+<FONT color="green">361</FONT>         * Serialize object with php serialization.<a name="line.361"></a>
+<FONT color="green">362</FONT>         *<a name="line.362"></a>
+<FONT color="green">363</FONT>         * @param  value  object to serialize<a name="line.363"></a>
+<FONT color="green">364</FONT>         * @return        object serialized to String.<a name="line.364"></a>
+<FONT color="green">365</FONT>         */<a name="line.365"></a>
+<FONT color="green">366</FONT>        public static String phpSerialize(Object value) {<a name="line.366"></a>
+<FONT color="green">367</FONT>            return PhpSerializer.serialize(value);<a name="line.367"></a>
+<FONT color="green">368</FONT>        }<a name="line.368"></a>
+<FONT color="green">369</FONT>    }<a name="line.369"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
