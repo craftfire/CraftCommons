@@ -4,7 +4,7 @@
 <FONT color="green">001</FONT>    /*<a name="line.1"></a>
 <FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
 <FONT color="green">003</FONT>     *<a name="line.3"></a>
-<FONT color="green">004</FONT>     * Copyright (c) 2011-2012, CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
 <FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
 <FONT color="green">006</FONT>     *<a name="line.6"></a>
 <FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
@@ -37,7 +37,7 @@
 <FONT color="green">034</FONT>    import com.craftfire.commons.database.DataManager;<a name="line.34"></a>
 <FONT color="green">035</FONT>    import com.craftfire.commons.database.DataRow;<a name="line.35"></a>
 <FONT color="green">036</FONT>    import com.craftfire.commons.database.DataType;<a name="line.36"></a>
-<FONT color="green">037</FONT>    import com.craftfire.commons.database.FieldType;<a name="line.37"></a>
+<FONT color="green">037</FONT>    import com.craftfire.commons.util.ValueType;<a name="line.37"></a>
 <FONT color="green">038</FONT>    <a name="line.38"></a>
 <FONT color="green">039</FONT>    public class DbTest_MySQL {<a name="line.39"></a>
 <FONT color="green">040</FONT>        static DataManager datamanager;<a name="line.40"></a>
@@ -95,10 +95,10 @@
 <FONT color="green">092</FONT>            while (I.hasNext()) {<a name="line.92"></a>
 <FONT color="green">093</FONT>                field = I.next();<a name="line.93"></a>
 <FONT color="green">094</FONT>                System.out.println(seperate);<a name="line.94"></a>
-<FONT color="green">095</FONT>                System.out.println(field.getFieldName() + " from "<a name="line.95"></a>
+<FONT color="green">095</FONT>                System.out.println(field.getName() + " from "<a name="line.95"></a>
 <FONT color="green">096</FONT>                        + field.getTable());<a name="line.96"></a>
-<FONT color="green">097</FONT>                System.out.println("Type: " + field.getFieldType().name());<a name="line.97"></a>
-<FONT color="green">098</FONT>                System.out.println("Size: " + field.getFieldSize());<a name="line.98"></a>
+<FONT color="green">097</FONT>                System.out.println("Type: " + field.getType().name());<a name="line.97"></a>
+<FONT color="green">098</FONT>                System.out.println("Size: " + field.getSize());<a name="line.98"></a>
 <FONT color="green">099</FONT>                System.out.println("SQL Type: " + field.getSQLType());<a name="line.99"></a>
 <FONT color="green">100</FONT>                runTest();<a name="line.100"></a>
 <FONT color="green">101</FONT>                System.out.println("SUCCEED: " + succeed + "/" + count);<a name="line.101"></a>
@@ -118,17 +118,17 @@
 <FONT color="green">115</FONT>            for (Object o : labels.keySet().toArray()) {<a name="line.115"></a>
 <FONT color="green">116</FONT>                String s = (String) o;<a name="line.116"></a>
 <FONT color="green">117</FONT>                try {<a name="line.117"></a>
-<FONT color="green">118</FONT>                    field = datamanager.getField(FieldType.UNKNOWN, "typetest", s,<a name="line.118"></a>
+<FONT color="green">118</FONT>                    field = datamanager.getField(ValueType.UNKNOWN, "typetest", s,<a name="line.118"></a>
 <FONT color="green">119</FONT>                            "1");<a name="line.119"></a>
 <FONT color="green">120</FONT>                } catch (SQLException e) {<a name="line.120"></a>
 <FONT color="green">121</FONT>                    e.printStackTrace();<a name="line.121"></a>
 <FONT color="green">122</FONT>                    field = null;<a name="line.122"></a>
 <FONT color="green">123</FONT>                }<a name="line.123"></a>
 <FONT color="green">124</FONT>                System.out.println(seperate);<a name="line.124"></a>
-<FONT color="green">125</FONT>                System.out.println(field.getFieldName() + " from "<a name="line.125"></a>
+<FONT color="green">125</FONT>                System.out.println(field.getName() + " from "<a name="line.125"></a>
 <FONT color="green">126</FONT>                        + field.getTable());<a name="line.126"></a>
-<FONT color="green">127</FONT>                System.out.println("Type: " + field.getFieldType().name());<a name="line.127"></a>
-<FONT color="green">128</FONT>                System.out.println("Size: " + field.getFieldSize());<a name="line.128"></a>
+<FONT color="green">127</FONT>                System.out.println("Type: " + field.getType().name());<a name="line.127"></a>
+<FONT color="green">128</FONT>                System.out.println("Size: " + field.getSize());<a name="line.128"></a>
 <FONT color="green">129</FONT>                System.out.println("SQL Type: " + field.getSQLType());<a name="line.129"></a>
 <FONT color="green">130</FONT>                runTest();<a name="line.130"></a>
 <FONT color="green">131</FONT>                System.out.println("SUCCEED: " + succeed + "/" + count);<a name="line.131"></a>

@@ -4,7 +4,7 @@
 <FONT color="green">001</FONT>    /*<a name="line.1"></a>
 <FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
 <FONT color="green">003</FONT>     *<a name="line.3"></a>
-<FONT color="green">004</FONT>     * Copyright (c) 2011-2012, CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
 <FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
 <FONT color="green">006</FONT>     *<a name="line.6"></a>
 <FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
@@ -36,185 +36,255 @@
 <FONT color="green">033</FONT>    public class LoggingManager {<a name="line.33"></a>
 <FONT color="green">034</FONT>        private final Logger logger;<a name="line.34"></a>
 <FONT color="green">035</FONT>        private String prefix, directory, format = "HH:mm:ss";<a name="line.35"></a>
-<FONT color="green">036</FONT>        private boolean debug = false, logging = false;<a name="line.36"></a>
-<FONT color="green">037</FONT>        protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {};<a name="line.37"></a>
-<FONT color="green">038</FONT>    <a name="line.38"></a>
-<FONT color="green">039</FONT>        public LoggingManager(String logger, String prefix) {<a name="line.39"></a>
-<FONT color="green">040</FONT>            this.logger = Logger.getLogger(logger);<a name="line.40"></a>
-<FONT color="green">041</FONT>            this.prefix = prefix;<a name="line.41"></a>
-<FONT color="green">042</FONT>        }<a name="line.42"></a>
-<FONT color="green">043</FONT>    <a name="line.43"></a>
-<FONT color="green">044</FONT>        public static enum Type {<a name="line.44"></a>
-<FONT color="green">045</FONT>            error, debug<a name="line.45"></a>
-<FONT color="green">046</FONT>        }<a name="line.46"></a>
-<FONT color="green">047</FONT>    <a name="line.47"></a>
-<FONT color="green">048</FONT>        public Logger getLogger() {<a name="line.48"></a>
-<FONT color="green">049</FONT>            return this.logger;<a name="line.49"></a>
-<FONT color="green">050</FONT>        }<a name="line.50"></a>
-<FONT color="green">051</FONT>    <a name="line.51"></a>
-<FONT color="green">052</FONT>        public String getPrefix() {<a name="line.52"></a>
-<FONT color="green">053</FONT>            return this.prefix;<a name="line.53"></a>
-<FONT color="green">054</FONT>        }<a name="line.54"></a>
-<FONT color="green">055</FONT>    <a name="line.55"></a>
-<FONT color="green">056</FONT>        public void setPrefix(String prefix) {<a name="line.56"></a>
-<FONT color="green">057</FONT>            this.prefix = prefix;<a name="line.57"></a>
-<FONT color="green">058</FONT>        }<a name="line.58"></a>
-<FONT color="green">059</FONT>    <a name="line.59"></a>
-<FONT color="green">060</FONT>        public String getDirectory() {<a name="line.60"></a>
-<FONT color="green">061</FONT>            return this.directory;<a name="line.61"></a>
-<FONT color="green">062</FONT>        }<a name="line.62"></a>
-<FONT color="green">063</FONT>    <a name="line.63"></a>
-<FONT color="green">064</FONT>        public void setDirectory(String directory) {<a name="line.64"></a>
-<FONT color="green">065</FONT>            this.directory = directory;<a name="line.65"></a>
-<FONT color="green">066</FONT>            if (directory == null || directory.isEmpty()) {<a name="line.66"></a>
-<FONT color="green">067</FONT>                this.logging = false;<a name="line.67"></a>
-<FONT color="green">068</FONT>            }<a name="line.68"></a>
-<FONT color="green">069</FONT>        }<a name="line.69"></a>
-<FONT color="green">070</FONT>    <a name="line.70"></a>
-<FONT color="green">071</FONT>        public boolean isDebug() {<a name="line.71"></a>
-<FONT color="green">072</FONT>            return this.debug;<a name="line.72"></a>
-<FONT color="green">073</FONT>        }<a name="line.73"></a>
-<FONT color="green">074</FONT>    <a name="line.74"></a>
-<FONT color="green">075</FONT>        public void setDebug(boolean debug) {<a name="line.75"></a>
-<FONT color="green">076</FONT>            this.debug = debug;<a name="line.76"></a>
-<FONT color="green">077</FONT>        }<a name="line.77"></a>
-<FONT color="green">078</FONT>    <a name="line.78"></a>
-<FONT color="green">079</FONT>        public boolean isLogging() {<a name="line.79"></a>
-<FONT color="green">080</FONT>            return this.logging;<a name="line.80"></a>
-<FONT color="green">081</FONT>        }<a name="line.81"></a>
-<FONT color="green">082</FONT>    <a name="line.82"></a>
-<FONT color="green">083</FONT>        public void setLogging(boolean logging) {<a name="line.83"></a>
-<FONT color="green">084</FONT>            this.logging = (this.directory != null) &amp;&amp; (!this.directory.isEmpty()) &amp;&amp; logging;<a name="line.84"></a>
-<FONT color="green">085</FONT>        }<a name="line.85"></a>
-<FONT color="green">086</FONT>    <a name="line.86"></a>
-<FONT color="green">087</FONT>        public String getFormat() {<a name="line.87"></a>
-<FONT color="green">088</FONT>            return this.format;<a name="line.88"></a>
-<FONT color="green">089</FONT>        }<a name="line.89"></a>
-<FONT color="green">090</FONT>    <a name="line.90"></a>
-<FONT color="green">091</FONT>        public void setFormat(String format) {<a name="line.91"></a>
-<FONT color="green">092</FONT>            this.format = format;<a name="line.92"></a>
-<FONT color="green">093</FONT>        }<a name="line.93"></a>
-<FONT color="green">094</FONT>    <a name="line.94"></a>
-<FONT color="green">095</FONT>        public void info(String line) {<a name="line.95"></a>
-<FONT color="green">096</FONT>            this.logger.info(this.prefix + " " + line);<a name="line.96"></a>
-<FONT color="green">097</FONT>        }<a name="line.97"></a>
-<FONT color="green">098</FONT>    <a name="line.98"></a>
-<FONT color="green">099</FONT>        public void warning(String line) {<a name="line.99"></a>
-<FONT color="green">100</FONT>            this.logger.warning(this.prefix + " " + line);<a name="line.100"></a>
-<FONT color="green">101</FONT>        }<a name="line.101"></a>
-<FONT color="green">102</FONT>    <a name="line.102"></a>
-<FONT color="green">103</FONT>        public void severe(String line) {<a name="line.103"></a>
-<FONT color="green">104</FONT>            this.logger.severe(this.prefix + " " + line);<a name="line.104"></a>
-<FONT color="green">105</FONT>        }<a name="line.105"></a>
-<FONT color="green">106</FONT>    <a name="line.106"></a>
-<FONT color="green">107</FONT>        public void debug(String line) {<a name="line.107"></a>
-<FONT color="green">108</FONT>            if (isDebug()) {<a name="line.108"></a>
-<FONT color="green">109</FONT>                this.logger.log(this.debugLevel, this.prefix + " " + line);<a name="line.109"></a>
-<FONT color="green">110</FONT>                toFile(Type.debug, line);<a name="line.110"></a>
-<FONT color="green">111</FONT>            }<a name="line.111"></a>
-<FONT color="green">112</FONT>        }<a name="line.112"></a>
-<FONT color="green">113</FONT>    <a name="line.113"></a>
-<FONT color="green">114</FONT>        public void error(String error) {<a name="line.114"></a>
-<FONT color="green">115</FONT>            severe(error);<a name="line.115"></a>
-<FONT color="green">116</FONT>            toFile(Type.error, error);<a name="line.116"></a>
+<FONT color="green">036</FONT>        private boolean debug = false, logging = false, combined = true;<a name="line.36"></a>
+<FONT color="green">037</FONT>        protected static final Level debugLevel = new Level("DEBUG", Level.INFO.intValue() + 1) {<a name="line.37"></a>
+<FONT color="green">038</FONT>        };<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>        public LoggingManager(String logger, String prefix) {<a name="line.40"></a>
+<FONT color="green">041</FONT>            this.logger = Logger.getLogger(logger);<a name="line.41"></a>
+<FONT color="green">042</FONT>            this.prefix = prefix;<a name="line.42"></a>
+<FONT color="green">043</FONT>        }<a name="line.43"></a>
+<FONT color="green">044</FONT>    <a name="line.44"></a>
+<FONT color="green">045</FONT>        public static enum Type {<a name="line.45"></a>
+<FONT color="green">046</FONT>            info, error, debug, warning<a name="line.46"></a>
+<FONT color="green">047</FONT>        }<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>        public Logger getLogger() {<a name="line.49"></a>
+<FONT color="green">050</FONT>            return this.logger;<a name="line.50"></a>
+<FONT color="green">051</FONT>        }<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>        public String getPrefix() {<a name="line.53"></a>
+<FONT color="green">054</FONT>            return this.prefix;<a name="line.54"></a>
+<FONT color="green">055</FONT>        }<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>        public void setPrefix(String prefix) {<a name="line.57"></a>
+<FONT color="green">058</FONT>            this.prefix = prefix;<a name="line.58"></a>
+<FONT color="green">059</FONT>        }<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>        public String getDirectory() {<a name="line.61"></a>
+<FONT color="green">062</FONT>            return this.directory;<a name="line.62"></a>
+<FONT color="green">063</FONT>        }<a name="line.63"></a>
+<FONT color="green">064</FONT>    <a name="line.64"></a>
+<FONT color="green">065</FONT>        public void setDirectory(String directory) {<a name="line.65"></a>
+<FONT color="green">066</FONT>            this.directory = directory;<a name="line.66"></a>
+<FONT color="green">067</FONT>            if (directory == null || directory.isEmpty()) {<a name="line.67"></a>
+<FONT color="green">068</FONT>                this.logging = false;<a name="line.68"></a>
+<FONT color="green">069</FONT>            }<a name="line.69"></a>
+<FONT color="green">070</FONT>        }<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>        public boolean isDebug() {<a name="line.72"></a>
+<FONT color="green">073</FONT>            return this.debug;<a name="line.73"></a>
+<FONT color="green">074</FONT>        }<a name="line.74"></a>
+<FONT color="green">075</FONT>    <a name="line.75"></a>
+<FONT color="green">076</FONT>        public void setDebug(boolean debug) {<a name="line.76"></a>
+<FONT color="green">077</FONT>            this.debug = debug;<a name="line.77"></a>
+<FONT color="green">078</FONT>        }<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>        public boolean isCombinedLogging() {<a name="line.80"></a>
+<FONT color="green">081</FONT>            return this.combined;<a name="line.81"></a>
+<FONT color="green">082</FONT>        }<a name="line.82"></a>
+<FONT color="green">083</FONT>    <a name="line.83"></a>
+<FONT color="green">084</FONT>        public void setCombinedLogging(boolean combined) {<a name="line.84"></a>
+<FONT color="green">085</FONT>            this.combined = combined;<a name="line.85"></a>
+<FONT color="green">086</FONT>        }<a name="line.86"></a>
+<FONT color="green">087</FONT>    <a name="line.87"></a>
+<FONT color="green">088</FONT>        public boolean isLogging() {<a name="line.88"></a>
+<FONT color="green">089</FONT>            return this.logging;<a name="line.89"></a>
+<FONT color="green">090</FONT>        }<a name="line.90"></a>
+<FONT color="green">091</FONT>    <a name="line.91"></a>
+<FONT color="green">092</FONT>        public void setLogging(boolean logging) {<a name="line.92"></a>
+<FONT color="green">093</FONT>            this.logging = (this.directory != null) &amp;&amp; (!this.directory.isEmpty()) &amp;&amp; logging;<a name="line.93"></a>
+<FONT color="green">094</FONT>        }<a name="line.94"></a>
+<FONT color="green">095</FONT>    <a name="line.95"></a>
+<FONT color="green">096</FONT>        public String getFormat() {<a name="line.96"></a>
+<FONT color="green">097</FONT>            return this.format;<a name="line.97"></a>
+<FONT color="green">098</FONT>        }<a name="line.98"></a>
+<FONT color="green">099</FONT>    <a name="line.99"></a>
+<FONT color="green">100</FONT>        public void setFormat(String format) {<a name="line.100"></a>
+<FONT color="green">101</FONT>            this.format = format;<a name="line.101"></a>
+<FONT color="green">102</FONT>        }<a name="line.102"></a>
+<FONT color="green">103</FONT>    <a name="line.103"></a>
+<FONT color="green">104</FONT>        public void info(String line) {<a name="line.104"></a>
+<FONT color="green">105</FONT>            info(line, true);<a name="line.105"></a>
+<FONT color="green">106</FONT>        }<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>        public void info(String line, boolean logFile) {<a name="line.108"></a>
+<FONT color="green">109</FONT>            this.logger.info(this.prefix + " " + line);<a name="line.109"></a>
+<FONT color="green">110</FONT>            if (logFile) {<a name="line.110"></a>
+<FONT color="green">111</FONT>                toFile(Type.info, line);<a name="line.111"></a>
+<FONT color="green">112</FONT>            }<a name="line.112"></a>
+<FONT color="green">113</FONT>        }<a name="line.113"></a>
+<FONT color="green">114</FONT>    <a name="line.114"></a>
+<FONT color="green">115</FONT>        public void warning(String line) {<a name="line.115"></a>
+<FONT color="green">116</FONT>            warning(line, true);<a name="line.116"></a>
 <FONT color="green">117</FONT>        }<a name="line.117"></a>
 <FONT color="green">118</FONT>    <a name="line.118"></a>
-<FONT color="green">119</FONT>        public void advancedWarning() {<a name="line.119"></a>
-<FONT color="green">120</FONT>            warning(System.getProperty("line.separator")<a name="line.120"></a>
-<FONT color="green">121</FONT>                    + "|-----------------------------------------------------------------------------|"<a name="line.121"></a>
-<FONT color="green">122</FONT>                    + System.getProperty("line.separator")<a name="line.122"></a>
-<FONT color="green">123</FONT>                    + "|---------------------------------- WARNING ----------------------------------|"<a name="line.123"></a>
-<FONT color="green">124</FONT>                    + System.getProperty("line.separator")<a name="line.124"></a>
-<FONT color="green">125</FONT>                    + "|-----------------------------------------------------------------------------|");<a name="line.125"></a>
-<FONT color="green">126</FONT>        }<a name="line.126"></a>
-<FONT color="green">127</FONT>    <a name="line.127"></a>
-<FONT color="green">128</FONT>        public void stackTrace(final Exception e) {<a name="line.128"></a>
-<FONT color="green">129</FONT>            stackTrace(e, null);<a name="line.129"></a>
-<FONT color="green">130</FONT>        }<a name="line.130"></a>
-<FONT color="green">131</FONT>    <a name="line.131"></a>
-<FONT color="green">132</FONT>        public void stackTrace(final Exception e, Map&lt;Integer, String&gt; extra) {<a name="line.132"></a>
-<FONT color="green">133</FONT>            advancedWarning();<a name="line.133"></a>
-<FONT color="green">134</FONT>            warning("Class name: " + e.getStackTrace()[1].getClassName());<a name="line.134"></a>
-<FONT color="green">135</FONT>            warning("Error message: " + e.getMessage());<a name="line.135"></a>
-<FONT color="green">136</FONT>            warning("Error cause: " + e.getCause());<a name="line.136"></a>
-<FONT color="green">137</FONT>            warning("File name: " + e.getStackTrace()[1].getFileName());<a name="line.137"></a>
-<FONT color="green">138</FONT>            warning("Function name: " + e.getStackTrace()[1].getMethodName());<a name="line.138"></a>
-<FONT color="green">139</FONT>            warning("Error line: " + e.getStackTrace()[1].getLineNumber());<a name="line.139"></a>
-<FONT color="green">140</FONT>            if (this.logging) {<a name="line.140"></a>
-<FONT color="green">141</FONT>                DateFormat logFormat = new SimpleDateFormat(this.format);<a name="line.141"></a>
-<FONT color="green">142</FONT>                Date date = new Date();<a name="line.142"></a>
-<FONT color="green">143</FONT>                warning("Check log file: " + this.directory + "error\\"<a name="line.143"></a>
-<FONT color="green">144</FONT>                        + logFormat.format(date) + "-error.log");<a name="line.144"></a>
-<FONT color="green">145</FONT>            } else {<a name="line.145"></a>
-<FONT color="green">146</FONT>                warning("Enable logging in the config to get more information about the error.");<a name="line.146"></a>
+<FONT color="green">119</FONT>        public void warning(String line, boolean logFile) {<a name="line.119"></a>
+<FONT color="green">120</FONT>            this.logger.warning(this.prefix + " " + line);<a name="line.120"></a>
+<FONT color="green">121</FONT>            if (logFile) {<a name="line.121"></a>
+<FONT color="green">122</FONT>                toFile(Type.warning, line);<a name="line.122"></a>
+<FONT color="green">123</FONT>            }<a name="line.123"></a>
+<FONT color="green">124</FONT>        }<a name="line.124"></a>
+<FONT color="green">125</FONT>    <a name="line.125"></a>
+<FONT color="green">126</FONT>        public void severe(String line) {<a name="line.126"></a>
+<FONT color="green">127</FONT>            severe(line, true);<a name="line.127"></a>
+<FONT color="green">128</FONT>        }<a name="line.128"></a>
+<FONT color="green">129</FONT>    <a name="line.129"></a>
+<FONT color="green">130</FONT>        public void severe(String line, boolean logFile) {<a name="line.130"></a>
+<FONT color="green">131</FONT>            this.logger.severe(this.prefix + " " + line);<a name="line.131"></a>
+<FONT color="green">132</FONT>            if (logFile) {<a name="line.132"></a>
+<FONT color="green">133</FONT>                toFile(Type.error, line);<a name="line.133"></a>
+<FONT color="green">134</FONT>            }<a name="line.134"></a>
+<FONT color="green">135</FONT>        }<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>        public void debug(String line) {<a name="line.137"></a>
+<FONT color="green">138</FONT>            debug(line, true);<a name="line.138"></a>
+<FONT color="green">139</FONT>        }<a name="line.139"></a>
+<FONT color="green">140</FONT>    <a name="line.140"></a>
+<FONT color="green">141</FONT>        public void debug(String line, boolean logFile) {<a name="line.141"></a>
+<FONT color="green">142</FONT>            if (isDebug()) {<a name="line.142"></a>
+<FONT color="green">143</FONT>                this.logger.log(debugLevel, this.prefix + " " + line);<a name="line.143"></a>
+<FONT color="green">144</FONT>                if (logFile) {<a name="line.144"></a>
+<FONT color="green">145</FONT>                    toFile(Type.debug, line);<a name="line.145"></a>
+<FONT color="green">146</FONT>                }<a name="line.146"></a>
 <FONT color="green">147</FONT>            }<a name="line.147"></a>
-<FONT color="green">148</FONT>    <a name="line.148"></a>
-<FONT color="green">149</FONT>            logError("--------------------------- STACKTRACE ERROR ---------------------------");<a name="line.149"></a>
-<FONT color="green">150</FONT>            logError("Class name: " + e.getStackTrace()[1].getClassName());<a name="line.150"></a>
-<FONT color="green">151</FONT>            logError("Error message: " + e.getMessage());<a name="line.151"></a>
-<FONT color="green">152</FONT>            logError("Error cause: " + e.getCause());<a name="line.152"></a>
-<FONT color="green">153</FONT>            logError("File name: " + e.getStackTrace()[1].getFileName());<a name="line.153"></a>
-<FONT color="green">154</FONT>            logError("Function name: " + e.getStackTrace()[1].getMethodName());<a name="line.154"></a>
-<FONT color="green">155</FONT>            logError("Error line: " + e.getStackTrace()[1].getLineNumber());<a name="line.155"></a>
-<FONT color="green">156</FONT>            if (extra != null) {<a name="line.156"></a>
-<FONT color="green">157</FONT>                for (int id : extra.keySet()) {<a name="line.157"></a>
-<FONT color="green">158</FONT>                    logError(extra.get(id));<a name="line.158"></a>
-<FONT color="green">159</FONT>                }<a name="line.159"></a>
-<FONT color="green">160</FONT>            }<a name="line.160"></a>
-<FONT color="green">161</FONT>            logError("--------------------------- STACKTRACE START ---------------------------");<a name="line.161"></a>
-<FONT color="green">162</FONT>            for (int i = 0; i &lt; e.getStackTrace().length; i++) {<a name="line.162"></a>
-<FONT color="green">163</FONT>                logError(e.getStackTrace()[i].toString());<a name="line.163"></a>
-<FONT color="green">164</FONT>            }<a name="line.164"></a>
-<FONT color="green">165</FONT>            logError("---------------------------- STACKTRACE END ----------------------------");<a name="line.165"></a>
-<FONT color="green">166</FONT>        }<a name="line.166"></a>
-<FONT color="green">167</FONT>    <a name="line.167"></a>
-<FONT color="green">168</FONT>        public void logError(String error) {<a name="line.168"></a>
-<FONT color="green">169</FONT>            toFile(Type.error, error);<a name="line.169"></a>
-<FONT color="green">170</FONT>        }<a name="line.170"></a>
-<FONT color="green">171</FONT>    <a name="line.171"></a>
-<FONT color="green">172</FONT>        private void toFile(Type type, String line) {<a name="line.172"></a>
-<FONT color="green">173</FONT>            if (this.logging) {<a name="line.173"></a>
-<FONT color="green">174</FONT>                File data = new File(this.directory, "");<a name="line.174"></a>
-<FONT color="green">175</FONT>                if (!data.exists()) {<a name="line.175"></a>
-<FONT color="green">176</FONT>                    if (data.mkdir()) {<a name="line.176"></a>
-<FONT color="green">177</FONT>                        debug("Created missing directory: " + this.directory);<a name="line.177"></a>
-<FONT color="green">178</FONT>                    }<a name="line.178"></a>
-<FONT color="green">179</FONT>                }<a name="line.179"></a>
-<FONT color="green">180</FONT>                data = new File(this.directory + type.toString() + "/", "");<a name="line.180"></a>
-<FONT color="green">181</FONT>                if (!data.exists()) {<a name="line.181"></a>
-<FONT color="green">182</FONT>                    if (data.mkdir()) {<a name="line.182"></a>
-<FONT color="green">183</FONT>                        debug("Created missing directory: " + this.directory<a name="line.183"></a>
-<FONT color="green">184</FONT>                                + type.toString());<a name="line.184"></a>
-<FONT color="green">185</FONT>                    }<a name="line.185"></a>
-<FONT color="green">186</FONT>                }<a name="line.186"></a>
-<FONT color="green">187</FONT>                DateFormat logFormat = new SimpleDateFormat(this.format);<a name="line.187"></a>
-<FONT color="green">188</FONT>                Date date = new Date();<a name="line.188"></a>
-<FONT color="green">189</FONT>                data = new File(this.directory + type.toString() + "/"<a name="line.189"></a>
-<FONT color="green">190</FONT>                        + logFormat.format(date) + "-" + type.toString() + ".log");<a name="line.190"></a>
-<FONT color="green">191</FONT>                if (!data.exists()) {<a name="line.191"></a>
-<FONT color="green">192</FONT>                    try {<a name="line.192"></a>
-<FONT color="green">193</FONT>                        data.createNewFile();<a name="line.193"></a>
-<FONT color="green">194</FONT>                    } catch (IOException e) {<a name="line.194"></a>
-<FONT color="green">195</FONT>                        stackTrace(e);<a name="line.195"></a>
-<FONT color="green">196</FONT>                    }<a name="line.196"></a>
-<FONT color="green">197</FONT>                }<a name="line.197"></a>
-<FONT color="green">198</FONT>                try {<a name="line.198"></a>
-<FONT color="green">199</FONT>                    DateFormat stringFormat = new SimpleDateFormat(<a name="line.199"></a>
-<FONT color="green">200</FONT>                            "yyyy/MM/dd HH:mm:ss");<a name="line.200"></a>
-<FONT color="green">201</FONT>                    FileWriter writer = new FileWriter(this.directory<a name="line.201"></a>
-<FONT color="green">202</FONT>                            + type.toString() + "/" + logFormat.format(date) + "-"<a name="line.202"></a>
-<FONT color="green">203</FONT>                            + type.toString() + ".log", true);<a name="line.203"></a>
-<FONT color="green">204</FONT>                    BufferedWriter buffer = new BufferedWriter(writer);<a name="line.204"></a>
-<FONT color="green">205</FONT>                    buffer.write(stringFormat.format(date) + " - " + line<a name="line.205"></a>
-<FONT color="green">206</FONT>                            + System.getProperty("line.separator"));<a name="line.206"></a>
-<FONT color="green">207</FONT>                    buffer.close();<a name="line.207"></a>
-<FONT color="green">208</FONT>                    writer.close();<a name="line.208"></a>
-<FONT color="green">209</FONT>                } catch (IOException e) {<a name="line.209"></a>
-<FONT color="green">210</FONT>                    stackTrace(e);<a name="line.210"></a>
-<FONT color="green">211</FONT>                }<a name="line.211"></a>
-<FONT color="green">212</FONT>            }<a name="line.212"></a>
-<FONT color="green">213</FONT>        }<a name="line.213"></a>
-<FONT color="green">214</FONT>    }<a name="line.214"></a>
+<FONT color="green">148</FONT>        }<a name="line.148"></a>
+<FONT color="green">149</FONT>    <a name="line.149"></a>
+<FONT color="green">150</FONT>        public void error(String error) {<a name="line.150"></a>
+<FONT color="green">151</FONT>            severe(error);<a name="line.151"></a>
+<FONT color="green">152</FONT>        }<a name="line.152"></a>
+<FONT color="green">153</FONT>    <a name="line.153"></a>
+<FONT color="green">154</FONT>        public void advancedWarning() {<a name="line.154"></a>
+<FONT color="green">155</FONT>            warning(System.getProperty("line.separator")<a name="line.155"></a>
+<FONT color="green">156</FONT>                    + "|-----------------------------------------------------------------------------|"<a name="line.156"></a>
+<FONT color="green">157</FONT>                    + System.getProperty("line.separator")<a name="line.157"></a>
+<FONT color="green">158</FONT>                    + "|---------------------------------- WARNING ----------------------------------|"<a name="line.158"></a>
+<FONT color="green">159</FONT>                    + System.getProperty("line.separator")<a name="line.159"></a>
+<FONT color="green">160</FONT>                    + "|-----------------------------------------------------------------------------|", false);<a name="line.160"></a>
+<FONT color="green">161</FONT>        }<a name="line.161"></a>
+<FONT color="green">162</FONT>    <a name="line.162"></a>
+<FONT color="green">163</FONT>        public void stackTrace(final Throwable e) {<a name="line.163"></a>
+<FONT color="green">164</FONT>            stackTrace(e, null);<a name="line.164"></a>
+<FONT color="green">165</FONT>        }<a name="line.165"></a>
+<FONT color="green">166</FONT>    <a name="line.166"></a>
+<FONT color="green">167</FONT>        public void stackTrace(final Throwable e, Map&lt;Integer, String&gt; extra) {<a name="line.167"></a>
+<FONT color="green">168</FONT>            advancedWarning();<a name="line.168"></a>
+<FONT color="green">169</FONT>            warning("Class name: " + e.getStackTrace()[1].getClassName(), false);<a name="line.169"></a>
+<FONT color="green">170</FONT>            warning("Error message: " + e.getMessage(), false);<a name="line.170"></a>
+<FONT color="green">171</FONT>            warning("Error cause: " + e.getCause(), false);<a name="line.171"></a>
+<FONT color="green">172</FONT>            warning("File name: " + e.getStackTrace()[1].getFileName(), false);<a name="line.172"></a>
+<FONT color="green">173</FONT>            warning("Function name: " + e.getStackTrace()[1].getMethodName(), false);<a name="line.173"></a>
+<FONT color="green">174</FONT>            warning("Error line: " + e.getStackTrace()[1].getLineNumber(), false);<a name="line.174"></a>
+<FONT color="green">175</FONT>            if (isLogging()) {<a name="line.175"></a>
+<FONT color="green">176</FONT>                DateFormat logFormat = new SimpleDateFormat(this.format);<a name="line.176"></a>
+<FONT color="green">177</FONT>                Date date = new Date();<a name="line.177"></a>
+<FONT color="green">178</FONT>                warning("Check log file: " + this.directory + "error" + File.separator<a name="line.178"></a>
+<FONT color="green">179</FONT>                        + logFormat.format(date) + "-error.log", false);<a name="line.179"></a>
+<FONT color="green">180</FONT>            } else {<a name="line.180"></a>
+<FONT color="green">181</FONT>                warning("Enable logging in the config to get more information about the error.", false);<a name="line.181"></a>
+<FONT color="green">182</FONT>            }<a name="line.182"></a>
+<FONT color="green">183</FONT>    <a name="line.183"></a>
+<FONT color="green">184</FONT>            logError("--------------------------- STACKTRACE ERROR ---------------------------");<a name="line.184"></a>
+<FONT color="green">185</FONT>            logError("Class name: " + e.getStackTrace()[1].getClassName());<a name="line.185"></a>
+<FONT color="green">186</FONT>            logError("Error message: " + e.getMessage());<a name="line.186"></a>
+<FONT color="green">187</FONT>            logError("Error cause: " + e.getCause());<a name="line.187"></a>
+<FONT color="green">188</FONT>            logError("File name: " + e.getStackTrace()[1].getFileName());<a name="line.188"></a>
+<FONT color="green">189</FONT>            logError("Function name: " + e.getStackTrace()[1].getMethodName());<a name="line.189"></a>
+<FONT color="green">190</FONT>            logError("Error line: " + e.getStackTrace()[1].getLineNumber());<a name="line.190"></a>
+<FONT color="green">191</FONT>            if (extra != null) {<a name="line.191"></a>
+<FONT color="green">192</FONT>                for (int id : extra.keySet()) {<a name="line.192"></a>
+<FONT color="green">193</FONT>                    logError(extra.get(id));<a name="line.193"></a>
+<FONT color="green">194</FONT>                }<a name="line.194"></a>
+<FONT color="green">195</FONT>            }<a name="line.195"></a>
+<FONT color="green">196</FONT>            logError("--------------------------- STACKTRACE START ---------------------------");<a name="line.196"></a>
+<FONT color="green">197</FONT>            for (int i = 0; i &lt; e.getStackTrace().length; i++) {<a name="line.197"></a>
+<FONT color="green">198</FONT>                logError(e.getStackTrace()[i].toString());<a name="line.198"></a>
+<FONT color="green">199</FONT>            }<a name="line.199"></a>
+<FONT color="green">200</FONT>            logError("---------------------------- STACKTRACE END ----------------------------");<a name="line.200"></a>
+<FONT color="green">201</FONT>        }<a name="line.201"></a>
+<FONT color="green">202</FONT>    <a name="line.202"></a>
+<FONT color="green">203</FONT>        public void logError(String error) {<a name="line.203"></a>
+<FONT color="green">204</FONT>            toFile(Type.error, error);<a name="line.204"></a>
+<FONT color="green">205</FONT>        }<a name="line.205"></a>
+<FONT color="green">206</FONT>    <a name="line.206"></a>
+<FONT color="green">207</FONT>        private void toFile(Type type, String line) {<a name="line.207"></a>
+<FONT color="green">208</FONT>            if (this.logging) {<a name="line.208"></a>
+<FONT color="green">209</FONT>                File data = new File(this.directory, "");<a name="line.209"></a>
+<FONT color="green">210</FONT>                if (!data.exists()) {<a name="line.210"></a>
+<FONT color="green">211</FONT>                    if (data.mkdir()) {<a name="line.211"></a>
+<FONT color="green">212</FONT>                        debug("Created missing directory: " + this.directory);<a name="line.212"></a>
+<FONT color="green">213</FONT>                    }<a name="line.213"></a>
+<FONT color="green">214</FONT>                }<a name="line.214"></a>
+<FONT color="green">215</FONT>                data = new File(this.directory + type.toString() + File.separator, "");<a name="line.215"></a>
+<FONT color="green">216</FONT>                if (!data.exists()) {<a name="line.216"></a>
+<FONT color="green">217</FONT>                    if (data.mkdir()) {<a name="line.217"></a>
+<FONT color="green">218</FONT>                        debug("Created missing directory: " + this.directory + type.toString());<a name="line.218"></a>
+<FONT color="green">219</FONT>                    }<a name="line.219"></a>
+<FONT color="green">220</FONT>                }<a name="line.220"></a>
+<FONT color="green">221</FONT>                if (isCombinedLogging()) {<a name="line.221"></a>
+<FONT color="green">222</FONT>                    data = new File(this.directory + "combined" + File.separator, "");<a name="line.222"></a>
+<FONT color="green">223</FONT>                    if (!data.exists()) {<a name="line.223"></a>
+<FONT color="green">224</FONT>                        if (data.mkdir()) {<a name="line.224"></a>
+<FONT color="green">225</FONT>                            debug("Created missing directory: " + this.directory + type.toString());<a name="line.225"></a>
+<FONT color="green">226</FONT>                        }<a name="line.226"></a>
+<FONT color="green">227</FONT>                    }<a name="line.227"></a>
+<FONT color="green">228</FONT>                }<a name="line.228"></a>
+<FONT color="green">229</FONT>                DateFormat logFormat = new SimpleDateFormat(this.format);<a name="line.229"></a>
+<FONT color="green">230</FONT>                Date date = new Date();<a name="line.230"></a>
+<FONT color="green">231</FONT>                if (isCombinedLogging()) {<a name="line.231"></a>
+<FONT color="green">232</FONT>                    data = new File(this.directory + "combined" + File.separator<a name="line.232"></a>
+<FONT color="green">233</FONT>                            + logFormat.format(date) + "-combined.log");<a name="line.233"></a>
+<FONT color="green">234</FONT>                    if (!data.exists()) {<a name="line.234"></a>
+<FONT color="green">235</FONT>                        try {<a name="line.235"></a>
+<FONT color="green">236</FONT>                            if (!data.createNewFile()) {<a name="line.236"></a>
+<FONT color="green">237</FONT>                                error("Failed creating file for logging: '" + data.getName() + "'.");<a name="line.237"></a>
+<FONT color="green">238</FONT>                            }<a name="line.238"></a>
+<FONT color="green">239</FONT>                        } catch (IOException e) {<a name="line.239"></a>
+<FONT color="green">240</FONT>                            stackTrace(e);<a name="line.240"></a>
+<FONT color="green">241</FONT>                        }<a name="line.241"></a>
+<FONT color="green">242</FONT>                    }<a name="line.242"></a>
+<FONT color="green">243</FONT>                }<a name="line.243"></a>
+<FONT color="green">244</FONT>                data = new File(this.directory + type.toString() + File.separator<a name="line.244"></a>
+<FONT color="green">245</FONT>                        + logFormat.format(date) + "-" + type.toString() + ".log");<a name="line.245"></a>
+<FONT color="green">246</FONT>                if (!data.exists()) {<a name="line.246"></a>
+<FONT color="green">247</FONT>                    try {<a name="line.247"></a>
+<FONT color="green">248</FONT>                        if (!data.createNewFile()) {<a name="line.248"></a>
+<FONT color="green">249</FONT>                            error("Failed creating file for logging: '" + data.getName() + "'.");<a name="line.249"></a>
+<FONT color="green">250</FONT>                        }<a name="line.250"></a>
+<FONT color="green">251</FONT>                    } catch (IOException e) {<a name="line.251"></a>
+<FONT color="green">252</FONT>                        stackTrace(e);<a name="line.252"></a>
+<FONT color="green">253</FONT>                    }<a name="line.253"></a>
+<FONT color="green">254</FONT>                }<a name="line.254"></a>
+<FONT color="green">255</FONT>                if (isCombinedLogging()) {<a name="line.255"></a>
+<FONT color="green">256</FONT>                    try {<a name="line.256"></a>
+<FONT color="green">257</FONT>                        DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");<a name="line.257"></a>
+<FONT color="green">258</FONT>                        FileWriter writer = new FileWriter(this.directory<a name="line.258"></a>
+<FONT color="green">259</FONT>                                + "combined" + File.separator + logFormat.format(date) + "-"<a name="line.259"></a>
+<FONT color="green">260</FONT>                                + "combined" + ".log", true);<a name="line.260"></a>
+<FONT color="green">261</FONT>                        BufferedWriter buffer = new BufferedWriter(writer);<a name="line.261"></a>
+<FONT color="green">262</FONT>                        buffer.write(stringFormat.format(date) + " - " + type.toString().toUpperCase()<a name="line.262"></a>
+<FONT color="green">263</FONT>                                + " - " + line + System.getProperty("line.separator"));<a name="line.263"></a>
+<FONT color="green">264</FONT>                        buffer.close();<a name="line.264"></a>
+<FONT color="green">265</FONT>                        writer.close();<a name="line.265"></a>
+<FONT color="green">266</FONT>                    } catch (IOException e) {<a name="line.266"></a>
+<FONT color="green">267</FONT>                        stackTrace(e);<a name="line.267"></a>
+<FONT color="green">268</FONT>                    }<a name="line.268"></a>
+<FONT color="green">269</FONT>                }<a name="line.269"></a>
+<FONT color="green">270</FONT>                try {<a name="line.270"></a>
+<FONT color="green">271</FONT>                    DateFormat stringFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");<a name="line.271"></a>
+<FONT color="green">272</FONT>                    FileWriter writer = new FileWriter(this.directory<a name="line.272"></a>
+<FONT color="green">273</FONT>                            + type.toString() + File.separator + logFormat.format(date) + "-"<a name="line.273"></a>
+<FONT color="green">274</FONT>                            + type.toString() + ".log", true);<a name="line.274"></a>
+<FONT color="green">275</FONT>                    BufferedWriter buffer = new BufferedWriter(writer);<a name="line.275"></a>
+<FONT color="green">276</FONT>                    buffer.write(stringFormat.format(date) + " - " + line + System.getProperty("line.separator"));<a name="line.276"></a>
+<FONT color="green">277</FONT>                    buffer.close();<a name="line.277"></a>
+<FONT color="green">278</FONT>                    writer.close();<a name="line.278"></a>
+<FONT color="green">279</FONT>                } catch (IOException e) {<a name="line.279"></a>
+<FONT color="green">280</FONT>                    stackTrace(e);<a name="line.280"></a>
+<FONT color="green">281</FONT>                }<a name="line.281"></a>
+<FONT color="green">282</FONT>            }<a name="line.282"></a>
+<FONT color="green">283</FONT>        }<a name="line.283"></a>
+<FONT color="green">284</FONT>    }<a name="line.284"></a>
 
 
 

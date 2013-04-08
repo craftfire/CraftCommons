@@ -4,7 +4,7 @@
 <FONT color="green">001</FONT>    /*<a name="line.1"></a>
 <FONT color="green">002</FONT>     * This file is part of CraftCommons.<a name="line.2"></a>
 <FONT color="green">003</FONT>     *<a name="line.3"></a>
-<FONT color="green">004</FONT>     * Copyright (c) 2011-2012, CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2011 CraftFire &lt;http://www.craftfire.com/&gt;<a name="line.4"></a>
 <FONT color="green">005</FONT>     * CraftCommons is licensed under the GNU Lesser General Public License.<a name="line.5"></a>
 <FONT color="green">006</FONT>     *<a name="line.6"></a>
 <FONT color="green">007</FONT>     * CraftCommons is free software: you can redistribute it and/or modify<a name="line.7"></a>
@@ -38,23 +38,23 @@
 <FONT color="green">035</FONT>            final String correctpl = "ąćęłóńśźż";<a name="line.35"></a>
 <FONT color="green">036</FONT>            final String wrongpl = "acelonszz";<a name="line.36"></a>
 <FONT color="green">037</FONT>            final String hashpl = "$P$ByXWbzDvVAJ0jxvNp5sv4xYPIRXJJ1.";<a name="line.37"></a>
-<FONT color="green">038</FONT>            String hashed = CraftCommons.encrypt(Encryption.PHPASS, correct);<a name="line.38"></a>
+<FONT color="green">038</FONT>            String hashed = CraftCommons.encrypt(Encryption.PHPASS_P, correct);<a name="line.38"></a>
 <FONT color="green">039</FONT>            assertEquals("Correct password doesn't match generated hash", hashed,<a name="line.39"></a>
-<FONT color="green">040</FONT>                    CraftCommons.encrypt(Encryption.PHPASS, correct, hashed));<a name="line.40"></a>
+<FONT color="green">040</FONT>                    CraftCommons.encrypt(Encryption.PHPASS_P, correct, hashed));<a name="line.40"></a>
 <FONT color="green">041</FONT>            assertFalse("Wrong password matches generated hash", CraftCommons<a name="line.41"></a>
-<FONT color="green">042</FONT>                    .encrypt(Encryption.PHPASS, wrong, hashed).equals(hashed));<a name="line.42"></a>
+<FONT color="green">042</FONT>                    .encrypt(Encryption.PHPASS_P, wrong, hashed).equals(hashed));<a name="line.42"></a>
 <FONT color="green">043</FONT>            assertEquals(<a name="line.43"></a>
 <FONT color="green">044</FONT>                    "Correct password doesn't match hash from original PHPass",<a name="line.44"></a>
-<FONT color="green">045</FONT>                    hash, CraftCommons.encrypt(Encryption.PHPASS, correct, hash));<a name="line.45"></a>
+<FONT color="green">045</FONT>                    hash, CraftCommons.encrypt(Encryption.PHPASS_P, correct, hash));<a name="line.45"></a>
 <FONT color="green">046</FONT>            assertFalse("Wrong password matches hash from phpass", CraftCommons<a name="line.46"></a>
-<FONT color="green">047</FONT>                    .encrypt(Encryption.PHPASS, wrong, hash).equals(hash));<a name="line.47"></a>
+<FONT color="green">047</FONT>                    .encrypt(Encryption.PHPASS_P, wrong, hash).equals(hash));<a name="line.47"></a>
 <FONT color="green">048</FONT>            assertEquals(<a name="line.48"></a>
 <FONT color="green">049</FONT>                    "Correct password with polish characters doesn't match hash from original PHPass",<a name="line.49"></a>
 <FONT color="green">050</FONT>                    hashpl,<a name="line.50"></a>
-<FONT color="green">051</FONT>                    CraftCommons.encrypt(Encryption.PHPASS, correctpl, hashpl));<a name="line.51"></a>
+<FONT color="green">051</FONT>                    CraftCommons.encrypt(Encryption.PHPASS_P, correctpl, hashpl));<a name="line.51"></a>
 <FONT color="green">052</FONT>            assertFalse(<a name="line.52"></a>
-<FONT color="green">053</FONT>                    "Wrong password matches  hash from oroginal PHPass (original password contained polish characters)",<a name="line.53"></a>
-<FONT color="green">054</FONT>                    CraftCommons.encrypt(Encryption.PHPASS, wrongpl, hashpl)<a name="line.54"></a>
+<FONT color="green">053</FONT>                    "Wrong password matches  hash from original PHPass (original password contained polish characters)",<a name="line.53"></a>
+<FONT color="green">054</FONT>                    CraftCommons.encrypt(Encryption.PHPASS_P, wrongpl, hashpl)<a name="line.54"></a>
 <FONT color="green">055</FONT>                            .equals(hashpl));<a name="line.55"></a>
 <FONT color="green">056</FONT>        }<a name="line.56"></a>
 <FONT color="green">057</FONT>    }<a name="line.57"></a>
