@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import com.craftfire.commons.util.LoggingManager;
 
@@ -431,6 +432,9 @@ public class SimpleYamlManager implements YamlManager {
         } catch (IOException e) {
             getLogger().stackTrace(e);
             return false;
+        } catch (YAMLException e) {
+            getLogger().stackTrace(e);
+            return false;
         }
         return true;
     }
@@ -455,6 +459,8 @@ public class SimpleYamlManager implements YamlManager {
                 return true;
             }
         } catch (IOException e) {
+            getLogger().stackTrace(e);
+        } catch (YAMLException e) {
             getLogger().stackTrace(e);
         }
         return false;
