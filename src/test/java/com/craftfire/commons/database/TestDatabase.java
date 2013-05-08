@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.commons;
+package com.craftfire.commons.database;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -45,6 +45,7 @@ import java.util.logging.Level;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.database.DataField;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataRow;
