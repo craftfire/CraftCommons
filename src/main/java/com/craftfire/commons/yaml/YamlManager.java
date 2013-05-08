@@ -181,7 +181,7 @@ public interface YamlManager {
      * Returns YamlNode with the given path.
      * 
      * @param  node          the node path
-     * @return               the YamlNode
+     * @return               the YamlNode, or {@code null} if not found
      * @throws YamlException if one of path elements is a scalar node
      */
     YamlNode getNode(String node) throws YamlException;
