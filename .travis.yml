@@ -1,6 +1,30 @@
+# Source language and JDK version to use
 language: java
-jdk: openjdk6
-install: mvn clean -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+jdk: oraclejdk7
+
+# Compile and package JAR and set build properties
+install: mvn package -DbuildNumber=$TRAVIS_BUILD_NUMBER -DciSystem=travis -Dcommit=${TRAVIS_COMMIT:0:7}
+
+# Perform steps after compilation/test success
+after_success:
+  # Get files for use with build, namely the custom Maven settings.xml
+  - "git clone https://github.com/craftfire/travis-ci-resources.git target/travis"
+  # Check if commit is not a pull request, if repo is official, and branch is master, generate and deploy artifacts and reports
+  - "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == CraftFire/CraftCommons ]] && [[ $TRAVIS_BRANCH == master ]] && mvn javadoc:jar source:jar cobertura:cobertura coveralls:cobertura -DserviceJobId=$TRAVIS_JOB_ID mvn deploy --settings target/travis/settings.xml"
+
+# Notification services
 notifications:
-    email: true
-    irc: "irc.esper.net#craftfire"
+  # Disable build status email notifications, until the issue with forks is fixed
+  email: false
+  webhooks:
+    # Send build information and status to Notifico
+    - http://n.tkte.ch/h/2026/J1E44RhabogUFM50EJc54N2P
+
+# Environmental system variables
+env:
+  global:
+    # Make the log output cleaner
+    - TERM=dumb
+    # Super secure, encrypted variables! Ssssh!
+    - secure: "EUFPyUwR11GU/xxi56SZdEZh0UkZoWYI9yNd7ewo07tl1QZkQNL3Cyh+MVc7EP5/9cDsVEruGBxp21j9+/vHln6/yY8IZukyh7ailH2eu+gCdpMSXVnDuuhYEoHkfSYx3aLo34CsjhZvviDhZQp52txgLiDmPx/w/spf2ZgNbP0="
+    - secure: "gHZXPpcTdZpQ2bLcooa9tmyM+n8WDQGY1R40RZKXdn+FF75J/2/kCcOjvauhkk17PreFklF9skwLsJPuOTe+f8x226YVPxS+13+cD+cFWE6UWqWcDGUNEg6ve2v+k5fRnnwKttcZb/8seti3aJzNPESOzQ2TpRLYwIxzbqsZ4bw="
