@@ -32,10 +32,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.craftfire.commons.ip.IPAddress;
-import com.craftfire.commons.ip.IPv4Address;
-import com.craftfire.commons.ip.IPv6Address;
-
 public class TestIPAddress {
     private static IPv4Address ipv4 = new IPv4Address(192, 168, 1, 1);
     private static IPv6Address ipv6 = new IPv6Address(0xfe80, 0, 0, 0, 0, 0x1015, 0xc0a8, 1);
@@ -65,9 +61,9 @@ public class TestIPAddress {
 
     @Test
     public void testValueOfStringHostname() {
-        IPAddress addr = IPAddress.valueOf("craftfire.com");
+        IPAddress addr = IPAddress.valueOf("k.root-servers.net");
         System.out.println("testValueOfStringHostname: " + addr);
-        assertTrue(addr.equals(new IPv4Address(204, 232, 175, 78)));
+        assertTrue(addr.equals(new IPv4Address(193, 0, 14, 129)));
     }
 
     @Test
