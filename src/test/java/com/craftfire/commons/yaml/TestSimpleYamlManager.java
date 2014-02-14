@@ -347,8 +347,14 @@ public class TestSimpleYamlManager {
         Settings settings = mock(Settings.class);
         stub(settings.createYaml()).toReturn(yaml);
         stub(settings.getLogger()).toReturn(logger);
+
+        Field pathField = File.class.getDeclaredField("path");
+        pathField.setAccessible(true);
+
         File file = mock(File.class);
-        stub(file.getPath()).toReturn("target/test/tmp" + rnd.nextInt());
+        String filePath = "target/test/tmp" + rnd.nextInt();
+        pathField.set(file, filePath);
+        stub(file.getPath()).toReturn(filePath);
         YamlNode root = mock(YamlNode.class);
         stub(root.dump()).toReturn("fox: true");
         Field f = SimpleYamlManager.class.getDeclaredField("root");
@@ -476,7 +482,7 @@ public class TestSimpleYamlManager {
     }
 
     @Test
-    public void testLoadFromFile() throws IOException {
+    public void testLoadFromFile() throws IOException, NoSuchFieldException, IllegalAccessException {
         String fileContent = "Some UTF-8 ąęłĸóþ¶↓µ";
         String filePath = "./target/test-classes/testresource.txt";
 
@@ -490,7 +496,11 @@ public class TestSimpleYamlManager {
 
         doNothing().when(mgr).load(isA(InputStream.class));
 
+        Field pathField = File.class.getDeclaredField("path");
+        pathField.setAccessible(true);
+
         File file = mock(File.class);
+        pathField.set(file, filePath);
         stub(file.getPath()).toReturn(filePath);
         stub(file.exists()).toReturn(true);
         mgr.load(file);
