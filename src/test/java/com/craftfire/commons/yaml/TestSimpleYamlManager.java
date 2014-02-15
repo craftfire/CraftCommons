@@ -70,6 +70,7 @@ public class TestSimpleYamlManager {
     @Before
     public void setup() throws IOException {
         this.manager = new SimpleYamlManager(new StringReader(""));
+        new File("target", "test").mkdir();
     }
 
     @Test
